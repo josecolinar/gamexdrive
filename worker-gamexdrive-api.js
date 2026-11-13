@@ -11,7 +11,12 @@
  *   POST /evento?tipo=visita&src=instagram   → cuenta una visita a la web (o tipo=pedido)
  *   GET  /stats?clave=TU_CLAVE&dias=30       → estadísticas privadas (para stats.html)
  *
- * CÓMO PUBLICARLO
+ * PUBLICACIÓN AUTOMÁTICA (recomendada)
+ *   Este archivo se publica solo junto con la web gracias a wrangler.jsonc:
+ *   Cloudflare → Workers & Pages → Create → Import a repository → josecolinar/gamexdrive.
+ *   Cada cambio en GitHub se publica solo. Solo falta crear el secreto STATS_CLAVE (paso 5).
+ *
+ * PUBLICACIÓN MANUAL (alternativa)
  *   1. dash.cloudflare.com → Storage & Databases → KV → Create namespace → nombre: VISITAS
  *   2. Workers & Pages → Create → Create Worker → nombre: gamexdrive-api → Deploy → Edit code
  *   3. Borra el código de ejemplo, pega TODO este archivo y presiona Deploy.
@@ -37,19 +42,23 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const origin = request.headers.get("Origin") || "";
+    const permitido = ORIGENES.includes(origin) || origin === url.origin;
     const cors = {
-      "Access-Control-Allow-Origin": ORIGENES.includes(origin) ? origin : ORIGENES[0],
+      "Access-Control-Allow-Origin": permitido ? (origin || url.origin) : ORIGENES[0],
       "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
       "Vary": "Origin",
     };
     if (request.method === "OPTIONS") return new Response(null, { headers: cors });
 
     try {
-      if (url.pathname === "/" || url.pathname === "/tasa") return await tasa(ctx, cors);
+      if (url.pathname === "/tasa") return await tasa(ctx, cors);
       if (url.pathname === "/visto" && request.method === "POST") return await visto(url, env, request, cors);
       if (url.pathname === "/top") return await top(url, env, cors);
       if (url.pathname === "/evento" && request.method === "POST") return await evento(url, env, request, cors);
       if (url.pathname === "/stats") return await stats(url, env, cors);
+      // Cualquier otra ruta: la web (cuando el worker se publica junto con los archivos)
+      if (env.ASSETS) return env.ASSETS.fetch(request);
+      if (url.pathname === "/") return await tasa(ctx, cors);
       return json({ error: "Ruta no encontrada" }, cors, 404);
     } catch (err) {
       return json({ error: String(err.message || err) }, cors, 500);
@@ -98,7 +107,7 @@ function mesAnterior(mes) {
 async function visto(url, env, request, cors) {
   if (!env.VISITAS) return json({ error: "Falta conectar el KV 'VISITAS'" }, cors, 500);
   const origin = request.headers.get("Origin") || "";
-  if (!ORIGENES.includes(origin)) return json({ ok: false }, cors, 403); // solo cuenta visitas desde tu web
+  if (!ORIGENES.includes(origin) && origin !== url.origin) return json({ ok: false }, cors, 403); // solo cuenta visitas desde tu web
   const id = parseInt(url.searchParams.get("id"), 10);
   if (!(id > 0) || id > 100000) return json({ error: "id inválido" }, cors, 400);
   const clave = "mes:" + mesCaracas();
@@ -134,7 +143,7 @@ const FUENTES_OK = /^[a-z0-9_-]{1,20}$/;
 async function evento(url, env, request, cors) {
   if (!env.VISITAS) return json({ ok: false }, cors, 500);
   const origin = request.headers.get("Origin") || "";
-  if (!ORIGENES.includes(origin)) return json({ ok: false }, cors, 403);
+  if (!ORIGENES.includes(origin) && origin !== url.origin) return json({ ok: false }, cors, 403);
   const tipo = url.searchParams.get("tipo") === "pedido" ? "pedidos" : "visitas";
   let src = (url.searchParams.get("src") || "otro").toLowerCase();
   if (!FUENTES_OK.test(src)) src = "otro";

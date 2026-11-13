@@ -1,0 +1,9 @@
+# Archivos del repositorio que NO deben publicarse como parte de la web
+.git
+.assetsignore
+.nojekyll
+wrangler.jsonc
+worker-gamexdrive-api.js
+herramientas
+README.md
+node_modules

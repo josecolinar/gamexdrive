@@ -1,0 +1,18 @@
+// Gamexdrive en Cloudflare: la web (archivos estáticos) + la API (tasa BCV, visitas, estadísticas)
+// Cloudflare lo publica solo cada vez que hay un cambio en GitHub (Workers Builds).
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "gamexdrive",
+  "main": "worker-gamexdrive-api.js",
+  "compatibility_date": "2026-11-12",
+  "assets": {
+    "directory": "./",
+    "binding": "ASSETS",
+    // Estas rutas las responde el worker; todo lo demás es la web
+    "run_worker_first": ["/tasa", "/visto", "/top", "/evento", "/stats"]
+  },
+  "kv_namespaces": [
+    { "binding": "VISITAS", "id": "fbbf06120f4e4735a0a07c08941266ec" }
+  ],
+  "observability": { "enabled": true }
+}

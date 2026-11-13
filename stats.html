@@ -65,7 +65,7 @@ const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt
 const fmt = n => Number(n||0).toLocaleString("es-VE");
 const pct = (a,b) => b ? (a/b*100).toLocaleString("es-VE",{maximumFractionDigits:1}) + "%" : "—";
 const NOMBRES = { directo:"Directo (escribieron la dirección)", instagram:"Instagram", whatsapp:"WhatsApp", google:"Google", facebook:"Facebook", tiktok:"TikTok", mercadolibre:"Mercado Libre", qr:"Código QR", app:"App (pantalla de inicio)", otro:"Otros sitios" };
-try { $("api").value = localStorage.getItem("gx_stats_api") || ""; } catch(e){}
+try { $("api").value = localStorage.getItem("gx_stats_api") || (/\.workers\.dev$/.test(location.hostname) ? location.origin : ""); } catch(e){}
 
 // Nombres de productos: se leen de la propia tienda (index.html)
 async function nombresProductos(){
