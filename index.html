@@ -156,7 +156,8 @@
   .pre-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1rem}
   .pre-item{display:grid;grid-template-columns:130px 1fr;gap:1.1rem;align-items:center;background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--red);border-radius:16px;padding:1rem}
   .pre-item .pi{width:130px;height:130px;border-radius:12px;background:radial-gradient(circle at 50% 60%,var(--glow),transparent 70%),var(--panel2);display:grid;place-items:center;font-size:4rem;cursor:pointer}
-  .pre-item .pi img{max-width:85%;max-height:85%;object-fit:contain}
+  .pre-item .pi{position:relative;overflow:hidden}
+  .pre-item .pi img{position:absolute;inset:7%;width:86%;height:86%;object-fit:contain}
   .pre-item h4{font-size:1.05rem;font-weight:700;line-height:1.3;cursor:pointer}
   .pre-item .meta{color:var(--muted);font-size:.85rem;margin:.25rem 0 .55rem}
   .pre-item .row{display:flex;align-items:center;justify-content:space-between;gap:.6rem;flex-wrap:wrap}
@@ -177,7 +178,7 @@
   .card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;transition:transform .15s,border-color .15s,box-shadow .15s}
   .card:hover{transform:translateY(-4px);border-color:var(--red);box-shadow:0 14px 30px -16px var(--red)}
   .card .im{position:relative;aspect-ratio:1/1;display:grid;place-items:center;font-size:clamp(3.6rem,8vw,5rem);cursor:pointer;background:radial-gradient(circle at 50% 62%,var(--glow),transparent 65%)}
-  .card .im img{width:78%;height:78%;object-fit:contain}
+  .card .im img{position:absolute;inset:9%;width:82%;height:82%;object-fit:contain;z-index:1}
   .card .im::after{content:"";position:absolute;width:62%;aspect-ratio:1;border-radius:50%;border:2px dashed var(--line);pointer-events:none}
   .card .im>*{position:relative;z-index:1}
   .card .im>.tagbox,.card .im>.origin{position:absolute;z-index:2}
@@ -229,11 +230,12 @@
   .modal.on{opacity:1;pointer-events:auto;transform:translate(-50%,-50%)}
   .modal .mv{display:grid;place-items:center;font-size:8rem;min-height:320px;background:radial-gradient(circle at 50% 60%,var(--glow),transparent 65%),var(--panel2);position:relative}
   .modal .mv{display:flex;flex-direction:column;justify-content:center;gap:.8rem;padding:1rem}
-  .modal .mv-main{display:grid;place-items:center;flex:1;min-height:260px;width:100%}
-  .modal .mv-main img{width:88%;max-height:360px;object-fit:contain;filter:drop-shadow(0 14px 24px rgba(0,0,0,.45))}
+  .modal .mv-main{position:relative;flex:1;min-height:300px;width:100%;display:grid;place-items:center}
+  .modal .mv-main img{position:absolute;inset:4%;width:92%;height:92%;object-fit:contain;filter:drop-shadow(0 14px 24px rgba(0,0,0,.45))}
   .thumbs{display:flex;gap:.5rem;justify-content:center}
   .thumb{width:58px;height:58px;border-radius:10px;background:var(--panel);border:2px solid var(--line);padding:4px;display:grid;place-items:center}
-  .thumb img{max-width:100%;max-height:100%;object-fit:contain}
+  .thumb{position:relative;overflow:hidden}
+  .thumb img{position:absolute;inset:4px;width:calc(100% - 8px);height:calc(100% - 8px);object-fit:contain}
   .thumb.on{border-color:var(--red)}
   .card .im img{filter:drop-shadow(0 10px 16px rgba(0,0,0,.4))}
   .modal .mi{padding:1.8rem;display:flex;flex-direction:column;gap:.7rem;position:relative}
@@ -296,7 +298,8 @@
   .crow.h{border-top:none;background:var(--panel2);color:var(--muted);font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.6px;padding:.85rem 1.2rem}
   .c-prod{display:flex;align-items:center;gap:.9rem;min-width:0}
   .cthumb{width:66px;height:66px;flex:0 0 auto;border-radius:12px;background:radial-gradient(circle at 50% 60%,var(--glow),transparent 70%),var(--panel2);display:grid;place-items:center;font-size:2rem;cursor:pointer;overflow:hidden}
-  .cthumb img{max-width:88%;max-height:88%;object-fit:contain}
+  .cthumb{position:relative}
+  .cthumb img{position:absolute;inset:6%;width:88%;height:88%;object-fit:contain}
   .c-prod .t{font-weight:700;line-height:1.3}
   .c-prod .m{color:var(--muted);font-size:.8rem;margin-top:.15rem}
   .c-prod .mp{display:none;font-size:.85rem;font-weight:700;margin-top:.2rem}
