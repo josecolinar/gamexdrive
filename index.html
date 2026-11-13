@@ -64,9 +64,10 @@
 
   /* ===== Hero póster ===== */
   .hero{position:relative;margin:1.6rem 0 0;border-radius:24px;overflow:hidden;background:#0d0d0d;border:1px solid var(--line);min-height:460px;color:#fff}
+  #slides{display:grid;position:relative;z-index:1;min-height:inherit}
   .hero::before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 52%,var(--dark-red) 52.2%,#c50f0f 100%);opacity:.95}
-  .hero::after{content:"";position:absolute;width:110px;height:110px;border-radius:50%;border:3px solid #ff1a1a;opacity:.55;left:-30px;bottom:-35px}
-  .slide{position:absolute;inset:0;display:grid;grid-template-columns:1.15fr 1fr;align-items:center;padding:2.6rem 3rem 4rem;opacity:0;transform:translateX(20px);transition:opacity .5s,transform .5s;pointer-events:none;z-index:1}
+  .hero::after{content:"";position:absolute;width:110px;height:110px;border-radius:50%;border:3px solid #fff;opacity:.35;right:-35px;bottom:-40px}
+  .slide{position:relative;grid-area:1/1;display:grid;grid-template-columns:1.15fr 1fr;align-items:center;padding:2.6rem 3rem 5rem;opacity:0;transform:translateX(20px);transition:opacity .5s,transform .5s;pointer-events:none;z-index:1}
   .slide.on{opacity:1;transform:none;pointer-events:auto}
   .chip-k{display:inline-flex;align-items:center;gap:.4rem;background:var(--red);color:#fff;font-size:.75rem;font-weight:800;letter-spacing:.8px;text-transform:uppercase;padding:.35rem .8rem;border-radius:999px}
   .slide h2{font-family:Anton,Impact,sans-serif;font-weight:400;text-transform:uppercase;font-size:clamp(2.6rem,6.4vw,5.2rem);line-height:.95;margin:1rem 0 .8rem;letter-spacing:.5px}
@@ -87,10 +88,10 @@
   .hnav button.on{color:#fff}
   .hnav button.on::after{background:var(--red)}
   @media (max-width:760px){
-    .hero{min-height:600px}
+    .hero{min-height:0}
     .hero::before{background:linear-gradient(170deg,transparent 46%,var(--dark-red) 46.2%,#c50f0f 100%)}
-    .slide{grid-template-columns:1fr;grid-template-rows:auto 1fr;padding:1.8rem 1.5rem 4rem;align-items:start}
-    .stage{order:2;min-height:250px}
+    .slide{grid-template-columns:1fr;grid-template-rows:auto auto;padding:1.8rem 1.5rem 4.6rem;align-items:start}
+    .stage{order:2;min-height:240px;margin-top:.6rem}
     .stage .ring{width:220px}
     .stage .art{font-size:7.5rem}
     .hnav{left:1.5rem}
@@ -303,6 +304,12 @@
   .tline span{font-weight:700;font-size:1.05rem}
   .tline b{font-size:1.75rem;font-weight:800}
   .tline small{display:block;text-align:right;color:var(--muted);font-size:.85rem;font-weight:500}
+  .bsbox{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:.8rem 1rem;display:grid;gap:.35rem}
+  .bsbox .row1{display:flex;justify-content:space-between;align-items:center;gap:.8rem}
+  .bsbox .row1 span{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--muted)}
+  .bsbox .row1 b{font-size:1.3rem;font-weight:800;white-space:nowrap}
+  .bsbox .rate{display:flex;justify-content:space-between;gap:.8rem;font-size:.78rem;color:var(--muted);border-top:1px dashed var(--line);padding-top:.4rem}
+  .bsbox .rate b{color:var(--text);font-weight:700}
   .freebox{border-radius:12px;padding:.75rem .9rem;font-size:.85rem;background:rgba(255,26,26,.08);border:1px solid rgba(255,26,26,.35)}
   .freebox.ok{background:rgba(37,211,102,.08);border-color:rgba(37,211,102,.4)}
   .freebox b{color:var(--text)}
@@ -838,7 +845,11 @@ function pintarPaginaCarrito(){
           <div class="line"><span>Envío</span><span class="${env.gratis?"free":""}">${env.txt}</span></div>
           <div class="line"><span>Precio aplicado</span><span>${lbl}</span></div>
         </div>
-        <div class="tline"><span>Total</span><span><b>${fmtUsd(t)}</b>${bcv && CONFIG.tasaBs?`<small>≈ ${fmtBs(t)}</small><small>Tasa BCV ${TASA.fecha?`del ${TASA.fecha}`:"de hoy"}: Bs. ${fmtTasa()}</small>`:""}</span></div>
+        <div class="tline"><span>Total</span><span><b>${fmtUsd(t)}</b></span></div>
+        ${bcv && CONFIG.tasaBs ? `<div class="bsbox">
+          <div class="row1"><span>En bolívares</span><b>${fmtBs(t)}</b></div>
+          <div class="rate"><span>Tasa BCV${TASA.fecha?` · ${TASA.fecha}`:""}</span><span><b>Bs. ${fmtTasa()}</b> por $1</span></div>
+        </div>` : ""}
         <div class="sform">
           <label>3 · Tu nombre<input id="fNombre" placeholder="Ej: Ana Pérez" value="${esc(sel.nombre)}" autocomplete="name"></label>
           <label>Notas ${entregaSel().envio?"(ciudad, dirección, agencia…)":"(opcional)"}<textarea id="fNotas" rows="2" placeholder="${entregaSel().envio?"Ej: Caracas, oficina MRW de Chacao":"Opcional"}">${esc(sel.notas)}</textarea></label>
@@ -921,7 +932,7 @@ $("sort").onchange = e => { orden = e.target.value; pintarCatalogo(); };
 function pintarTodo(){ pintarMoneda(); pintarHero(); pintarSecciones(); pintarChips(); pintarCatalogo(); pintarCarrito(); }
 /* ---------- Tasa BCV automática ---------- */
 const TASA = {valor:0, fecha:"", fuente:""};
-const fmtTasa = () => CONFIG.tasaBs.toLocaleString("es-VE",{minimumFractionDigits:2,maximumFractionDigits:4});
+const fmtTasa = () => CONFIG.tasaBs.toLocaleString("es-VE",{minimumFractionDigits:2,maximumFractionDigits:2});
 function numBonito(){ const n = waNum(); const m = n.match(/^58(\d{3})(\d{7})$/); return m ? `0${m[1]}-${m[2]}` : "+"+n; }
 function fechaCorta(f){
   if(!f) return "";
