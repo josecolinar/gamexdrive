@@ -1,0 +1,12 @@
+CARPETA DE CLIENTES — Gamexdrive
+
+Sube aquí las capturas o videos de tus destacados de Instagram (clientes felices).
+La web los muestra solos en la sección "Clientes", sin tocar nada más.
+
+Formatos: .jpg .jpeg .png .webp .gif .mp4 .webm .mov
+Orden: se muestran del nombre más alto al más bajo. Para que lo nuevo salga primero,
+nómbralos con la fecha, por ejemplo: 2026-11-13-cliente.jpg
+
+Cómo subir desde el celular o la computadora:
+github.com/josecolinar/gamexdrive → carpeta "clientes" → Add file → Upload files → Commit changes.
+Aparecen en la web en 1–2 minutos (en el navegador de cada cliente se refresca cada hora).

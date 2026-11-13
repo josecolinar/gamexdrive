@@ -230,6 +230,7 @@
   .card .im>.plus{position:absolute;right:.7rem;bottom:.7rem;z-index:3;box-shadow:0 6px 16px -6px rgba(0,0,0,.6)}
   .card .bd{padding:.2rem .9rem .95rem}
   .card .im>.tagbox{max-width:calc(100% - 4.6rem)}
+  .card .im>.ribbon{position:absolute}
   @media (max-width:720px){ .card .im>.origin .otx{display:none} .card .im>.origin{padding:.15rem .35rem} }
   .card .nm{flex:1}
   .prices.big{margin:.2rem 0 .3rem}
@@ -330,6 +331,24 @@
   .toast span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:60vw}
   .toast button{background:var(--red);color:#fff;border-radius:999px;padding:.35rem .8rem;font-weight:700;font-size:.85rem;white-space:nowrap}
   [hidden]{display:none !important}
+
+  /* ===== Ofertas del mes ===== */
+  .card .was{display:block;font-size:.74rem;color:var(--muted);margin-top:.4rem;text-align:center}
+  .card .was s{margin-left:.2rem}
+  .card.mes{border-color:rgba(255,26,26,.55)}
+  .ribbon{position:absolute;left:-1px;bottom:.8rem;z-index:3;background:var(--red);color:#fff;font-family:Anton,Impact,sans-serif;text-transform:uppercase;letter-spacing:.8px;font-size:.72rem;padding:.2rem .7rem .2rem .6rem;border-radius:0 6px 6px 0}
+  .countdown{display:inline-flex;align-items:center;gap:.4rem;background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:.3rem .8rem;font-weight:700;font-size:.82rem;color:var(--text)}
+  .countdown b{color:var(--red)}
+
+  /* ===== Clientes (carrusel) ===== */
+  .car-nav{display:flex;align-items:center;gap:.5rem}
+  .car-nav .round{font-size:1.4rem;line-height:1}
+  .car{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(200px,240px);gap:1rem;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:.6rem;scrollbar-width:thin}
+  .story{scroll-snap-align:start;position:relative;aspect-ratio:9/16;border-radius:18px;overflow:hidden;background:var(--panel2);border:1px solid var(--line)}
+  .story img,.story video{width:100%;height:100%;object-fit:cover;display:block}
+  .story::after{content:"";position:absolute;inset:0;border-radius:18px;box-shadow:inset 0 0 0 3px rgba(255,26,26,.0);transition:box-shadow .15s;pointer-events:none}
+  .story:hover::after{box-shadow:inset 0 0 0 3px var(--red)}
+  @media (max-width:640px){ .car{grid-auto-columns:62%} .car-nav .round{display:none} }
 </style>
 </head>
 <body>
@@ -364,6 +383,16 @@
 
   <div class="cats" id="cats"></div>
 
+  <section class="block" id="secOfertas">
+    <div class="sec"><h3><span class="n">01</span>Ofertas del mes</h3><p id="ofertaInfo"></p></div>
+    <div class="grid" id="ofertas"></div>
+  </section>
+
+  <section class="block" id="secTop">
+    <div class="sec"><h3><span class="n">02</span>Destacados</h3><p id="topInfo">Lo más visto por la comunidad Gamexdrive.</p></div>
+    <div class="grid" id="top"></div>
+  </section>
+
   <section class="block" id="secPre">
     <div class="sec"><h3><span class="n">01</span>Preventas</h3><p>Aparta lo que viene con un abono y asegura tu unidad antes que nadie.</p></div>
     <div class="pre-list" id="pre"></div>
@@ -387,6 +416,15 @@
     </div>
     <div class="chips" id="chips"></div>
     <div class="grid" id="grid"></div>
+  </section>
+
+  <section class="block" id="secClientes">
+    <div class="sec">
+      <h3><span class="n">05</span>Clientes</h3>
+      <div class="car-nav"><a class="more" id="igLink" target="_blank" rel="noopener">Ver en Instagram →</a>
+        <button class="round" data-car="-1" aria-label="Anterior">‹</button><button class="round" data-car="1" aria-label="Siguiente">›</button></div>
+    </div>
+    <div class="car" id="clientes"></div>
   </section>
 
   <section class="block" id="faqSec">
@@ -441,9 +479,23 @@ const CONFIG = {
   // 1) Tu propio worker que lee bcv.org.ve (pega aquí su dirección cuando esté publicado)
   // 2) Respaldo público que toma el valor del BCV
   tasaFuentes: [
-    "",
     "https://ve.dolarapi.com/v1/dolares/oficial"
   ],
+  // Dirección de tu worker de Cloudflare (tasa BCV propia + contador de visitas).
+  // Ej: "https://gamexdrive-api.TUUSUARIO.workers.dev"  (vacío = se usa el respaldo y los destacados manuales)
+  api: "",
+  // Ofertas del mes: cada mes se eligen solos estos productos al azar (iguales para todos los visitantes)
+  ofertaMensual: {
+    cantidad: 10,              // cuántos productos
+    descuento: 10,             // % de descuento
+    maxPctCatalogo: 40,        // nunca más de este % del catálogo (para que no todo esté en oferta)
+    excluirCategorias: ["Gift Cards"]
+  },
+  // Destacados: los más vistos del mes (con el worker). Sin worker, se usan los productos con destacado:true
+  destacados: { cantidad: 4 },
+  // Clientes: la web muestra sola todas las fotos/videos que subas a esta carpeta de tu GitHub
+  github: { usuario: "josecolinar", repo: "gamexdrive", carpetaClientes: "clientes" },
+  clientes: [],                // opcional: lista manual de archivos, ej. ["clientes/cliente1.jpg"]
   // Precio "Tasa BCV" = precio en divisas × este factor (1.30 = 30% más).
   // Si un producto tiene "precioBCV", se usa ese en lugar del cálculo.
   recargoBCV: 1.30,
@@ -493,16 +545,16 @@ const CONFIG = {
    img: foto en base64 (data:image/...) o vacío para usar el emoji
    ========================================================= */
 const PRODUCTOS = [
-  {id:1, nombre:"Figura Luffy Gear 5 — One Piece", cat:"Figuras", precio:45, precioAntes:50, emoji:"🏴‍☠️", origen:["🇯🇵","JP"], desc:"Figura de PVC con base y efectos, aprox. 20 cm.", nuevo:true, stock:true},
+  {destacado:true, id:1, nombre:"Figura Luffy Gear 5 — One Piece", cat:"Figuras", precio:45, precioAntes:50, emoji:"🏴‍☠️", origen:["🇯🇵","JP"], desc:"Figura de PVC con base y efectos, aprox. 20 cm.", nuevo:true, stock:true},
   {id:2, nombre:"Figura Monkey D. Luffy (en caja)", cat:"Figuras", precio:38, emoji:"👒", origen:["🇯🇵","JP"], desc:"One Piece. Viene en su caja original.", stock:true},
-  {id:3, nombre:"Figura Goku Super Saiyajin — Dragon Ball", cat:"Figuras", precio:35, emoji:"🐉", origen:["🇯🇵","JP"], desc:"Pose de batalla, aprox. 22 cm.", stock:true},
+  {destacado:true, id:3, nombre:"Figura Goku Super Saiyajin — Dragon Ball", cat:"Figuras", precio:35, emoji:"🐉", origen:["🇯🇵","JP"], desc:"Pose de batalla, aprox. 22 cm.", stock:true},
   {id:4, nombre:"Figura Yuta Okkotsu — Jujutsu Kaisen", cat:"Figuras", precio:32, emoji:"⚔️", origen:["🇯🇵","JP"], desc:"Figura de colección, aprox. 18 cm.", nuevo:true, stock:true},
   {id:5, nombre:"Figura Inosuke chibi — Demon Slayer", cat:"Figuras", precio:18, emoji:"🐗", desc:"Versión chibi, ideal para escritorio.", stock:true},
   {id:6, nombre:"Barco Thousand Sunny — One Piece", cat:"Figuras", precio:28, emoji:"⛵", origen:["🇯🇵","JP"], desc:"Modelo coleccionable con base.", preventa:true, stock:true},
   {id:13, nombre:"Figura Zoro Wano — One Piece", cat:"Figuras", precio:42, emoji:"🗡️", origen:["🇯🇵","JP"], desc:"Edición coleccionista con tres espadas.", preventa:true, stock:true},
   {id:7, nombre:"Funko Pop Boruto", cat:"Funko Pop", precio:20, emoji:"🍥", origen:["🇺🇸","US"], desc:"Boruto: Naruto Next Generations. Nuevo en caja.", nuevo:true, stock:true},
-  {id:8, nombre:"Peluche Pochita — Chainsaw Man", cat:"Peluches", precio:22, emoji:"🐶", desc:"Suave, aprox. 25 cm.", nuevo:true, stock:true},
-  {id:9, nombre:"Peluche Makima — Chainsaw Man", cat:"Peluches", precio:25, emoji:"🧸", desc:"Aprox. 30 cm.", stock:true},
+  {destacado:true, id:8, nombre:"Peluche Pochita — Chainsaw Man", cat:"Peluches", precio:22, emoji:"🐶", desc:"Suave, aprox. 25 cm.", nuevo:true, stock:true},
+  {destacado:true, id:9, nombre:"Peluche Makima — Chainsaw Man", cat:"Peluches", precio:25, emoji:"🧸", desc:"Aprox. 30 cm.", stock:true},
   {id:10, nombre:"Peluche Power — Chainsaw Man", cat:"Peluches", precio:25, emoji:"😈", desc:"Aprox. 30 cm.", stock:false},
   {id:11, nombre:"Fortnite 1.000 V-Bucks", cat:"Gift Cards", precio:10, emoji:"🎮", origen:["🇺🇸","US"], desc:"Código digital. Te lo enviamos por WhatsApp al confirmar el pago.", nuevo:true, stock:true, digital:true},
   {id:12, nombre:"League of Legends $10", cat:"Gift Cards", precio:11, emoji:"🎟️", origen:["🇺🇸","US"], desc:"Tarjeta de Riot Points. Código digital por WhatsApp.", stock:true, digital:true}
@@ -652,9 +704,10 @@ function tarjeta(p){
     if(p.precioAntes) t.push(`<span class="tg off">-${Math.round((1-p.precio/p.precioAntes)*100)}%</span>`);
     if(p.nuevo && !p.preventa) t.push('<span class="tg">Nuevo</span>');
   }
-  return `<article class="card">
+  return `<article class="card${p.ofertaMes?" mes":""}">
     <div class="im" data-ver="${p.id}">
       <div class="tagbox">${t.join("")}</div>
+      ${p.ofertaMes?`<span class="ribbon">Oferta del mes</span>`:""}
       ${p.origen?`<span class="origin" title="Origen: ${esc(p.origen[1])}">${p.origen[0]} <span class="otx">${esc(p.origen[1])}</span></span>`:""}
       ${vis(p)}
       ${boton(p)}
@@ -663,6 +716,7 @@ function tarjeta(p){
       <span class="ct">${esc(p.cat)}</span>
       <span class="nm" data-ver="${p.id}">${esc(p.nombre)}</span>
       ${preciosHTML(p)}
+      ${p.precioAntes?`<span class="was">Antes<s>${fmtUsd(p.precioAntes)}</s> en divisas</span>`:""}
     </div>
   </article>`;
 }
@@ -684,10 +738,26 @@ function pintarSecciones(){
   $("nuevos").innerHTML = nuevos.map(tarjeta).join("");
   $("secPre").style.display = pre.length ? "" : "none";
   $("secNuevos").style.display = nuevos.length ? "" : "none";
-  let n = 0; const num = () => String(++n).padStart(2,"0");
-  if(pre.length) $("secPre").querySelector(".n").textContent = num();
-  if(nuevos.length) $("nNuevos").textContent = num();
-  $("nCat").textContent = num(); $("nFaq").textContent = num();
+
+  // Ofertas del mes
+  $("ofertas").innerHTML = OFERTAS.map(tarjeta).join("");
+  $("secOfertas").style.display = OFERTAS.length ? "" : "none";
+  const dias = diasRestantesMes();
+  $("ofertaInfo").innerHTML = `<span class="countdown">⏳ Termina en <b>${dias} día${dias===1?"":"s"}</b> · -${CONFIG.ofertaMensual.descuento}% en divisas y tasa BCV</span>`;
+
+  // Destacados (más vistos, o manuales si aún no hay contador)
+  const top = (TOP.length ? TOP : PRODUCTOS.filter(p=>p.destacado && p.stock)).slice(0, CONFIG.destacados.cantidad);
+  $("top").innerHTML = top.map(tarjeta).join("");
+  $("secTop").style.display = top.length ? "" : "none";
+  $("topInfo").textContent = TOP.length ? "Lo más visto este mes por la comunidad Gamexdrive." : "Lo más buscado por la comunidad Gamexdrive.";
+  numerar();
+}
+function numerar(){
+  let n = 0;
+  ["secOfertas","secTop","secPre","secNuevos","productos","secClientes","faqSec"].forEach(id=>{
+    const el = $(id); if(!el || el.style.display==="none") return;
+    const s = el.querySelector(".sec .n"); if(s) s.textContent = String(++n).padStart(2,"0");
+  });
 }
 function pintarChips(){
   $("chips").innerHTML = ["Todos", ...categorias()].map(c=>`<button class="chip ${c===filtro?"on":""}" data-cat="${esc(c)}">${esc(c)}</button>`).join("");
@@ -741,6 +811,7 @@ function irCategoria(c){
 /* ---------- Vista rápida ---------- */
 function verProducto(id){
   const p = byId(id); if(!p) return;
+  registrarVisita(p.id);
   modalQty = 1;
   $("modal").innerHTML = `
     <div class="mv">${vis(p)}</div>
@@ -816,7 +887,7 @@ function pintarPaginaCarrito(){
     const pu = precioCarrito(p);
     return `<div class="crow">
       <div class="c-prod"><div class="cthumb" data-ver="${p.id}">${vis(p)}</div>
-        <div><div class="t">${esc(p.nombre)}</div><div class="m">${esc(p.cat)}${p.preventa?" · Preventa":""}${p.digital?" · Digital":""}</div><div class="mp">${fmtUsd(pu)} c/u</div></div></div>
+        <div><div class="t">${esc(p.nombre)}</div><div class="m">${esc(p.cat)}${p.preventa?" · Preventa":""}${p.digital?" · Digital":""}${p.ofertaMes?` · <span style="color:var(--red);font-weight:700">Oferta del mes -${CONFIG.ofertaMensual.descuento}%</span>`:""}</div><div class="mp">${fmtUsd(pu)} c/u</div></div></div>
       <div class="c-price">${fmtUsd(pu)}</div>
       <div class="c-qty"><div class="qbox"><button data-menos="${p.id}" aria-label="Quitar uno">−</button><span>${q}</span><button data-mas="${p.id}" aria-label="Agregar uno">+</button></div></div>
       <div class="c-sub">${fmtUsd(r2(pu*q))}</div>
@@ -872,7 +943,7 @@ function actualizarWA(){
   btn.classList.remove("off");
   const t = total(), env = estadoEnvio(), bcv = esBCV();
   let m = `¡Hola ${CONFIG.nombre}! 👋 Quiero hacer este pedido:\n\n`;
-  L.forEach(({p,q})=>{ m += `• ${q} x ${p.nombre}${p.preventa?" (preventa)":""} — ${fmtUsd(r2(precioCarrito(p)*q))}\n`; });
+  L.forEach(({p,q})=>{ m += `• ${q} x ${p.nombre}${p.preventa?" (preventa)":""}${p.ofertaMes?` (oferta del mes -${CONFIG.ofertaMensual.descuento}%)`:""} — ${fmtUsd(r2(precioCarrito(p)*q))}\n`; });
   m += `\n💳 Pago: ${sel.pago} (precio ${bcv?"tasa BCV":"divisas"})`;
   m += `\n*Total: ${fmtUsd(t)}*${bcv && CONFIG.tasaBs?` (≈ ${fmtBs(t)})`:""}`;
   m += `\n🚚 Entrega: ${sel.entrega} — envío ${env.gratis ? env.txt.replace(/[¡!]/g,"").toLowerCase() : "por confirmar"}${cumpleGratis() && entregaSel().envio ? " 🎉" : ""}`;
@@ -905,6 +976,7 @@ document.addEventListener("click", e=>{
   if(d.goto) return irCategoria(d.goto);
   if(d.cat){ filtro = d.cat; pintarChips(); pintarCatalogo(); return; }
   if(d.slide){ irSlide(+d.slide); arrancarSlider(); return; }
+  if(d.car){ const c = $("clientes"); c.scrollBy({left: (+d.car) * c.clientWidth * 0.8, behavior:"smooth"}); return; }
   if(d.add){ agregar(d.add, d.frommodal ? modalQty : 1); if(d.frommodal) cerrarModal(); return; }
   if(d.ver) return verProducto(d.ver);
   if(d.mq){ modalQty = Math.max(1, modalQty + +d.mq); $("mq").textContent = modalQty; return; }
@@ -965,7 +1037,8 @@ async function cargarTasa(){
   if(cache && cache.valor>0){ aplicarTasa(cache.valor, cache.fecha, cache.fuente); }
   if(cache && Date.now() - cache.ts < 2*3600e3) return; // fresca: menos de 2 horas
   if(!PUBLICADA) return;
-  for(const url of (CONFIG.tasaFuentes||[]).filter(Boolean)){
+  const fuentes = [CONFIG.api ? CONFIG.api.replace(/\/$/,"") + "/tasa" : "", ...(CONFIG.tasaFuentes||[])].filter(Boolean);
+  for(const url of fuentes){
     try{
       const ctrl = new AbortController(); const to = setTimeout(()=>ctrl.abort(), 6000);
       const r = await fetch(url, {signal:ctrl.signal, cache:"no-store"}); clearTimeout(to);
@@ -981,8 +1054,90 @@ async function cargarTasa(){
   }
 }
 
+/* ---------- Ofertas del mes (automáticas) ---------- */
+// La selección depende solo del mes: todos los visitantes ven las mismas ofertas
+// y cambian solas el día 1 de cada mes (hora de Caracas).
+function mesCaracas(){
+  try { return new Intl.DateTimeFormat("en-CA",{timeZone:"America/Caracas",year:"numeric",month:"2-digit"}).format(new Date()).slice(0,7); }
+  catch(e){ const d = new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0"); }
+}
+function diasRestantesMes(){
+  const [y,m] = mesCaracas().split("-").map(Number);
+  let hoy; try { hoy = Number(new Intl.DateTimeFormat("en-CA",{timeZone:"America/Caracas",day:"numeric"}).format(new Date())); } catch(e){ hoy = new Date().getDate(); }
+  return new Date(y, m, 0).getDate() - hoy + 1;
+}
+function semilla(str){ let h = 2166136261; for(const c of str){ h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
+function aleatorio(seed){ return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+let OFERTAS = [];
+function aplicarOfertasMes(){
+  const cfg = CONFIG.ofertaMensual; if(!cfg || !(cfg.cantidad>0) || !(cfg.descuento>0)) return;
+  const elegibles = PRODUCTOS.filter(p => p.stock && !p.preventa && !p.precioAntes && !(cfg.excluirCategorias||[]).includes(p.cat))
+                             .sort((a,b)=>a.id-b.id);
+  const rnd = aleatorio(semilla("gamexdrive-" + mesCaracas()));
+  for(let i = elegibles.length-1; i > 0; i--){ const j = Math.floor(rnd()*(i+1)); [elegibles[i], elegibles[j]] = [elegibles[j], elegibles[i]]; }
+  const tope = Math.max(1, Math.floor(elegibles.length * (cfg.maxPctCatalogo||100) / 100));
+  OFERTAS = elegibles.slice(0, Math.min(cfg.cantidad, tope));
+  OFERTAS.forEach(p => {
+    p.ofertaMes = true; p.precioAntes = p.precio;
+    p.precio = r2(p.precio * (1 - cfg.descuento/100));
+    if(p.precioBCV) p.precioBCV = r2(p.precioBCV * (1 - cfg.descuento/100));
+  });
+}
+
+/* ---------- Destacados: contador de visitas (worker propio) ---------- */
+let TOP = [];
+const apiURL = () => (CONFIG.api||"").replace(/\/$/,"");
+function hoyCaracas(){ try { return new Intl.DateTimeFormat("en-CA",{timeZone:"America/Caracas"}).format(new Date()); } catch(e){ return new Date().toISOString().slice(0,10); } }
+function registrarVisita(id){
+  if(!PUBLICADA || !apiURL()) return;
+  const vistos = store.get("gx_vistos", {}), hoy = hoyCaracas();
+  if(vistos[id] === hoy) return;           // una visita por producto por día y por persona
+  vistos[id] = hoy; store.set("gx_vistos", vistos);
+  try { fetch(apiURL() + "/visto?id=" + encodeURIComponent(id), {method:"POST", keepalive:true}).catch(()=>{}); } catch(e){}
+}
+async function cargarTop(){
+  if(!PUBLICADA || !apiURL()) return;
+  const cache = store.get("gx_top", null);
+  const usar = ids => { TOP = ids.map(byId).filter(p => p && p.stock); pintarSecciones(); };
+  if(cache && Date.now() - cache.ts < 30*60e3) return usar(cache.ids);
+  try {
+    const r = await fetch(apiURL() + "/top?n=" + (CONFIG.destacados.cantidad*3), {cache:"no-store"});
+    if(!r.ok) return;
+    const j = await r.json(); const ids = (j.top||[]).map(x => x.id);
+    store.set("gx_top", {ids, ts:Date.now()}); usar(ids);
+  } catch(e){}
+}
+
+/* ---------- Clientes: fotos y videos de la carpeta "clientes" de GitHub ---------- */
+const EXT_IMG = /\.(jpe?g|png|webp|gif|avif)$/i, EXT_VID = /\.(mp4|webm|mov)$/i;
+function pintarClientes(lista){
+  const items = lista.filter(f => EXT_IMG.test(f) || EXT_VID.test(f));
+  $("igLink").href = CONFIG.instagram ? `https://instagram.com/${CONFIG.instagram}` : "#";
+  $("igLink").hidden = !CONFIG.instagram;
+  $("clientes").innerHTML = items.map((f,i) => EXT_VID.test(f)
+    ? `<div class="story"><video src="${esc(f)}" muted loop playsinline autoplay preload="metadata" aria-label="Cliente ${i+1}"></video></div>`
+    : `<div class="story"><img src="${esc(f)}" alt="Cliente feliz de Gamexdrive ${i+1}" loading="lazy"></div>`).join("");
+  $("secClientes").style.display = items.length ? "" : "none";
+  numerar();
+}
+async function cargarClientes(){
+  let lista = [...(CONFIG.clientes||[])];
+  pintarClientes(lista);
+  if(!PUBLICADA || !CONFIG.github || !CONFIG.github.usuario) return;
+  const g = CONFIG.github, cache = store.get("gx_clientes", null);
+  if(cache && Date.now() - cache.ts < 60*60e3){ return pintarClientes([...lista, ...cache.files]); }
+  try {
+    const r = await fetch(`https://api.github.com/repos/${g.usuario}/${g.repo}/contents/${g.carpetaClientes}`, {headers:{Accept:"application/vnd.github+json"}});
+    if(!r.ok) return;
+    const files = (await r.json()).filter(x => x.type === "file").map(x => `${g.carpetaClientes}/${x.name}`).sort().reverse();
+    store.set("gx_clientes", {files, ts:Date.now()});
+    pintarClientes([...lista, ...files]);
+  } catch(e){}
+}
+
 try {
-  pintarFijos(); pintarTodo(); arrancarSlider(); syncURL(false); ruta(); cargarTasa();
+  aplicarOfertasMes();
+  pintarFijos(); pintarTodo(); arrancarSlider(); syncURL(false); ruta(); cargarTasa(); cargarTop(); cargarClientes();
 } catch(err) {
   // Nunca dejar la página en blanco: mostrar la tienda y un aviso con el error
   console.error(err);
