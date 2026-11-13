@@ -228,7 +228,14 @@
   .modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-46%);opacity:0;pointer-events:none;transition:all .2s;z-index:50;width:min(820px,94vw);max-height:90vh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:22px;display:grid;grid-template-columns:1fr 1fr}
   .modal.on{opacity:1;pointer-events:auto;transform:translate(-50%,-50%)}
   .modal .mv{display:grid;place-items:center;font-size:8rem;min-height:320px;background:radial-gradient(circle at 50% 60%,var(--glow),transparent 65%),var(--panel2);position:relative}
-  .modal .mv img{width:80%;height:80%;object-fit:contain}
+  .modal .mv{display:flex;flex-direction:column;justify-content:center;gap:.8rem;padding:1rem}
+  .modal .mv-main{display:grid;place-items:center;flex:1;min-height:260px;width:100%}
+  .modal .mv-main img{width:88%;max-height:360px;object-fit:contain;filter:drop-shadow(0 14px 24px rgba(0,0,0,.45))}
+  .thumbs{display:flex;gap:.5rem;justify-content:center}
+  .thumb{width:58px;height:58px;border-radius:10px;background:var(--panel);border:2px solid var(--line);padding:4px;display:grid;place-items:center}
+  .thumb img{max-width:100%;max-height:100%;object-fit:contain}
+  .thumb.on{border-color:var(--red)}
+  .card .im img{filter:drop-shadow(0 10px 16px rgba(0,0,0,.4))}
   .modal .mi{padding:1.8rem;display:flex;flex-direction:column;gap:.7rem;position:relative}
   .modal h3{font-size:1.45rem;line-height:1.2;padding-right:2rem;font-weight:800}
   .modal .d{color:var(--muted)}
@@ -632,7 +639,8 @@ const CONFIG = {
    desde: fecha en que se agregó (AAAA-MM-DD). Entra a las ofertas del mes a partir del mes siguiente,
           así las ofertas del mes en curso no cambian al agregar productos.
    origen: bandera + texto corto (opcional), ej. ["🇯🇵","JP"]
-   img: foto en base64 (data:image/...) o vacío para usar el emoji
+   img: foto principal (ruta como "img/productos/14-1.webp"); vacío = se usa el emoji
+   fotos: varias fotos ["img/productos/14-1.webp", ...]; la primera es la principal y en la vista rápida se pueden cambiar
    ========================================================= */
 const PRODUCTOS = [
   {destacado:true, id:1, autenticidad:"original", cantidad:2, nombre:"Figura Luffy Gear 5 — One Piece", cat:"Figuras", precio:45, precioAntes:50, emoji:"🏴‍☠️", origen:["🇯🇵","JP"], desc:"Figura de PVC con base y efectos, aprox. 20 cm.", nuevo:true, stock:true},
@@ -648,7 +656,7 @@ const PRODUCTOS = [
   {id:10, autenticidad:"generico", nombre:"Peluche Power — Chainsaw Man", cat:"Peluches", precio:25, emoji:"😈", desc:"Aprox. 30 cm.", stock:false},
   {id:11, nombre:"Fortnite 1.000 V-Bucks", cat:"Gift Cards", precio:10, emoji:"🎮", origen:["🇺🇸","US"], desc:"Código digital. Te lo enviamos por WhatsApp al confirmar el pago.", nuevo:true, stock:true, digital:true},
   {id:12, nombre:"League of Legends $10", cat:"Gift Cards", precio:11, emoji:"🎟️", origen:["🇺🇸","US"], desc:"Tarjeta de Riot Points. Código digital por WhatsApp.", stock:true, digital:true},
-  {id:14, desde:"2026-11-13", nombre:"Control PowerA Advantage Mario Time — Nintendo Switch 2", cat:"Controles", precio:50, cantidad:2, autenticidad:"original", emoji:"🎮", desc:"Control con cable con licencia oficial de Nintendo. Sticks Hall Effect, 2 botones programables, botón C para GameChat y cable USB-C desmontable de 3 m. Funciona con la Switch 2 en modo dock; no es compatible con HD rumble, cámara IR, controles de movimiento ni amiibo NFC.", nuevo:true}
+  {id:14, desde:"2026-11-13", nombre:"Control PowerA Advantage Mario Time — Nintendo Switch 2", cat:"Controles", precio:50, cantidad:2, autenticidad:"original", emoji:"🎮", fotos:["img/productos/14-1.webp","img/productos/14-2.webp","img/productos/14-3.webp"], desc:"Control con cable con licencia oficial de Nintendo. Sticks Hall Effect, 2 botones programables, botón C para GameChat y cable USB-C desmontable de 3 m. Funciona con la Switch 2 en modo dock; no es compatible con HD rumble, cámara IR, controles de movimiento ni amiibo NFC.", nuevo:true}
 ];
 
 /* ========================================================= */
@@ -659,7 +667,7 @@ const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt
 const byId = id => PRODUCTOS.find(p => p.id == id);
 const waNum = () => (CONFIG.whatsapp||"").replace(/\D/g,"");
 const waLink = txt => `https://wa.me/${waNum()}${txt?`?text=${encodeURIComponent(txt)}`:""}`;
-const vis = p => p.img ? `<img src="${p.img}" alt="${esc(p.nombre)}">` : `<span aria-hidden="true">${p.emoji}</span>`;
+const vis = p => p.img ? `<img src="${esc(p.img)}" alt="${esc(p.nombre)}" loading="lazy" decoding="async" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'${p.emoji||"🎁"}'}))">` : `<span aria-hidden="true">${p.emoji}</span>`;
 const store = {
   get(k,d){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
   set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
@@ -926,7 +934,9 @@ function verProducto(id){
   registrarVisita(p.id);
   modalQty = 1;
   $("modal").innerHTML = `
-    <div class="mv">${vis(p)}</div>
+    <div class="mv"><div class="mv-main" id="mvMain">${vis(p)}</div>
+      ${(p.fotos||[]).length > 1 ? `<div class="thumbs">${p.fotos.map((f,i)=>`<button class="thumb ${i===0?"on":""}" data-foto="${esc(f)}" aria-label="Foto ${i+1}"><img src="${esc(f)}" alt=""></button>`).join("")}</div>` : ""}
+    </div>
     <div class="mi">
       <button class="x" data-close aria-label="Cerrar">×</button>
       <span style="color:var(--red);font-size:.75rem;font-weight:800;letter-spacing:.8px;text-transform:uppercase">${esc(p.cat)}${p.origen?` · ${p.origen[0]} ${esc(p.origen[1])}`:""}${p.preventa?" · Preventa":""}</span>
@@ -1137,6 +1147,7 @@ document.addEventListener("click", e=>{
   if(d.goto) return irCategoria(d.goto);
   if(d.cat){ filtro = d.cat; pintarChips(); pintarCatalogo(); return; }
   if(d.slide){ irSlide(+d.slide); arrancarSlider(); return; }
+  if(d.foto){ $("mvMain").querySelector("img").src = d.foto; t.parentElement.querySelectorAll(".thumb").forEach(b=>b.classList.toggle("on", b===t)); return; }
   if(d.car){ const c = $("clientes"); c.scrollBy({left: (+d.car) * c.clientWidth * 0.8, behavior:"smooth"}); return; }
   if(d.add){ agregar(d.add, d.frommodal ? modalQty : 1); if(d.frommodal) cerrarModal(); return; }
   if(d.ver) return verProducto(d.ver);
@@ -1340,7 +1351,7 @@ async function cargarClientes(){
 }
 
 try {
-  PRODUCTOS.forEach(p => { if(typeof p.cantidad === "number") p.stock = p.cantidad > 0; });
+  PRODUCTOS.forEach(p => { if(typeof p.cantidad === "number") p.stock = p.cantidad > 0; if(!p.img && p.fotos && p.fotos.length) p.img = p.fotos[0]; });
   aplicarOfertasMes();
   pintarFijos(); pintarTodo(); arrancarSlider(); syncURL(false); ruta(); cargarTasa(); cargarTop(); cargarClientes(); registrarPV();
 } catch(err) {
