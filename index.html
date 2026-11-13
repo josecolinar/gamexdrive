@@ -385,7 +385,9 @@
   .au.original{background:rgba(37,211,102,.14);color:var(--ok)}
   .au.generico{background:var(--panel2);color:var(--muted);border:1px solid var(--line)}
   .tg.low{background:#ffb400;color:#111}
-  .tg.aviso{background:#3a3a3a;color:#fff;border:1px solid #666}
+  .au.aviso{background:rgba(255,180,0,.14);color:#ffb400}
+  .tg{white-space:nowrap}
+  @media (max-width:720px){ .tg{font-size:.66rem;padding:.1rem .4rem} .tagbox{max-width:calc(100% - 3.2rem)} .card .im>.origin{top:.55rem;right:.55rem} }
   .authbox{font-size:.84rem;border-radius:10px;padding:.6rem .8rem;background:var(--panel2);border:1px solid var(--line);color:var(--muted)}
   .authbox b{color:var(--text)}
   .authbox.original b{color:var(--ok)}
@@ -827,7 +829,6 @@ function tarjeta(p){
     if(p.preventa) t.push('<span class="tg pre">Preventa</span>');
     if(p.precioAntes) t.push(`<span class="tg off">-${Math.round((1-p.precio/p.precioAntes)*100)}%</span>`);
     if(p.nuevo && !p.preventa) t.push('<span class="tg">Nuevo</span>');
-    if(p.etiqueta) t.push(`<span class="tg aviso">${esc(p.etiqueta)}</span>`);
     if(pocas(p)) t.push(`<span class="tg low">¡${p.cantidad===1?"Queda 1":"Quedan "+p.cantidad}!</span>`);
   }
   return `<article class="card${p.ofertaMes?" mes":""}">
@@ -839,7 +840,7 @@ function tarjeta(p){
       ${boton(p)}
     </div>
     <div class="bd">
-      <span class="ct">${esc(p.cat)}${authTag(p)}</span>
+      <span class="ct">${esc(p.cat)}${authTag(p)}${p.etiqueta?`<span class="au aviso">⚠ ${esc(p.etiqueta)}</span>`:""}</span>
       <span class="nm" data-ver="${p.id}">${esc(p.nombre)}</span>
       ${preciosHTML(p)}
       ${p.precioAntes?`<span class="was">Antes<s>${fmtUsd(p.precioAntes)}</s> en divisas</span>`:""}
