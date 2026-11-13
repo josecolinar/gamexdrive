@@ -1,0 +1,15 @@
+{
+  "name": "Gamexdrive · Tienda geek",
+  "short_name": "Gamexdrive",
+  "description": "Figuras de anime, peluches, Funko Pop y gift cards. Pedidos por WhatsApp.",
+  "lang": "es-VE",
+  "start_url": "./?utm_source=app",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "icons": [
+    { "src": "img/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "img/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

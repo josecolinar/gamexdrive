@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Gamexdrive · Estadísticas</title>
+<link rel="icon" type="image/png" href="img/favicon-32.png">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#0a0a0a;color:#fff;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.45;padding:1.2rem}
+  .wrap{max-width:980px;margin:0 auto}
+  h1{font-size:1.6rem;margin-bottom:.2rem}
+  h1 span{color:#ff1a1a}
+  h2{font-size:1.05rem;margin:1.6rem 0 .6rem;text-transform:uppercase;letter-spacing:.6px;color:#bbb}
+  p.sub{color:#a3a3a3;font-size:.9rem;margin-bottom:1rem}
+  form{display:grid;grid-template-columns:2fr 1fr auto;gap:.5rem;background:#141414;border:1px solid #262626;border-radius:14px;padding:.9rem}
+  input{font:inherit;color:#fff;background:#1c1c1c;border:1px solid #2a2a2a;border-radius:10px;padding:.65rem .8rem;width:100%}
+  button{font:inherit;font-weight:700;background:#ff1a1a;color:#fff;border:0;border-radius:10px;padding:.65rem 1.1rem;cursor:pointer}
+  @media (max-width:640px){ form{grid-template-columns:1fr} }
+  .msg{margin-top:.8rem;color:#ff8a8a}
+  table{width:100%;border-collapse:collapse;background:#141414;border:1px solid #262626;border-radius:14px;overflow:hidden;font-size:.92rem}
+  th,td{padding:.6rem .8rem;text-align:left;border-bottom:1px solid #222}
+  th{background:#1c1c1c;color:#a3a3a3;font-size:.75rem;text-transform:uppercase;letter-spacing:.6px}
+  td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+  tr:last-child td{border-bottom:0}
+  .resumen td:first-child{color:#a3a3a3}
+  .resumen td.n{font-weight:800;font-size:1.1rem}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  @media (max-width:760px){ .grid2{grid-template-columns:1fr} }
+  .nota{color:#777;font-size:.8rem;margin-top:1.4rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>GAMEX<span>DRIVE</span> · Estadísticas</h1>
+  <p class="sub">Página privada: solo muestra datos con tu clave. Los datos los cuenta tu propio worker de Cloudflare.</p>
+
+  <form id="f">
+    <input id="api" placeholder="Dirección del worker (https://gamexdrive-api.….workers.dev)" required>
+    <input id="clave" type="password" placeholder="Tu clave (STATS_CLAVE)" required>
+    <button>Ver estadísticas</button>
+  </form>
+  <p class="msg" id="msg"></p>
+
+  <div id="out" hidden>
+    <h2>Últimos 30 días</h2>
+    <table class="resumen"><tbody id="resumen"></tbody></table>
+
+    <div class="grid2">
+      <div><h2>De dónde llegan</h2>
+        <table><thead><tr><th>Origen</th><th class="n">Visitas</th><th class="n">Pedidos</th><th class="n">% pedido</th></tr></thead><tbody id="fuentes"></tbody></table></div>
+      <div><h2>Productos más vistos del mes</h2>
+        <table><thead><tr><th>Producto</th><th class="n">Visitas</th></tr></thead><tbody id="productos"></tbody></table></div>
+    </div>
+
+    <h2>Día por día</h2>
+    <table><thead><tr><th>Fecha</th><th class="n">Visitas</th><th class="n">Pedidos</th></tr></thead><tbody id="dias"></tbody></table>
+    <p class="nota">“Pedidos” = clientes que tocaron “Comprar por WhatsApp”. Las ventas confirmadas se registran aparte cuando conectemos la hoja de pedidos.</p>
+  </div>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = n => Number(n||0).toLocaleString("es-VE");
+const pct = (a,b) => b ? (a/b*100).toLocaleString("es-VE",{maximumFractionDigits:1}) + "%" : "—";
+const NOMBRES = { directo:"Directo (escribieron la dirección)", instagram:"Instagram", whatsapp:"WhatsApp", google:"Google", facebook:"Facebook", tiktok:"TikTok", mercadolibre:"Mercado Libre", qr:"Código QR", app:"App (pantalla de inicio)", otro:"Otros sitios" };
+try { $("api").value = localStorage.getItem("gx_stats_api") || ""; } catch(e){}
+
+// Nombres de productos: se leen de la propia tienda (index.html)
+async function nombresProductos(){
+  try {
+    const html = await (await fetch("index.html", {cache:"no-store"})).text();
+    const m = html.match(/const PRODUCTOS = (\[[\s\S]*?\n\]);/);
+    const lista = m ? Function('"use strict";return (' + m[1] + ')')() : [];
+    return Object.fromEntries(lista.map(p => [p.id, p.nombre]));
+  } catch(e){ return {}; }
+}
+
+$("f").onsubmit = async e => {
+  e.preventDefault(); $("msg").textContent = "Cargando…";
+  const api = $("api").value.trim().replace(/\/$/,""), clave = $("clave").value;
+  try { localStorage.setItem("gx_stats_api", api); } catch(e){}
+  try {
+    const r = await fetch(`${api}/stats?dias=30&clave=${encodeURIComponent(clave)}`, {cache:"no-store"});
+    const j = await r.json();
+    if(!r.ok) throw new Error(j.error || ("Error " + r.status));
+    const nombres = await nombresProductos();
+    const V = j.dias.reduce((s,d)=>s+(d.visitas||0),0), P = j.dias.reduce((s,d)=>s+(d.pedidos||0),0);
+    const hoy = j.dias[j.dias.length-1] || {};
+    $("resumen").innerHTML = [
+      ["Visitas a la web", fmt(V)], ["Pedidos enviados por WhatsApp", fmt(P)],
+      ["De cada 100 visitas, piden", pct(P,V)], ["Visitas hoy", fmt(hoy.visitas)], ["Pedidos hoy", fmt(hoy.pedidos)]
+    ].map(([a,b])=>`<tr><td>${a}</td><td class="n">${b}</td></tr>`).join("");
+    const F = {}, FP = {};
+    j.dias.forEach(d => { for(const [k,v] of Object.entries(d.fuentes||{})) F[k]=(F[k]||0)+v; for(const [k,v] of Object.entries(d.pedidosPorFuente||{})) FP[k]=(FP[k]||0)+v; });
+    const keys = [...new Set([...Object.keys(F), ...Object.keys(FP)])].sort((a,b)=>(F[b]||0)-(F[a]||0));
+    $("fuentes").innerHTML = keys.length ? keys.map(k=>`<tr><td>${esc(NOMBRES[k]||k)}</td><td class="n">${fmt(F[k])}</td><td class="n">${fmt(FP[k])}</td><td class="n">${pct(FP[k]||0,F[k]||0)}</td></tr>`).join("") : `<tr><td colspan="4">Aún no hay visitas registradas.</td></tr>`;
+    $("productos").innerHTML = j.productos.length ? j.productos.map(p=>`<tr><td>${esc(nombres[p.id] || "Producto #"+p.id)}</td><td class="n">${fmt(p.visitas)}</td></tr>`).join("") : `<tr><td colspan="2">Aún no hay productos vistos este mes.</td></tr>`;
+    $("dias").innerHTML = [...j.dias].reverse().map(d=>`<tr><td>${d.fecha.split("-").reverse().join("/")}</td><td class="n">${fmt(d.visitas)}</td><td class="n">${fmt(d.pedidos)}</td></tr>`).join("");
+    $("out").hidden = false; $("msg").textContent = "";
+  } catch(err){ $("out").hidden = true; $("msg").textContent = "No se pudo cargar: " + err.message; }
+};
+</script>
+</body>
+</html>

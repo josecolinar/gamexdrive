@@ -8,6 +8,8 @@
  *   POST /visto?id=5      → suma una visita al producto 5 (la web lo llama al abrir un producto)
  *   GET  /top?n=12        → productos más vistos del mes
  *                           { "mes": "2026-11", "top": [ { "id": 5, "visitas": 42 }, ... ] }
+ *   POST /evento?tipo=visita&src=instagram   → cuenta una visita a la web (o tipo=pedido)
+ *   GET  /stats?clave=TU_CLAVE&dias=30       → estadísticas privadas (para stats.html)
  *
  * CÓMO PUBLICARLO
  *   1. dash.cloudflare.com → Storage & Databases → KV → Create namespace → nombre: VISITAS
@@ -15,7 +17,9 @@
  *   3. Borra el código de ejemplo, pega TODO este archivo y presiona Deploy.
  *   4. En el worker: Settings → Bindings → Add → KV namespace
  *        Variable name: VISITAS    ·   KV namespace: VISITAS   → Save / Deploy
- *   5. Copia la dirección (ej: https://gamexdrive-api.TUUSUARIO.workers.dev)
+ *   5. Settings → Variables and Secrets → Add → Type: Secret
+ *        Name: STATS_CLAVE   ·   Value: una clave que solo tú sepas (para ver tus estadísticas)
+ *   6. Copia la dirección (ej: https://gamexdrive-api.TUUSUARIO.workers.dev)
  *      y pégala en la web en CONFIG.api
  */
 
@@ -44,6 +48,8 @@ export default {
       if (url.pathname === "/" || url.pathname === "/tasa") return await tasa(ctx, cors);
       if (url.pathname === "/visto" && request.method === "POST") return await visto(url, env, request, cors);
       if (url.pathname === "/top") return await top(url, env, cors);
+      if (url.pathname === "/evento" && request.method === "POST") return await evento(url, env, request, cors);
+      if (url.pathname === "/stats") return await stats(url, env, cors);
       return json({ error: "Ruta no encontrada" }, cors, 404);
     } catch (err) {
       return json({ error: String(err.message || err) }, cors, 500);
@@ -117,6 +123,45 @@ async function top(url, env, cors) {
     .sort((a, b) => b.visitas - a.visitas || a.id - b.id)
     .slice(0, n);
   return json({ mes, top: lista }, { ...cors, "Cache-Control": "public, max-age=300" });
+}
+
+/* ---------------- Estadísticas ---------------- */
+function diaCaracas(d = new Date()) {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "America/Caracas" }).format(d);
+}
+const FUENTES_OK = /^[a-z0-9_-]{1,20}$/;
+
+async function evento(url, env, request, cors) {
+  if (!env.VISITAS) return json({ ok: false }, cors, 500);
+  const origin = request.headers.get("Origin") || "";
+  if (!ORIGENES.includes(origin)) return json({ ok: false }, cors, 403);
+  const tipo = url.searchParams.get("tipo") === "pedido" ? "pedidos" : "visitas";
+  let src = (url.searchParams.get("src") || "otro").toLowerCase();
+  if (!FUENTES_OK.test(src)) src = "otro";
+  const clave = "dia:" + diaCaracas();
+  const d = (await env.VISITAS.get(clave, "json")) || { visitas: 0, pedidos: 0, fuentes: {}, pedidosPorFuente: {} };
+  d[tipo] = (d[tipo] || 0) + 1;
+  const mapa = tipo === "visitas" ? "fuentes" : "pedidosPorFuente";
+  d[mapa][src] = (d[mapa][src] || 0) + 1;
+  await env.VISITAS.put(clave, JSON.stringify(d), { expirationTtl: 60 * 60 * 24 * 400 });
+  return json({ ok: true }, cors);
+}
+
+async function stats(url, env, cors) {
+  const privado = { ...cors, "Cache-Control": "no-store" };
+  if (!env.STATS_CLAVE || url.searchParams.get("clave") !== env.STATS_CLAVE) return json({ error: "Clave incorrecta" }, privado, 401);
+  if (!env.VISITAS) return json({ error: "Falta conectar el KV 'VISITAS'" }, privado, 500);
+  const n = Math.min(parseInt(url.searchParams.get("dias"), 10) || 30, 120);
+  const dias = [];
+  for (let i = n - 1; i >= 0; i--) {
+    const fecha = diaCaracas(new Date(Date.now() - i * 86400000));
+    const d = (await env.VISITAS.get("dia:" + fecha, "json")) || { visitas: 0, pedidos: 0, fuentes: {}, pedidosPorFuente: {} };
+    dias.push({ fecha, ...d });
+  }
+  const mes = mesCaracas();
+  const vistos = (await env.VISITAS.get("mes:" + mes, "json")) || {};
+  const productos = Object.entries(vistos).map(([id, v]) => ({ id: Number(id), visitas: v })).sort((a, b) => b.visitas - a.visitas).slice(0, 20);
+  return json({ mes, dias, productos }, privado);
 }
 
 /* ---------------- Utilidades ---------------- */

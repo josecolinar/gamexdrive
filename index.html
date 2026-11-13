@@ -3,7 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gamexdrive</title>
+<title>Gamexdrive · Tienda geek en Caracas</title>
+<meta name="description" content="Figuras de anime, peluches, Funko Pop y gift cards en Caracas. Precios en divisas y tasa BCV, pedidos por WhatsApp y envíos a toda Venezuela.">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="canonical" href="https://josecolinar.github.io/gamexdrive/">
+<!-- Vista previa al compartir (WhatsApp, Instagram, Facebook, X) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Gamexdrive">
+<meta property="og:locale" content="es_VE">
+<meta property="og:title" content="Gamexdrive · Tienda geek en Caracas">
+<meta property="og:description" content="Figuras de anime, peluches, Funko Pop y gift cards. Pedidos por WhatsApp · Envíos a toda Venezuela.">
+<meta property="og:url" content="https://josecolinar.github.io/gamexdrive/">
+<meta property="og:image" content="https://josecolinar.github.io/gamexdrive/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Gamexdrive — Tienda geek en Caracas">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://josecolinar.github.io/gamexdrive/img/og.jpg">
+<!-- Íconos y app en la pantalla de inicio -->
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="img/favicon-64.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Gamexdrive">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Squada+One&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -332,6 +357,41 @@
   .toast button{background:var(--red);color:#fff;border-radius:999px;padding:.35rem .8rem;font-weight:700;font-size:.85rem;white-space:nowrap}
   [hidden]{display:none !important}
 
+  /* ===== Cómo comprar + confianza ===== */
+  .como{margin:-1.2rem 0 3.4rem;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:1.4rem 1.4rem 1.2rem}
+  .como-t{font-family:Anton,Impact,sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.5px;font-size:1.5rem;margin-bottom:1rem}
+  .pasos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+  .paso{display:flex;gap:.8rem;align-items:flex-start}
+  .pn{flex:0 0 auto;width:40px;height:40px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-family:Anton,Impact,sans-serif;font-size:1.25rem}
+  .paso b{display:block;margin-bottom:.15rem}
+  .paso p{color:var(--muted);font-size:.88rem}
+  .confianza{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.1rem;padding-top:1rem;border-top:1px dashed var(--line)}
+  .confianza span,.confianza a{font-size:.82rem;font-weight:600;background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:.35rem .8rem;text-decoration:none}
+  .confianza a:hover{border-color:var(--red)}
+  @media (max-width:760px){ .pasos{grid-template-columns:1fr} .como{margin-top:-1.6rem} }
+
+  /* ===== Original / genérico · pocas unidades ===== */
+  .au{display:inline-block;margin-left:.35rem;font-size:.6rem;padding:.08rem .4rem;border-radius:4px;letter-spacing:.5px;vertical-align:1px}
+  .au.original{background:rgba(37,211,102,.14);color:var(--ok)}
+  .au.generico{background:var(--panel2);color:var(--muted);border:1px solid var(--line)}
+  .tg.low{background:#ffb400;color:#111}
+  .authbox{font-size:.84rem;border-radius:10px;padding:.6rem .8rem;background:var(--panel2);border:1px solid var(--line);color:var(--muted)}
+  .authbox b{color:var(--text)}
+  .authbox.original b{color:var(--ok)}
+  .lowbox{font-size:.85rem;font-weight:700;color:#ffb400}
+  .combobox{font-size:.84rem;border-radius:10px;padding:.55rem .8rem;background:rgba(255,26,26,.08);border:1px solid rgba(255,26,26,.35)}
+
+  /* ===== Cupones y combos ===== */
+  .cupon{display:flex;gap:.5rem}
+  .cupon input{text-transform:uppercase;padding:.6rem .8rem}
+  .cupon .btn{padding:.55rem 1rem;font-size:.85rem;white-space:nowrap}
+  .cmsg{font-size:.8rem;margin-top:.35rem}
+  .cmsg.ok{color:var(--ok)} .cmsg.bad{color:#ff6b6b}
+  .cmsg button{color:var(--muted);text-decoration:underline;font-size:.78rem;margin-left:.4rem}
+  .line .dsc{color:var(--ok);font-weight:700}
+  .c-sub s{display:block;color:var(--muted);font-weight:500;font-size:.78rem}
+  .pct{display:inline-block;background:rgba(37,211,102,.14);color:var(--ok);font-size:.65rem;font-weight:800;border-radius:4px;padding:.05rem .35rem;margin-left:.3rem}
+
   /* ===== Ofertas del mes ===== */
   .card .was{display:block;font-size:.74rem;color:var(--muted);margin-top:.4rem;text-align:center}
   .card .was s{margin-left:.2rem}
@@ -383,6 +443,12 @@
 
   <div class="cats" id="cats"></div>
 
+  <section class="como" id="secComo" aria-label="Cómo comprar">
+    <h3 class="como-t">¿Cómo comprar?</h3>
+    <div class="pasos" id="pasos"></div>
+    <div class="confianza" id="confianza"></div>
+  </section>
+
   <section class="block" id="secOfertas">
     <div class="sec"><h3><span class="n">01</span>Ofertas del mes</h3><p id="ofertaInfo"></p></div>
     <div class="grid" id="ofertas"></div>
@@ -407,6 +473,11 @@
     <div class="sec"><h3><span class="n" id="nCat">03</span>Tienda</h3><p id="priceNote"></p></div>
     <div class="controls">
       <input class="search" id="search" type="search" placeholder="Buscar figuras, peluches, gift cards…" aria-label="Buscar">
+      <select id="authF" aria-label="Filtrar por autenticidad">
+        <option value="todos">Originales y genéricos</option>
+        <option value="original">Solo originales</option>
+        <option value="generico">Solo genéricos</option>
+      </select>
       <select id="sort" aria-label="Ordenar">
         <option value="rel">Ordenar: relevancia</option>
         <option value="asc">Precio: menor a mayor</option>
@@ -491,6 +562,18 @@ const CONFIG = {
     maxPctCatalogo: 40,        // nunca más de este % del catálogo (para que no todo esté en oferta)
     excluirCategorias: ["Gift Cards"]
   },
+  // Etiqueta "¡Quedan N!" cuando un producto con "cantidad" tiene estas unidades o menos
+  pocasUnidades: 2,
+  // Cupones: el cliente escribe el código en el carrito. vence = último día válido (AAAA-MM-DD).
+  // No se suman a las ofertas: aplican a productos que no estén ya en oferta.
+  cupones: [
+    { codigo: "GAMEX10", descuento: 10, vence: "2026-12-31", nota: "Seguidores de Instagram" }
+  ],
+  // Combos: llevando "minimo" productos de una categoría, esos productos tienen "descuento" %.
+  combos: [
+    { categoria: "Peluches", minimo: 2, descuento: 10, nombre: "Combo peluches" },
+    { categoria: "Figuras",  minimo: 3, descuento: 10, nombre: "Combo figuras" }
+  ],
   // Destacados: los más vistos del mes (con el worker). Sin worker, se usan los productos con destacado:true
   destacados: { cantidad: 4 },
   // Clientes: la web muestra sola todas las fotos/videos que subas a esta carpeta de tu GitHub
@@ -526,6 +609,8 @@ const CONFIG = {
     {producto:11, etiqueta:"Entrega digital", titulo:"*V-Bucks* al instante", texto:"Recarga Fortnite y recibe tu código por WhatsApp."}
   ],
   faq: [
+    {p:"¿Los productos son originales?", r:"Cada producto dice si es Original (oficial o licenciado) o Genérico (no oficial). Siempre te lo indicamos para que sepas exactamente qué compras. Si tienes dudas, pregúntanos por WhatsApp antes de comprar."},
+    {p:"¿Cómo uso un cupón?", r:"En el carrito, escribe el código en “¿Tienes un cupón?” y toca Aplicar. Los cupones no se suman a productos que ya están en oferta."},
     {p:"¿Cómo compro?", r:"Agrega tus productos al carrito, entra al carrito, elige forma de pago y entrega, y toca “Comprar por WhatsApp”. Te escribimos para confirmar disponibilidad y coordinar el pago."},
     {p:"¿Por qué hay dos precios?", r:"“Divisas” es el precio pagando en dólares (Zelle, Binance, PayPal o efectivo). “Tasa BCV” es el precio pagando en bolívares por Pago Móvil, calculado a la tasa oficial BCV del día."},
     {p:"¿Hacen envíos?", r:"Sí, enviamos a todo el país por MRW, Zoom o Tealca, y hacemos delivery en la ciudad. El envío es gratis en órdenes desde $20 con mínimo 2 artículos (no aplica para gift cards, que son digitales). Si no aplica, te informamos el costo al confirmar."},
@@ -541,21 +626,23 @@ const CONFIG = {
    precioAntes: precio tachado en divisas (opcional)
    nuevo / preventa: true o false · stock: false = agotado
    digital: true para gift cards (no cuentan para el envío gratis)
+   autenticidad: "original" o "generico" (se muestra en la tarjeta)
+   cantidad: unidades disponibles (opcional). 0 = agotado; con pocas sale "¡Quedan N!"
    origen: bandera + texto corto (opcional), ej. ["🇯🇵","JP"]
    img: foto en base64 (data:image/...) o vacío para usar el emoji
    ========================================================= */
 const PRODUCTOS = [
-  {destacado:true, id:1, nombre:"Figura Luffy Gear 5 — One Piece", cat:"Figuras", precio:45, precioAntes:50, emoji:"🏴‍☠️", origen:["🇯🇵","JP"], desc:"Figura de PVC con base y efectos, aprox. 20 cm.", nuevo:true, stock:true},
-  {id:2, nombre:"Figura Monkey D. Luffy (en caja)", cat:"Figuras", precio:38, emoji:"👒", origen:["🇯🇵","JP"], desc:"One Piece. Viene en su caja original.", stock:true},
-  {destacado:true, id:3, nombre:"Figura Goku Super Saiyajin — Dragon Ball", cat:"Figuras", precio:35, emoji:"🐉", origen:["🇯🇵","JP"], desc:"Pose de batalla, aprox. 22 cm.", stock:true},
-  {id:4, nombre:"Figura Yuta Okkotsu — Jujutsu Kaisen", cat:"Figuras", precio:32, emoji:"⚔️", origen:["🇯🇵","JP"], desc:"Figura de colección, aprox. 18 cm.", nuevo:true, stock:true},
-  {id:5, nombre:"Figura Inosuke chibi — Demon Slayer", cat:"Figuras", precio:18, emoji:"🐗", desc:"Versión chibi, ideal para escritorio.", stock:true},
-  {id:6, nombre:"Barco Thousand Sunny — One Piece", cat:"Figuras", precio:28, emoji:"⛵", origen:["🇯🇵","JP"], desc:"Modelo coleccionable con base.", preventa:true, stock:true},
-  {id:13, nombre:"Figura Zoro Wano — One Piece", cat:"Figuras", precio:42, emoji:"🗡️", origen:["🇯🇵","JP"], desc:"Edición coleccionista con tres espadas.", preventa:true, stock:true},
-  {id:7, nombre:"Funko Pop Boruto", cat:"Funko Pop", precio:20, emoji:"🍥", origen:["🇺🇸","US"], desc:"Boruto: Naruto Next Generations. Nuevo en caja.", nuevo:true, stock:true},
-  {destacado:true, id:8, nombre:"Peluche Pochita — Chainsaw Man", cat:"Peluches", precio:22, emoji:"🐶", desc:"Suave, aprox. 25 cm.", nuevo:true, stock:true},
-  {destacado:true, id:9, nombre:"Peluche Makima — Chainsaw Man", cat:"Peluches", precio:25, emoji:"🧸", desc:"Aprox. 30 cm.", stock:true},
-  {id:10, nombre:"Peluche Power — Chainsaw Man", cat:"Peluches", precio:25, emoji:"😈", desc:"Aprox. 30 cm.", stock:false},
+  {destacado:true, id:1, autenticidad:"original", cantidad:2, nombre:"Figura Luffy Gear 5 — One Piece", cat:"Figuras", precio:45, precioAntes:50, emoji:"🏴‍☠️", origen:["🇯🇵","JP"], desc:"Figura de PVC con base y efectos, aprox. 20 cm.", nuevo:true, stock:true},
+  {id:2, autenticidad:"original", nombre:"Figura Monkey D. Luffy (en caja)", cat:"Figuras", precio:38, emoji:"👒", origen:["🇯🇵","JP"], desc:"One Piece. Viene en su caja original.", stock:true},
+  {destacado:true, id:3, autenticidad:"original", cantidad:1, nombre:"Figura Goku Super Saiyajin — Dragon Ball", cat:"Figuras", precio:35, emoji:"🐉", origen:["🇯🇵","JP"], desc:"Pose de batalla, aprox. 22 cm.", stock:true},
+  {id:4, autenticidad:"original", nombre:"Figura Yuta Okkotsu — Jujutsu Kaisen", cat:"Figuras", precio:32, emoji:"⚔️", origen:["🇯🇵","JP"], desc:"Figura de colección, aprox. 18 cm.", nuevo:true, stock:true},
+  {id:5, autenticidad:"generico", nombre:"Figura Inosuke chibi — Demon Slayer", cat:"Figuras", precio:18, emoji:"🐗", desc:"Versión chibi, ideal para escritorio.", stock:true},
+  {id:6, autenticidad:"original", nombre:"Barco Thousand Sunny — One Piece", cat:"Figuras", precio:28, emoji:"⛵", origen:["🇯🇵","JP"], desc:"Modelo coleccionable con base.", preventa:true, stock:true},
+  {id:13, autenticidad:"original", nombre:"Figura Zoro Wano — One Piece", cat:"Figuras", precio:42, emoji:"🗡️", origen:["🇯🇵","JP"], desc:"Edición coleccionista con tres espadas.", preventa:true, stock:true},
+  {id:7, autenticidad:"original", nombre:"Funko Pop Boruto", cat:"Funko Pop", precio:20, emoji:"🍥", origen:["🇺🇸","US"], desc:"Boruto: Naruto Next Generations. Nuevo en caja.", nuevo:true, stock:true},
+  {destacado:true, id:8, autenticidad:"generico", cantidad:5, nombre:"Peluche Pochita — Chainsaw Man", cat:"Peluches", precio:22, emoji:"🐶", desc:"Suave, aprox. 25 cm.", nuevo:true, stock:true},
+  {destacado:true, id:9, autenticidad:"generico", nombre:"Peluche Makima — Chainsaw Man", cat:"Peluches", precio:25, emoji:"🧸", desc:"Aprox. 30 cm.", stock:true},
+  {id:10, autenticidad:"generico", nombre:"Peluche Power — Chainsaw Man", cat:"Peluches", precio:25, emoji:"😈", desc:"Aprox. 30 cm.", stock:false},
   {id:11, nombre:"Fortnite 1.000 V-Bucks", cat:"Gift Cards", precio:10, emoji:"🎮", origen:["🇺🇸","US"], desc:"Código digital. Te lo enviamos por WhatsApp al confirmar el pago.", nuevo:true, stock:true, digital:true},
   {id:12, nombre:"League of Legends $10", cat:"Gift Cards", precio:11, emoji:"🎟️", origen:["🇺🇸","US"], desc:"Tarjeta de Riot Points. Código digital por WhatsApp.", stock:true, digital:true}
 ];
@@ -625,7 +712,18 @@ function pintarFijos(){
   $("logo").innerHTML = $("flogo").innerHTML = logoHTML();
   $("logo").setAttribute("aria-label", CONFIG.nombre);
   $("waHead").href = waLink(`¡Hola ${CONFIG.nombre}! Tengo una consulta`);
-  const frases = CONFIG.franja.map(f=>`<span>${esc(f)}</span>`).join("");
+  const extra = (CONFIG.combos||[]).map(c => `${c.minimo}+ ${c.categoria}: -${c.descuento}%`);
+  const frases = [...CONFIG.franja, ...extra].map(f=>`<span>${esc(f)}</span>`).join("");
+  const eg = CONFIG.envioGratisDesde>0 ? ` Envío gratis desde ${fmtUsd(CONFIG.envioGratisDesde)} con ${CONFIG.envioGratisMinArticulos||1} artículos.` : "";
+  $("pasos").innerHTML = [
+    ["Elige", "Agrega tus productos al carrito con el botón +."],
+    ["Paga como prefieras", "Divisas (" + CONFIG.pagos.filter(p=>p.tipo==="divisas").map(p=>p.nombre).join(", ") + ") o " + CONFIG.pagos.filter(p=>p.tipo==="bcv").map(p=>p.nombre).join(", ") + " a tasa BCV."],
+    ["Recibe", "Retiro o delivery en Caracas, o envío nacional." + eg]
+  ].map(([t,d],i)=>`<div class="paso"><span class="pn">${i+1}</span><div><b>${t}</b><p>${esc(d)}</p></div></div>`).join("");
+  $("confianza").innerHTML =
+    `<span>💬 Atención directa por WhatsApp</span><span>🛡️ Siempre te decimos si es original o genérico</span><span>📦 Envíos a toda Venezuela</span>` +
+    (CONFIG.mercadolibre ? `<a href="${esc(CONFIG.mercadolibre)}" target="_blank" rel="noopener">⭐ Nuestra reputación en Mercado Libre →</a>` : "") +
+    (CONFIG.instagram ? `<a href="https://instagram.com/${esc(CONFIG.instagram)}" target="_blank" rel="noopener">📸 @${esc(CONFIG.instagram)}</a>` : "");
   $("ticker").innerHTML = frases + frases;
   $("cats").innerHTML = categorias().map(c=>{
     const n = PRODUCTOS.filter(p=>p.cat===c && p.stock).length;
@@ -696,6 +794,14 @@ function boton(p){
   if(p.preventa) return `<button class="plus res" data-add="${p.id}" aria-label="Reservar ${esc(p.nombre)}" title="Reservar">${ICON_BOOK}</button>`;
   return `<button class="plus" data-add="${p.id}" aria-label="Añadir ${esc(p.nombre)} al carrito" title="Añadir al carrito">${ICON_PLUS}</button>`;
 }
+const pocas = p => p.stock && typeof p.cantidad === "number" && p.cantidad > 0 && p.cantidad <= (CONFIG.pocasUnidades||0);
+const maxUnidades = p => typeof p.cantidad === "number" ? p.cantidad : Infinity;
+function authTag(p){
+  if(p.autenticidad === "original") return `<span class="au original">✓ Original</span>`;
+  if(p.autenticidad === "generico") return `<span class="au generico">Genérico</span>`;
+  return "";
+}
+const comboDe = p => (CONFIG.combos||[]).find(c => c.categoria === p.cat);
 function tarjeta(p){
   const t = [];
   if(!p.stock) t.push('<span class="tg out">Agotado</span>');
@@ -703,6 +809,7 @@ function tarjeta(p){
     if(p.preventa) t.push('<span class="tg pre">Preventa</span>');
     if(p.precioAntes) t.push(`<span class="tg off">-${Math.round((1-p.precio/p.precioAntes)*100)}%</span>`);
     if(p.nuevo && !p.preventa) t.push('<span class="tg">Nuevo</span>');
+    if(pocas(p)) t.push(`<span class="tg low">¡${p.cantidad===1?"Queda 1":"Quedan "+p.cantidad}!</span>`);
   }
   return `<article class="card${p.ofertaMes?" mes":""}">
     <div class="im" data-ver="${p.id}">
@@ -713,7 +820,7 @@ function tarjeta(p){
       ${boton(p)}
     </div>
     <div class="bd">
-      <span class="ct">${esc(p.cat)}</span>
+      <span class="ct">${esc(p.cat)}${authTag(p)}</span>
       <span class="nm" data-ver="${p.id}">${esc(p.nombre)}</span>
       ${preciosHTML(p)}
       ${p.precioAntes?`<span class="was">Antes<s>${fmtUsd(p.precioAntes)}</s> en divisas</span>`:""}
@@ -765,7 +872,8 @@ function pintarChips(){
 }
 function pintarCatalogo(){
   const q = busqueda.trim().toLowerCase();
-  let lista = PRODUCTOS.filter(p => (filtro==="Todos"||p.cat===filtro) && (!q || `${p.nombre} ${p.cat} ${p.desc}`.toLowerCase().includes(q)));
+  const authF = ($("authF") && $("authF").value) || "todos";
+  let lista = PRODUCTOS.filter(p => (authF==="todos" || p.autenticidad===authF) && (filtro==="Todos"||p.cat===filtro) && (!q || `${p.nombre} ${p.cat} ${p.desc}`.toLowerCase().includes(q)));
   if(orden==="asc") lista.sort((a,b)=>a.precio-b.precio);
   if(orden==="desc") lista.sort((a,b)=>b.precio-a.precio);
   if(orden==="sale") lista.sort((a,b)=>(b.precioAntes?1:0)-(a.precioAntes?1:0));
@@ -823,6 +931,10 @@ function verProducto(id){
       ${p.precioAntes?`<span class="was">Antes en divisas:<s>${fmtUsd(p.precioAntes)}</s></span>`:""}
       ${CONFIG.tasaBs && moneda!=="bs"?`<span class="was">Tasa BCV en bolívares: ${fmtBs(pBCV(p))}</span>`:""}
       <p class="d">${esc(p.desc)}</p>
+      ${p.autenticidad==="original" ? `<div class="authbox original"><b>✓ Original</b> · Producto oficial / licenciado de la marca.</div>`
+        : p.autenticidad==="generico" ? `<div class="authbox"><b>Genérico</b> · No es producto oficial de la marca. Te lo indicamos siempre para que sepas lo que compras.</div>` : ""}
+      ${pocas(p) ? `<div class="lowbox">⚠️ ${p.cantidad===1?"¡Solo queda 1 unidad!":"¡Solo quedan "+p.cantidad+" unidades!"}</div>` : ""}
+      ${comboDe(p) && !p.ofertaMes && !p.precioAntes ? `<div class="combobox">🎁 Llévate ${comboDe(p).minimo} o más ${esc(p.cat)} y ahorra ${comboDe(p).descuento}%</div>` : ""}
       ${p.stock ? `
         <div class="qty"><button data-mq="-1" aria-label="Menos">−</button><span id="mq">1</span><button data-mq="1" aria-label="Más">+</button></div>
         <button class="btn" data-add="${p.id}" data-frommodal="1">${p.preventa?"Reservar":"Añadir al carrito"}</button>
@@ -836,9 +948,37 @@ function cerrarModal(){ $("modal").classList.remove("on"); $("overlay").classLis
 
 /* ---------- Carrito: cálculos ---------- */
 const lineas = () => Object.entries(carrito).map(([id,q])=>({p:byId(id), q})).filter(l=>l.p);
-const total = () => r2(lineas().reduce((s,l)=>s + precioCarrito(l.p)*l.q, 0));
-const fisicosTotal = () => r2(lineas().filter(l=>!l.p.digital).reduce((s,l)=>s + precioCarrito(l.p)*l.q, 0));
-const fisicosCant = () => lineas().filter(l=>!l.p.digital).reduce((s,l)=>s+l.q, 0);
+function cuponValido(){
+  const cod = (sel.cupon||"").trim().toUpperCase(); if(!cod) return null;
+  const c = (CONFIG.cupones||[]).find(x => x.codigo.toUpperCase() === cod);
+  if(!c) return null;
+  if(c.vence && hoyCaracas() > c.vence) return null;
+  return c;
+}
+// Calcula subtotal, descuentos (combos y cupón, sin sumarse a ofertas) y total
+function calcular(){
+  const cup = cuponValido();
+  const items = lineas().map(({p,q}) => ({p, q, pu: precioCarrito(p), pct: 0, motivo: ""}));
+  const elegible = it => !it.p.ofertaMes && !it.p.precioAntes;
+  (CONFIG.combos||[]).forEach(cb => {
+    const its = items.filter(it => elegible(it) && it.p.cat === cb.categoria);
+    if(its.reduce((s,it)=>s+it.q,0) >= cb.minimo)
+      its.forEach(it => { if(cb.descuento > it.pct){ it.pct = cb.descuento; it.motivo = `${cb.nombre||"Combo "+cb.categoria} -${cb.descuento}%`; } });
+  });
+  if(cup) items.forEach(it => {
+    if(elegible(it) && (!cup.categorias || cup.categorias.includes(it.p.cat)) && cup.descuento > it.pct){ it.pct = cup.descuento; it.motivo = `Cupón ${cup.codigo.toUpperCase()} -${cup.descuento}%`; }
+  });
+  items.forEach(it => { it.bruto = r2(it.pu*it.q); it.desc = r2(it.bruto*it.pct/100); it.neto = r2(it.bruto - it.desc); });
+  const grupos = {};
+  items.filter(i => i.desc > 0).forEach(i => { grupos[i.motivo] = r2((grupos[i.motivo]||0) + i.desc); });
+  const sub = r2(items.reduce((s,i)=>s+i.bruto,0)), desc = r2(items.reduce((s,i)=>s+i.desc,0));
+  return { items, sub, desc, total: r2(sub-desc), grupos, cup, cupAplicado: items.some(i => i.motivo.startsWith("Cupón")),
+    fisTotal: r2(items.filter(i=>!i.p.digital).reduce((s,i)=>s+i.neto,0)),
+    fisCant: items.filter(i=>!i.p.digital).reduce((s,i)=>s+i.q,0) };
+}
+const total = () => calcular().total;
+const fisicosTotal = () => calcular().fisTotal;
+const fisicosCant = () => calcular().fisCant;
 const minArt = () => Math.max(1, CONFIG.envioGratisMinArticulos||1);
 const cumpleGratis = () => CONFIG.envioGratisDesde>0 && fisicosTotal()>=CONFIG.envioGratisDesde && fisicosCant()>=minArt();
 function estadoEnvio(){
@@ -852,7 +992,7 @@ function guardarSel(){ store.set("gx_sel", sel); }
 
 /* ---------- Carrito: header + página ---------- */
 function pintarCarrito(){
-  Object.keys(carrito).forEach(id=>{ const p = byId(id); if(!p || !p.stock) delete carrito[id]; });
+  Object.keys(carrito).forEach(id=>{ const p = byId(id); if(!p || !p.stock) delete carrito[id]; else if(carrito[id] > maxUnidades(p)) carrito[id] = maxUnidades(p); });
   const n = lineas().reduce((s,l)=>s+l.q,0);
   $("count").textContent = n;
   $("hdrTotal").textContent = fmtUsd(total());
@@ -882,15 +1022,14 @@ function pintarPaginaCarrito(){
     $("cpContent").innerHTML = `<div class="cempty"><span class="e">🛒</span><b style="color:var(--text);font-size:1.15rem">Tu carrito está vacío</b><br>Agrega tu próxima figura, peluche o gift card.<br><button class="btn" data-store>Ir a la tienda</button></div>`;
     return;
   }
-  const bcv = esBCV(), lbl = bcv ? "Tasa BCV" : "Divisas", env = estadoEnvio(), t = total();
-  const filas = L.map(({p,q})=>{
-    const pu = precioCarrito(p);
+  const bcv = esBCV(), lbl = bcv ? "Tasa BCV" : "Divisas", env = estadoEnvio(), C = calcular(), t = C.total;
+  const filas = C.items.map(({p,q,pu,pct,bruto,neto})=>{
     return `<div class="crow">
       <div class="c-prod"><div class="cthumb" data-ver="${p.id}">${vis(p)}</div>
-        <div><div class="t">${esc(p.nombre)}</div><div class="m">${esc(p.cat)}${p.preventa?" · Preventa":""}${p.digital?" · Digital":""}${p.ofertaMes?` · <span style="color:var(--red);font-weight:700">Oferta del mes -${CONFIG.ofertaMensual.descuento}%</span>`:""}</div><div class="mp">${fmtUsd(pu)} c/u</div></div></div>
+        <div><div class="t">${esc(p.nombre)}</div><div class="m">${esc(p.cat)}${p.preventa?" · Preventa":""}${p.digital?" · Digital":""}${p.ofertaMes?` · <span style="color:var(--red);font-weight:700">Oferta del mes -${CONFIG.ofertaMensual.descuento}%</span>`:""}${p.autenticidad==="generico"?" · Genérico":p.autenticidad==="original"?" · Original":""}</div><div class="mp">${fmtUsd(pu)} c/u</div></div></div>
       <div class="c-price">${fmtUsd(pu)}</div>
       <div class="c-qty"><div class="qbox"><button data-menos="${p.id}" aria-label="Quitar uno">−</button><span>${q}</span><button data-mas="${p.id}" aria-label="Agregar uno">+</button></div></div>
-      <div class="c-sub">${fmtUsd(r2(pu*q))}</div>
+      <div class="c-sub">${pct?`<s>${fmtUsd(bruto)}</s>`:""}${fmtUsd(neto)}${pct?`<span class="pct">-${pct}%</span>`:""}</div>
       <div class="c-del"><button class="del" data-del="${p.id}" aria-label="Eliminar ${esc(p.nombre)}">${ICON_TRASH}</button></div>
     </div>`;
   }).join("");
@@ -915,9 +1054,18 @@ function pintarPaginaCarrito(){
           <div class="opts">${CONFIG.entregas.map(e=>`<button class="opt ${e.nombre===sel.entrega?"on":""}" data-entrega="${esc(e.nombre)}"><b>${esc(e.nombre)}</b><small>${esc(e.detalle||"")}</small></button>`).join("")}</div>
         </div>
         <div class="lines">
-          ${L.map(({p,q})=>`<div class="line"><span>${q} × ${esc(p.nombre)}</span><span>${fmtUsd(r2(precioCarrito(p)*q))}</span></div>`).join("")}
+          ${C.items.map(({p,q,bruto})=>`<div class="line"><span>${q} × ${esc(p.nombre)}</span><span>${fmtUsd(bruto)}</span></div>`).join("")}
+          ${C.desc>0 ? `<div class="line"><span>Subtotal</span><span>${fmtUsd(C.sub)}</span></div>` : ""}
+          ${Object.entries(C.grupos).map(([k,v])=>`<div class="line"><span>🏷️ ${esc(k)}</span><span class="dsc">−${fmtUsd(v)}</span></div>`).join("")}
           <div class="line"><span>Envío</span><span class="${env.gratis?"free":""}">${env.txt}</span></div>
           <div class="line"><span>Precio aplicado</span><span>${lbl}</span></div>
+        </div>
+        <div>
+          <div class="cupon"><input id="fCupon" placeholder="¿Tienes un cupón?" value="${esc(sel.cupon||"")}" aria-label="Código de cupón" autocomplete="off"><button class="btn line" data-cupon>Aplicar</button></div>
+          ${sel.cupon ? (C.cup
+              ? (C.cupAplicado ? `<p class="cmsg ok">✓ Cupón ${esc(C.cup.codigo.toUpperCase())} aplicado (-${C.cup.descuento}%)<button data-quitarcupon>Quitar</button></p>`
+                               : `<p class="cmsg bad">El cupón ${esc(C.cup.codigo.toUpperCase())} no aplica a productos que ya tienen descuento.<button data-quitarcupon>Quitar</button></p>`)
+              : `<p class="cmsg bad">El cupón “${esc(sel.cupon)}” no es válido o ya venció.<button data-quitarcupon>Quitar</button></p>`) : ""}
         </div>
         <div class="tline"><span>Total</span><span><b>${fmtUsd(t)}</b></span></div>
         ${bcv && CONFIG.tasaBs ? `<div class="bsbox">
@@ -941,9 +1089,14 @@ function actualizarWA(){
   const btn = $("waBtn"); if(!btn) return;
   const L = lineas(); if(!L.length){ btn.classList.add("off"); return; }
   btn.classList.remove("off");
-  const t = total(), env = estadoEnvio(), bcv = esBCV();
+  const C = calcular(), t = C.total, env = estadoEnvio(), bcv = esBCV();
   let m = `¡Hola ${CONFIG.nombre}! 👋 Quiero hacer este pedido:\n\n`;
-  L.forEach(({p,q})=>{ m += `• ${q} x ${p.nombre}${p.preventa?" (preventa)":""}${p.ofertaMes?` (oferta del mes -${CONFIG.ofertaMensual.descuento}%)`:""} — ${fmtUsd(r2(precioCarrito(p)*q))}\n`; });
+  C.items.forEach(({p,q,bruto})=>{ m += `• ${q} x ${p.nombre}${p.autenticidad==="generico"?" [genérico]":""}${p.preventa?" (preventa)":""}${p.ofertaMes?` (oferta del mes -${CONFIG.ofertaMensual.descuento}%)`:""} — ${fmtUsd(bruto)}\n`; });
+  if(C.desc > 0){
+    m += `\nSubtotal: ${fmtUsd(C.sub)}`;
+    Object.entries(C.grupos).forEach(([k,v]) => { m += `\n🏷️ ${k}: −${fmtUsd(v)}`; });
+    m += `\n`;
+  }
   m += `\n💳 Pago: ${sel.pago} (precio ${bcv?"tasa BCV":"divisas"})`;
   m += `\n*Total: ${fmtUsd(t)}*${bcv && CONFIG.tasaBs?` (≈ ${fmtBs(t)})`:""}`;
   m += `\n🚚 Entrega: ${sel.entrega} — envío ${env.gratis ? env.txt.replace(/[¡!]/g,"").toLowerCase() : "por confirmar"}${cumpleGratis() && entregaSel().envio ? " 🎉" : ""}`;
@@ -954,8 +1107,12 @@ function actualizarWA(){
 
 function agregar(id, n=1){
   const p = byId(id); if(!p || !p.stock) return;
-  carrito[id] = (carrito[id]||0) + n; store.set("gx_cart", carrito); pintarCarrito();
-  toast(`${p.preventa?"Reservado":"Añadido"}: ${p.nombre}`, true);
+  const actual = carrito[id]||0, max = maxUnidades(p);
+  if(actual >= max){ toast(max===1 ? "Solo queda 1 unidad y ya está en tu carrito" : `Solo quedan ${max} y ya están en tu carrito`, true); return; }
+  const nuevo = Math.min(max, actual + n);
+  carrito[id] = nuevo; store.set("gx_cart", carrito); pintarCarrito();
+  if(nuevo < actual + n) toast(`Solo quedan ${max}: agregamos ${nuevo-actual}`, true);
+  else toast(`${p.preventa?"Reservado":"Añadido"}: ${p.nombre}`, true);
 }
 
 /* ---------- UI ---------- */
@@ -979,8 +1136,10 @@ document.addEventListener("click", e=>{
   if(d.car){ const c = $("clientes"); c.scrollBy({left: (+d.car) * c.clientWidth * 0.8, behavior:"smooth"}); return; }
   if(d.add){ agregar(d.add, d.frommodal ? modalQty : 1); if(d.frommodal) cerrarModal(); return; }
   if(d.ver) return verProducto(d.ver);
-  if(d.mq){ modalQty = Math.max(1, modalQty + +d.mq); $("mq").textContent = modalQty; return; }
-  if(d.mas){ carrito[d.mas]++; store.set("gx_cart", carrito); pintarCarrito(); return; }
+  if(d.mq){ const mp = byId($("modal").querySelector("[data-add]")?.dataset.add); modalQty = Math.max(1, Math.min(mp ? maxUnidades(mp) : Infinity, modalQty + +d.mq)); $("mq").textContent = modalQty; return; }
+  if(d.mas){ const p = byId(d.mas); if(carrito[d.mas] >= maxUnidades(p)){ toast(`Solo ${maxUnidades(p)===1?"queda 1 unidad":"quedan "+maxUnidades(p)+" unidades"}`); return; } carrito[d.mas]++; store.set("gx_cart", carrito); pintarCarrito(); return; }
+  if(d.cupon !== undefined){ sel.cupon = ($("fCupon").value||"").trim().toUpperCase(); guardarSel(); pintarCarrito(); return; }
+  if(d.quitarcupon !== undefined){ sel.cupon = ""; guardarSel(); pintarCarrito(); return; }
   if(d.menos){ if(--carrito[d.menos] <= 0) delete carrito[d.menos]; store.set("gx_cart", carrito); pintarCarrito(); return; }
   if(d.del){ delete carrito[d.del]; store.set("gx_cart", carrito); pintarCarrito(); return; }
   if(d.pago){ sel.pago = d.pago; guardarSel(); pintarCarrito(); return; }
@@ -992,8 +1151,12 @@ $("cpContent").addEventListener("input", e=>{
   if(e.target.id==="fNotas") sel.notas = e.target.value;
   guardarSel(); actualizarWA();
 });
+$("cpContent").addEventListener("keydown", e=>{
+  if(e.target.id === "fCupon" && e.key === "Enter"){ e.preventDefault(); sel.cupon = (e.target.value||"").trim().toUpperCase(); guardarSel(); pintarCarrito(); }
+});
 $("cpContent").addEventListener("click", e=>{
-  if(e.target.closest("#waBtn") && !sel.nombre.trim()){ e.preventDefault(); $("err").style.display = "block"; $("fNombre").focus(); }
+  if(e.target.closest("#waBtn") && !sel.nombre.trim()){ e.preventDefault(); $("err").style.display = "block"; $("fNombre").focus(); return; }
+  if(e.target.closest("#waBtn")) evento("pedido");
 });
 $("logo").onclick = e => { e.preventDefault(); irTienda(()=>window.scrollTo({top:0,behavior:"smooth"})); };
 $("openCart").onclick = irCarrito;
@@ -1003,6 +1166,7 @@ $("search").oninput = e => { busqueda = e.target.value; $("hsearch").value = bus
 $("hsearch").oninput = e => { busqueda = e.target.value; $("search").value = busqueda; pintarCatalogo(); if(enCarrito()) irTienda(()=>$("productos").scrollIntoView()); };
 $("hsearch").onkeydown = e => { if(e.key==="Enter") irTienda(()=>$("productos").scrollIntoView({behavior:"smooth"})); };
 $("sort").onchange = e => { orden = e.target.value; pintarCatalogo(); };
+$("authF").onchange = () => pintarCatalogo();
 
 function pintarTodo(){ pintarMoneda(); pintarHero(); pintarSecciones(); pintarChips(); pintarCatalogo(); pintarCarrito(); }
 /* ---------- Tasa BCV automática ---------- */
@@ -1011,6 +1175,9 @@ const fmtTasa = () => CONFIG.tasaBs.toLocaleString("es-VE",{minimumFractionDigit
 function numBonito(){ const n = waNum(); const m = n.match(/^58(\d{3})(\d{7})$/); return m ? `0${m[1]}-${m[2]}` : "+"+n; }
 function fechaCorta(f){
   if(!f) return "";
+  // "2026-11-13" (fecha sin hora): se muestra tal cual, sin convertir zona horaria
+  const solo = String(f).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if(solo) return `${solo[3]}/${solo[2]}/${solo[1]}`;
   const d = new Date(f); if(isNaN(d)) return String(f);
   return d.toLocaleDateString("es-VE",{day:"2-digit",month:"2-digit",year:"numeric",timeZone:"America/Caracas"});
 }
@@ -1108,6 +1275,34 @@ async function cargarTop(){
   } catch(e){}
 }
 
+/* ---------- Estadísticas propias (worker): visitas por origen y pedidos ---------- */
+function fuenteVisita(){
+  try { const s = sessionStorage.getItem("gx_src"); if(s) return s; } catch(e){}
+  try {
+    const u = new URLSearchParams(location.search).get("utm_source");
+    if(u) return u.toLowerCase().replace(/[^a-z0-9_-]/g,"").slice(0,20) || "otro";
+    if(!document.referrer) return "directo";
+    const h = new URL(document.referrer).hostname;
+    if(h === location.hostname) return "interno";
+    if(/instagram/.test(h)) return "instagram";
+    if(/whatsapp|wa\.me/.test(h)) return "whatsapp";
+    if(/google\./.test(h)) return "google";
+    if(/facebook|fb\.|messenger/.test(h)) return "facebook";
+    if(/tiktok/.test(h)) return "tiktok";
+    if(/mercadolibre/.test(h)) return "mercadolibre";
+    return "otro";
+  } catch(e){ return "otro"; }
+}
+function evento(tipo){
+  if(!PUBLICADA || !apiURL()) return;
+  try { fetch(`${apiURL()}/evento?tipo=${tipo}&src=${encodeURIComponent(fuenteVisita())}`, {method:"POST", keepalive:true}).catch(()=>{}); } catch(e){}
+}
+function registrarPV(){
+  try { if(sessionStorage.getItem("gx_pv")) return; sessionStorage.setItem("gx_pv","1"); } catch(e){}
+  try { const f = fuenteVisita(); if(f !== "interno") sessionStorage.setItem("gx_src", f); } catch(e){}
+  evento("visita");
+}
+
 /* ---------- Clientes: fotos y videos de la carpeta "clientes" de GitHub ---------- */
 const EXT_IMG = /\.(jpe?g|png|webp|gif|avif)$/i, EXT_VID = /\.(mp4|webm|mov)$/i;
 function pintarClientes(lista){
@@ -1136,8 +1331,9 @@ async function cargarClientes(){
 }
 
 try {
+  PRODUCTOS.forEach(p => { if(typeof p.cantidad === "number") p.stock = p.cantidad > 0; });
   aplicarOfertasMes();
-  pintarFijos(); pintarTodo(); arrancarSlider(); syncURL(false); ruta(); cargarTasa(); cargarTop(); cargarClientes();
+  pintarFijos(); pintarTodo(); arrancarSlider(); syncURL(false); ruta(); cargarTasa(); cargarTop(); cargarClientes(); registrarPV();
 } catch(err) {
   // Nunca dejar la página en blanco: mostrar la tienda y un aviso con el error
   console.error(err);
