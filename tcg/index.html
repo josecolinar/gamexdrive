@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Astral TCG — Cartas, sellado y accesorios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f3ec; --surface:#ffffff; --surface-2:#efeae0; --ink:#16140f; --muted:#6f6a5f; --line:#e2dccf;
+  --accent:#ff5a1f; --accent-2:#e64a12; --teal:#0f766e; --sale:#e11d48; --ok:#15803d;
+  --on-ink:#f6f3ec; --shadow:0 1px 2px rgba(22,20,15,.06),0 8px 24px rgba(22,20,15,.06);
+}
+[data-theme="dark"]{
+  --bg:#121210; --surface:#1b1a17; --surface-2:#24221e; --ink:#f3efe6; --muted:#a39d90; --line:#33302a;
+  --on-ink:#121210; --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.5;transition:background .25s,color .25s}
+h1,h2,h3,h4,.display{font-family:'Space Grotesk',system-ui,sans-serif;letter-spacing:-.02em;line-height:1.1}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+input,select{font:inherit;color:var(--ink)}
+.wrap{max-width:1360px;margin:0 auto;padding:0 32px}
+.pill{border-radius:999px}
+.btn{white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--ink);color:var(--on-ink);border-radius:999px;padding:12px 22px;font-weight:700;transition:background .2s,transform .1s}
+.btn:hover{background:var(--accent);color:#fff}
+.btn:active{transform:scale(.97)}
+.btn.accent{background:var(--accent);color:#fff}.btn.accent:hover{background:var(--accent-2)}
+.btn.line{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+.btn.line:hover{background:var(--ink);color:var(--on-ink)}
+.btn.block{width:100%}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+/* ---------- HEADER ---------- */
+header{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.top{display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:center;height:76px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo b{font-family:'Space Grotesk';font-size:26px;font-weight:700;letter-spacing:-.04em}
+.logo small{display:block;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:-2px}
+.gsearch{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:0 6px 0 18px;height:48px;max-width:560px;width:100%;justify-self:center}
+.gsearch input{flex:1;border:none;background:none;outline:none;min-width:0}
+.gsearch button{background:var(--ink);color:var(--on-ink);border-radius:999px;height:36px;padding:0 16px;font-weight:700;font-size:14px}
+.tools{display:flex;align-items:center;gap:10px}
+.seg{display:flex;background:var(--surface-2);border-radius:999px;padding:3px}
+.seg button{padding:7px 12px;border-radius:999px;font-size:13px;font-weight:700;color:var(--muted)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.round{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);background:var(--surface)}
+.cartpill{display:flex;align-items:center;gap:10px;background:var(--ink);color:var(--on-ink);border-radius:999px;padding:6px 16px 6px 6px;font-weight:700}
+.cartpill .n{background:var(--accent);color:#fff;border-radius:999px;min-width:32px;height:32px;display:grid;place-items:center;font-size:14px}
+.subnav{display:flex;align-items:center;justify-content:space-between;height:52px}
+.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.tabs a{padding:8px 16px;border-radius:999px;font-weight:500;color:var(--muted);white-space:nowrap}
+.tabs a:hover{color:var(--ink)}
+.tabs a.on{background:var(--ink);color:var(--on-ink)}
+.sell{font-weight:700;color:var(--accent);white-space:nowrap}
+.ticker{background:var(--ink);color:var(--on-ink);overflow:hidden;white-space:nowrap;font-size:14px;font-weight:500}
+.ticker div{display:inline-block;padding:9px 0;animation:tick 40s linear infinite}
+.ticker span{margin:0 28px}.ticker span::before{content:'✦';color:var(--accent);margin-right:28px}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* ---------- HOME ---------- */
+.bento{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,minmax(210px,auto));gap:16px;padding:28px 0 12px}
+.tile{border-radius:24px;padding:28px;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.tile h2{font-size:30px;margin:8px 0}
+.tile p{opacity:.85}
+.tile .go{margin-top:auto;font-weight:700;display:inline-flex;align-items:center;gap:6px}
+.t-hero{grid-column:span 2;grid-row:span 2;background:var(--ink);color:var(--on-ink);padding:44px}
+.t-hero .eyebrow{color:var(--accent)}
+.t-hero>*:not(img){position:relative;z-index:1}
+.t-hero h1{font-size:68px;margin:14px 0 14px;max-width:420px}
+.t-hero p{max-width:320px;font-size:18px}
+.t-hero img{position:absolute;right:-30px;bottom:-20px;width:62%;max-width:430px;transform:rotate(-6deg);filter:drop-shadow(0 30px 40px rgba(0,0,0,.45))}
+.t-hero .btn{margin-top:auto;align-self:flex-start;background:var(--accent);color:#fff}
+.t-hero .btn:hover{background:#fff;color:#16140f}
+.t-orange{background:var(--accent);color:#fff}
+.t-teal{background:var(--teal);color:#fff}
+.t-surface{background:var(--surface);border:1px solid var(--line)}
+.t-paper{background:var(--surface-2)}
+.tile .big{font-family:'Space Grotesk';font-size:44px;font-weight:700;letter-spacing:-.03em}
+.tile .deco{position:absolute;right:-24px;bottom:-24px;opacity:.18}
+.sec{padding:56px 0 8px}
+.sec-h{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:24px}
+.sec-h h2{font-size:38px;margin-top:6px}
+.sec-h .ctrl{display:flex;gap:8px;align-items:center}
+.rail{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 48px)/4);gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:4px}
+.rail>*{scroll-snap-align:start}
+.cats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.cat{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;display:flex;align-items:center;gap:14px;transition:border-color .2s,transform .2s}
+.cat{min-width:0;overflow-wrap:anywhere}.cat>span{min-width:0}
+.cat:hover{border-color:var(--ink);transform:translateY(-2px)}
+.cat .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:20px;flex:none}
+.cat b{display:block;font-weight:700;line-height:1.2}
+.cat small{color:var(--muted)}
+.reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.review{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:28px;display:flex;flex-direction:column;gap:18px}
+.review .st{color:var(--accent);letter-spacing:3px}
+.review q{font-family:'Space Grotesk';font-size:21px;line-height:1.35;quotes:none}
+.review .who{display:flex;align-items:center;gap:12px;margin-top:auto;font-weight:700}
+.review .av{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700}
+.review .who small{display:block;font-weight:400;color:var(--muted)}
+
+/* ---------- TARJETAS ---------- */
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.grid.six{grid-template-columns:repeat(6,1fr);gap:14px}
+.card{min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:12px;display:flex;flex-direction:column;transition:box-shadow .2s,transform .2s}
+.card:hover{box-shadow:var(--shadow);transform:translateY(-3px)}
+.media{background:var(--surface-2);border-radius:16px;aspect-ratio:1;position:relative;display:grid;place-items:center;overflow:hidden;cursor:pointer}
+.media img{width:74%;height:74%;object-fit:contain;transition:transform .35s}
+.card:hover .media img{transform:scale(1.06) rotate(-2deg)}
+.single .media{aspect-ratio:.8}
+.single .media img{width:80%;height:88%}
+.chips{position:absolute;top:10px;left:10px;display:flex;gap:6px}
+.chip{font-size:11px;font-weight:700;letter-spacing:.06em;padding:4px 9px;border-radius:999px;background:var(--surface);color:var(--ink)}
+.chip.sale{background:var(--sale);color:#fff}
+.chip.new{background:var(--teal);color:#fff}
+.peek{position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:50%;background:var(--surface);display:grid;place-items:center;opacity:0;transform:translateY(-4px);transition:.2s}
+.card:hover .peek{opacity:1;transform:none}
+.body{padding:14px 6px 4px;display:flex;flex-direction:column;flex:1}
+.kind{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.name{font-weight:700;font-size:16px;line-height:1.3;margin:6px 0 10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:42px}
+.set{font-size:14px;color:var(--muted);margin:-6px 0 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.tags span{font-size:12px;background:var(--surface-2);padding:3px 9px;border-radius:999px;color:var(--muted);font-weight:500}
+.buy{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto}
+.price{font-family:'Space Grotesk';font-weight:700;font-size:21px;line-height:1.1}
+.price s{display:block;font-family:'DM Sans';font-size:13px;color:var(--muted);font-weight:500}
+.add{width:44px;height:44px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;flex:none;transition:background .2s,transform .15s}
+.add:hover{background:var(--accent);color:#fff;transform:rotate(90deg)}
+.add.in{background:var(--teal);color:#fff;transform:none}
+
+/* ---------- CATÁLOGO ---------- */
+.phead{padding:40px 0 20px;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.phead h1{font-size:54px}
+.phead p{color:var(--muted);margin-top:8px;max-width:520px}
+.bar{display:flex;align-items:center;gap:10px;padding:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:16px}
+.fchips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;flex:1}
+.fchip{white-space:nowrap;padding:9px 16px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-weight:500;font-size:14px}
+.fchip:hover{border-color:var(--ink)}
+.fchip.on{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+.fchip .c{opacity:.55;margin-left:4px}
+.sortsel{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:9px 14px;font-size:14px;font-weight:500;outline:none}
+.fbtn{display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;border:1px solid var(--ink);font-weight:700;font-size:14px;white-space:nowrap}
+.fbtn .dot{background:var(--accent);color:#fff;border-radius:999px;font-size:11px;padding:1px 7px}
+.active{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;align-items:center}
+.active button.tag{display:inline-flex;align-items:center;gap:6px;background:var(--surface-2);padding:6px 12px;border-radius:999px;font-size:13px;font-weight:500}
+.active .clr{font-size:13px;font-weight:700;color:var(--accent);margin-left:4px}
+.more{display:flex;flex-direction:column;align-items:center;gap:12px;padding:36px 0 10px;color:var(--muted);font-size:14px}
+.progress{width:220px;height:4px;background:var(--line);border-radius:4px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--ink)}
+.empty{grid-column:1/-1;text-align:center;padding:70px 20px;color:var(--muted)}
+.empty b{display:block;font-family:'Space Grotesk';font-size:26px;color:var(--ink);margin-bottom:8px}
+
+/* ---------- PANELES (carrito / filtros) ---------- */
+.scrim{position:fixed;inset:0;background:rgba(22,20,15,.45);opacity:0;pointer-events:none;transition:opacity .25s;z-index:60}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;top:12px;bottom:12px;right:12px;width:440px;max-width:calc(100% - 24px);background:var(--bg);border-radius:24px;z-index:70;transform:translateX(calc(100% + 24px));transition:transform .3s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.sheet.left{right:auto;left:12px;transform:translateX(calc(-100% - 24px))}
+.sheet.on{transform:none}
+.sh-head{display:flex;align-items:center;justify-content:space-between;padding:22px 24px;border-bottom:1px solid var(--line)}
+.sh-head h3{font-size:24px}
+.sh-body{flex:1;overflow:auto;padding:16px 24px}
+.sh-foot{padding:20px 24px;border-top:1px solid var(--line);background:var(--surface)}
+.ship{background:var(--surface);border-radius:16px;padding:14px 16px;margin-bottom:12px;font-size:14px}
+.ship .bar2{height:6px;background:var(--surface-2);border-radius:6px;margin-top:10px;overflow:hidden}
+.ship .bar2 i{display:block;height:100%;background:var(--teal);transition:width .4s}
+.cline{display:grid;grid-template-columns:64px 1fr auto;gap:14px;padding:14px 0;border-bottom:1px solid var(--line);align-items:center}
+.cline:last-child{border-bottom:none}
+.cline img{width:64px;height:64px;object-fit:contain;background:var(--surface-2);border-radius:12px;padding:4px}
+.cline b{font-size:14px;line-height:1.3;display:block}
+.cline small{color:var(--muted);font-size:13px}
+.cline .r{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.stepper{display:inline-flex;align-items:center;background:var(--surface-2);border-radius:999px;height:32px}
+.stepper button{width:30px;height:32px;font-size:16px;font-weight:700}
+.stepper button:disabled{opacity:.3;cursor:default}
+.stepper span{min-width:22px;text-align:center;font-size:14px;font-weight:700}
+.rm{font-size:12px;color:var(--muted);text-decoration:underline}
+.rm:hover{color:var(--sale)}
+.tot{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.tot b{font-family:'Space Grotesk';font-size:28px}
+.tot-alt{text-align:right;color:var(--muted);font-size:13px;margin-bottom:16px}
+.fgroup{padding:18px 0;border-bottom:1px solid var(--line)}
+.fgroup h4{font-size:16px;margin-bottom:12px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field label{display:block;font-size:13px;font-weight:700;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;outline:none;font:inherit;color:var(--ink)}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--ink)}
+.sw{display:flex;align-items:center;justify-content:space-between;font-weight:500}
+.switch{width:46px;height:26px;border-radius:999px;background:var(--line);position:relative;transition:background .2s;flex:none}
+.switch::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .2s}
+.switch.on{background:var(--accent)}.switch.on::after{left:23px}
+
+/* ---------- PEDIDO ---------- */
+.checkout{display:grid;grid-template-columns:1.3fr 1fr;gap:28px;padding:20px 0 40px;align-items:start}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:28px}
+.box h3{font-size:22px;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.box h3 .num{width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-size:14px}
+.form{display:grid;gap:14px}
+.radios{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.radio{border:1.5px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;display:flex;gap:10px;align-items:flex-start}
+.radio.on{border-color:var(--ink);background:var(--surface-2)}
+.radio i{width:18px;height:18px;border-radius:50%;border:2px solid var(--muted);flex:none;margin-top:2px}
+.radio.on i{border:5px solid var(--ink)}
+.radio b{display:block;font-size:15px}.radio small{color:var(--muted);font-size:13px}
+.sticky{position:sticky;top:150px}
+.sumrow{display:flex;justify-content:space-between;padding:8px 0;color:var(--muted)}
+.sumrow.t{color:var(--ink);font-family:'Space Grotesk';font-size:26px;font-weight:700;border-top:1px solid var(--line);margin-top:8px;padding-top:16px}
+.note{font-size:13px;color:var(--muted);margin-top:12px;text-align:center}
+
+/* ---------- MODAL / TOAST / FOOTER ---------- */
+.modal{position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal.on{opacity:1;pointer-events:auto}
+.modal .bg{position:absolute;inset:0;background:rgba(22,20,15,.5)}
+.mbox{position:relative;background:var(--bg);border-radius:28px;max-width:860px;width:100%;max-height:90vh;overflow:auto;display:grid;grid-template-columns:1fr 1fr}
+.mbox.narrow{max-width:520px;display:block;padding:32px}
+.mbox .mm{background:var(--surface-2);display:grid;place-items:center;padding:40px;min-height:420px}
+.mbox .mm img{max-width:100%;max-height:400px}
+.mbox .mi{padding:40px 36px;display:flex;flex-direction:column;gap:14px}
+.mbox h3{font-size:30px}
+.mbox .x{position:absolute;top:16px;right:16px;z-index:2}
+.mbox pre{white-space:pre-wrap;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;font:14px/1.5 'DM Sans';max-height:280px;overflow:auto;margin:14px 0}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,140%);background:var(--ink);color:var(--on-ink);padding:12px 18px 12px 12px;border-radius:999px;display:flex;align-items:center;gap:12px;z-index:90;transition:transform .3s;font-weight:500;box-shadow:var(--shadow)}
+.toast.on{transform:translate(-50%,0)}
+.toast img{width:36px;height:36px;object-fit:contain;background:var(--surface-2);border-radius:50%;padding:3px}
+footer{margin-top:80px;background:var(--ink);color:var(--on-ink)}
+.fgrid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px;padding:60px 0 40px}
+.fgrid h5{font-size:13px;letter-spacing:.14em;text-transform:uppercase;opacity:.6;margin-bottom:16px}
+.fgrid li{list-style:none;margin-bottom:10px}
+.fgrid a:hover{color:var(--accent)}
+.fbig{font-family:'Space Grotesk';font-size:min(15vw,190px);font-weight:700;letter-spacing:-.06em;line-height:.8;opacity:.08;white-space:nowrap;overflow:hidden;padding-bottom:10px}
+.fbottom{display:flex;justify-content:space-between;padding:20px 0;border-top:1px solid rgba(255,255,255,.12);font-size:14px;opacity:.7}
+[data-theme="dark"] .fbottom{border-color:rgba(0,0,0,.15)}
+
+@media (max-width:1100px){
+  .grid{grid-template-columns:repeat(3,1fr)}.grid.six{grid-template-columns:repeat(4,1fr)}
+  .bento{grid-template-columns:repeat(2,1fr)}.cats{grid-template-columns:repeat(3,1fr)}
+  .rail{grid-auto-columns:calc((100% - 32px)/3)}.reviews{grid-template-columns:1fr 1fr}
+  .checkout{grid-template-columns:1fr}.sticky{position:static}.fgrid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:760px){
+  .wrap{padding:0 16px}
+  .top{grid-template-columns:minmax(0,1fr) auto;height:auto;padding-top:10px;row-gap:10px}.logo small{display:none}.seg button{padding:6px 9px}.gsearch{grid-column:1/-1;grid-row:2;max-width:none;margin-bottom:10px}
+  .tools .round.theme,.cartpill .amt{display:none}.cartpill{padding:6px}
+  .sell{display:none}
+  .grid{grid-template-columns:1fr 1fr;gap:10px}.grid.six{grid-template-columns:1fr 1fr}
+  .rail{grid-auto-columns:70%}
+  .bento{grid-template-columns:1fr}.t-hero{grid-column:auto;grid-row:auto;min-height:440px;padding:28px}
+  .t-hero h1{font-size:46px}.t-hero img{width:70%}
+  .cats{grid-template-columns:1fr 1fr}.reviews{grid-template-columns:1fr}
+  .phead h1{font-size:38px}.sec-h h2{font-size:28px}
+  .mbox{grid-template-columns:1fr}.mbox .mm{min-height:260px}
+  .radios,.two{grid-template-columns:1fr}
+  .price{font-size:18px}.add{width:38px;height:38px}
+  .fgrid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap top">
+    <a href="#inicio" class="logo" aria-label="Inicio">
+      <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 2l15.6 9v18L20 38 4.4 29V11z" fill="var(--ink)"/><path d="M20 10l2.6 6.6 7 .5-5.4 4.5 1.7 6.9L20 24.7l-5.9 3.8 1.7-6.9-5.4-4.5 7-.5z" fill="#ff5a1f"/></svg>
+      <div><b>astral</b><small>tcg · cartas & sellado</small></div>
+    </a>
+    <form class="gsearch" id="gsearch" role="search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input placeholder="Busca una carta, set o producto…" aria-label="Buscar">
+      <button>Buscar</button>
+    </form>
+    <div class="tools">
+      <div class="seg" data-cur><button data-c="USD">USD</button><button data-c="VES">Bs.</button></div>
+      <button class="round theme" id="themeBtn" aria-label="Cambiar tema"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+      <button class="cartpill" id="cartBtn" aria-label="Abrir carrito"><span class="n" id="cartCount">0</span><span class="amt" id="cartTotalHdr">$0.00</span></button>
+    </div>
+  </div>
+  <div class="wrap subnav">
+    <nav class="tabs">
+      <a href="#inicio" data-nav="inicio">Inicio</a>
+      <a href="#sellado" data-nav="sellado">Sellado</a>
+      <a href="#singles" data-nav="singles">Singles</a>
+      <a href="#accesorios" data-nav="accesorios">Accesorios</a>
+      <a href="#ofertas" data-nav="ofertas">Ofertas</a>
+    </nav>
+    <a class="sell" data-wa-sell href="#">¿Vendes tus cartas? Te las compramos →</a>
+  </div>
+  <div class="ticker" aria-hidden="true"><div id="ticker"></div></div>
+</header>
+
+<main id="app"></main>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <h5>Astral TCG</h5>
+        <p style="opacity:.8;max-width:320px">Cartas sueltas, producto sellado y accesorios originales. Pedidos por WhatsApp con envío a todo el país.</p>
+      </div>
+      <div><h5>Tienda</h5><ul><li><a href="#sellado">Sellado</a></li><li><a href="#singles">Singles</a></li><li><a href="#accesorios">Accesorios</a></li><li><a href="#ofertas">Ofertas</a></li></ul></div>
+      <div><h5>Ayuda</h5><ul><li><a href="#" data-info="faq">Preguntas frecuentes</a></li><li><a href="#" data-info="devoluciones">Devoluciones</a></li><li><a href="#" data-info="pagos">Métodos de pago</a></li></ul></div>
+      <div><h5>Contacto</h5><ul><li><a href="#" data-wa id="footWa"></a></li><li id="footIg"></li><li id="footCity"></li></ul></div>
+    </div>
+    <div class="fbig">astral tcg</div>
+    <div class="fbottom"><span>© <span id="year"></span> Astral TCG</span><span>Hecho para coleccionistas</span></div>
+  </div>
+</footer>
+
+<div class="scrim" id="scrim"></div>
+<aside class="sheet" id="cartSheet" aria-label="Carrito">
+  <div class="sh-head"><h3>Tu carrito</h3><button class="round" data-close-sheet aria-label="Cerrar">✕</button></div>
+  <div class="sh-body" id="cartBody"></div>
+  <div class="sh-foot" id="cartFoot"></div>
+</aside>
+<aside class="sheet left" id="filterSheet" aria-label="Filtros">
+  <div class="sh-head"><h3>Filtros</h3><button class="round" data-close-sheet aria-label="Cerrar">✕</button></div>
+  <div class="sh-body" id="filterBody"></div>
+  <div class="sh-foot"><div class="two"><button class="btn line" data-clear>Limpiar</button><button class="btn" data-close-sheet id="seeResults">Ver resultados</button></div></div>
+</aside>
+<div class="modal" id="modal"><div class="bg" data-close></div><div class="mbox" id="mbox"></div></div>
+<div class="toast" id="toast"></div>
+<script>
+const CONFIG = {
+  brand: 'Astral TCG',
+  whatsapp: '584120000000',          // número en formato internacional, sin "+" ni espacios
+  whatsappDisplay: '(+58) 0412-000-0000',
+  instagram: '@astraltcg',
+  city: 'Caracas, Venezuela',
+  // Tasa BCV: se busca sola al abrir la web publicada (GitHub Pages) y se guarda 2 horas.
+  // Fuentes en orden: tu worker propio (si pones su dirección en "api") y luego el respaldo público.
+  api: '',                           // ej. 'https://gamexdrive-api.TUUSUARIO.workers.dev' → usa su /tasa
+  tasaFuentes: ['https://ve.dolarapi.com/v1/dolares/oficial'],
+  tasaBs: 0,                         // respaldo manual: solo se usa si no se pudo leer la tasa automática
+  envioGratisDesde: 25               // $ — no aplica a singles
+};
+
+/* ===================== CATÁLOGO ===================== */
+// kind: box | pack | etb | collection | graded | binder | sleeves | deck | kit | tin
+const PRODUCTS = [
+  {id:'p1', name:'Surging Sparks - Pokemon Center Elite Trainer Box', cat:'Elite Trainer Boxes', lang:'EN', price:270, kind:'etb', hue:52, isNew:false},
+  {id:'p2', name:'Gardevoir EX - Shiny Treasures ex PSA 10', cat:'Cartas gradeadas', lang:'JP', price:228, old:240, kind:'graded', hue:190},
+  {id:'p3', name:'Pokemon - Abyss Eye Booster Box', cat:'Booster Boxes', lang:'JP', price:118, kind:'box', hue:285, isNew:true},
+  {id:'p4', name:'Pokemon - Mega Brave Booster Box', cat:'Booster Boxes', lang:'JP', price:118, kind:'box', hue:5, isNew:true},
+  {id:'p5', name:'Pokemon - First Partners Series 3', cat:'Collection Boxes', lang:'EN', price:40, old:50, kind:'collection', hue:140},
+  {id:'p6', name:'Dragon Ball Fusion World Premium Card Collection 01', cat:'Dragon Ball', lang:'EN', price:40, kind:'collection', hue:25},
+  {id:'p7', name:'Pitch Black: Sleeved Booster Pack', cat:'Booster Packs', lang:'EN', price:7, old:7.5, kind:'pack', hue:300, isNew:true},
+  {id:'p8', name:'Mascarada Crepuscular - Sleeved Booster Pack', cat:'Booster Packs', lang:'ES', price:6, old:7, kind:'pack', hue:160},
+  {id:'p9', name:'Ultra Pro Mega Gengar 2x2 Binder', cat:'Accesorios', lang:'EN', price:10, old:15, kind:'binder', hue:275},
+  {id:'p10', name:'Ultra Pro Greninja 2x2 Binder', cat:'Accesorios', lang:'EN', price:10, old:13, kind:'binder', hue:205},
+  {id:'p11', name:'Protector para Cartas Gradeadas - Graded Guard: Snowfall (PSA)', cat:'Accesorios', lang:'EN', price:16, old:28, kind:'graded', hue:210},
+  {id:'p12', name:'Dragon Ball Fusion World - Dual Evolution FB09', cat:'Dragon Ball', lang:'JP', price:5, kind:'pack', hue:220, isNew:true},
+  {id:'p13', name:'Dragon Shield - Matte Clear Sleeves (Protectores de Cartas) x100', cat:'Accesorios', lang:'EN', price:18, kind:'sleeves', hue:180, isNew:true},
+  {id:'p14', name:'Pitch Black - Elite Trainer Box', cat:'Elite Trainer Boxes', lang:'EN', price:62, kind:'etb', hue:0, sat:0, isNew:true},
+  {id:'p15', name:'Pokemon - Terastal Festival Booster Box', cat:'Booster Boxes', lang:'JP', price:135, kind:'box', hue:320},
+  {id:'p16', name:'Battle Deck - Mega Lucario ex', cat:'Deck Estructurado', lang:'EN', price:22, kind:'deck', hue:215},
+  {id:'p17', name:'Battle Deck - Mega Venusaur ex', cat:'Deck Estructurado', lang:'ES', price:22, kind:'deck', hue:110},
+  {id:'p18', name:'Pokemon - Prismatic Evolutions Booster Bundle', cat:'Collection Boxes', lang:'EN', price:55, kind:'collection', hue:265},
+  {id:'p19', name:'Model Kit Quick!! - Pikachu', cat:'Model Kits', lang:'JP', price:14, kind:'kit', hue:50},
+  {id:'p20', name:'Model Kit Quick!! - Eevee', cat:'Model Kits', lang:'JP', price:14, kind:'kit', hue:30},
+  {id:'p21', name:'Destined Rivals - Sleeved Booster Pack', cat:'Booster Packs', lang:'EN', price:6.5, kind:'pack', hue:350},
+  {id:'p22', name:'Journey Together - Booster Pack', cat:'Booster Packs', lang:'ES', price:5.5, kind:'pack', hue:195},
+  {id:'p23', name:'Ultra Pro Toploaders x25', cat:'Accesorios', lang:'EN', price:4, kind:'sleeves', hue:0, sat:0},
+  {id:'p24', name:'Dragon Shield Deck Box - Nest 100', cat:'Accesorios', lang:'EN', price:9, kind:'tin', hue:260},
+  {id:'p25', name:'Magic: The Gathering - Play Booster Box', cat:'Booster Boxes', lang:'EN', price:150, kind:'box', hue:30},
+  {id:'p26', name:'One Piece Card Game - OP-11 Booster Box', cat:'Booster Boxes', lang:'JP', price:95, kind:'box', hue:0},
+  {id:'p27', name:'Charizard ex - Obsidian Flames PSA 9', cat:'Cartas gradeadas', lang:'EN', price:85, kind:'graded', hue:15},
+  {id:'p28', name:'Pokemon - Mega Evolution Mini Tin', cat:'Collection Boxes', lang:'EN', price:12, kind:'tin', hue:345}
+];
+
+const SINGLES = [
+  {id:'s1', name:'Feraligatr (JP)', set:'EX Dragon Frontiers (Japanese)', num:'026', lang:'JP', price:68, rarity:'Rare', cond:'NM-', finish:'Holo', tcg:'Pokémon', type:'water', hp:120, featured:true},
+  {id:'s2', name:"Team Rocket's Moltres ex", set:'Miscellaneous Cards & Products', num:'229', lang:'EN', price:49, rarity:'Special Illustration Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'fire', hp:220, featured:true},
+  {id:'s3', name:'Tyranitar', set:'Secret of the Lakes', num:'000', lang:'JP', price:35, rarity:'Holo Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'dark', hp:140, featured:true},
+  {id:'s4', name:'Altaria ex', set:'Paradox Rift', num:'253', lang:'EN', price:45, rarity:'Special Illustration Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'dragon', hp:260, featured:true},
+  {id:'s5', name:'Zorua', set:'White Flare', num:'142', lang:'EN', price:40.99, rarity:'Illustration Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'dark', hp:70, featured:true},
+  {id:'s6', name:'Litten', set:'Temporal Forces', num:'167', lang:'EN', price:39, rarity:'Illustration Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'fire', hp:70, featured:true},
+  {id:'s7', name:'Latias & Latios GX (JP)', set:'Tag Team GX All Stars', num:'060', lang:'JP', price:32, rarity:'Tag Team', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'psychic', hp:250, featured:true},
+  {id:'s8', name:'Metagross ex (JP)', set:'Dream League', num:'245', lang:'JP', price:28, rarity:'Special Art Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'metal', hp:340, featured:true},
+  {id:'s9', name:'Magby', set:'Obsidian Flames', num:'206', lang:'EN', price:18, rarity:'Illustration Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'fire', hp:30, featured:true},
+  {id:'s10', name:'Zoroark (JP)', set:'Night Wanderer', num:'071', lang:'JP', price:22, rarity:'Art Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'dark', hp:120, featured:true},
+  {id:'s11', name:'Regirock ex', set:'Glory of Team Rocket', num:'052', lang:'JP', price:0.32, rarity:'Double Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'fighting', hp:230},
+  {id:'s12', name:'Larvitar (Poke Ball Pattern)', set:'Prismatic Evolutions', num:'058', lang:'EN', price:1, rarity:'Common', cond:'NM', finish:'Reverse Holo', tcg:'Pokémon', type:'fighting', hp:80},
+  {id:'s13', name:'Fan Rotom', set:'MEGA Dream ex', num:'115', lang:'JP', price:2.9, rarity:'Illustration Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'colorless', hp:70},
+  {id:'s14', name:'Nidorina', set:'M6a: 30th Celebration', num:'032', lang:'JP', price:4, rarity:'Art Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'psychic', hp:90},
+  {id:'s15', name:'Flygon GX (JP)', set:'Alter Genesis', num:'105', lang:'JP', price:2.99, rarity:'Ultra Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'dragon', hp:240},
+  {id:'s16', name:'Noctowl (JP)', set:'Stellar Miracle', num:'115', lang:'JP', price:3.99, rarity:'Art Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'colorless', hp:120},
+  {id:'s17', name:'Alolan Dugtrio (JP)', set:'Super Electric Breaker', num:'111', lang:'JP', price:5.99, rarity:'Art Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'metal', hp:110},
+  {id:'s18', name:'Umbreon VMAX', set:'Evolving Skies', num:'215', lang:'EN', price:280, rarity:'Secret Rare', cond:'LP', finish:'Holo', tcg:'Pokémon', type:'dark', hp:310},
+  {id:'s19', name:'Pikachu ex', set:'Surging Sparks', num:'238', lang:'EN', price:95, rarity:'Special Illustration Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'electric', hp:200},
+  {id:'s20', name:'Sylveon ex', set:'Prismatic Evolutions', num:'156', lang:'EN', price:62, rarity:'Special Illustration Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'psychic', hp:270},
+  {id:'s21', name:'Greninja ex', set:'Twilight Masquerade', num:'214', lang:'ES', price:38, rarity:'Special Illustration Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'water', hp:310},
+  {id:'s22', name:'Lightning Bolt', set:'Magic 2011', num:'149', lang:'EN', price:3.5, rarity:'Common', cond:'NM', finish:'Normal', tcg:'Magic: The Gathering', type:'fire'},
+  {id:'s23', name:'Sheoldred, the Apocalypse', set:"Dominaria United", num:'107', lang:'EN', price:72, rarity:'Mythic', cond:'NM', finish:'Foil', tcg:'Magic: The Gathering', type:'dark'},
+  {id:'s24', name:'Counterspell', set:'Commander Masters', num:'81', lang:'ES', price:1.5, rarity:'Uncommon', cond:'NM', finish:'Normal', tcg:'Magic: The Gathering', type:'water'},
+  {id:'s25', name:'Jinx - Loose Cannon', set:'Origins', num:'030', lang:'EN', price:12, rarity:'Epic', cond:'NM', finish:'Foil', tcg:'Riftbound', type:'psychic'},
+  {id:'s26', name:'Ahri - Nine-Tailed Fox', set:'Origins', num:'066', lang:'EN', price:18, rarity:'Overnumbered', cond:'NM', finish:'Foil', tcg:'Riftbound', type:'psychic'},
+  {id:'s27', name:'Son Goku (SCR)', set:'FB01 Awakened Pulse', num:'139', lang:'JP', price:48, rarity:'Secret Rare', cond:'NM', finish:'Holo', tcg:'Dragon Ball', type:'fire'},
+  {id:'s28', name:'Vegeta (SR)', set:'FB02 Blazing Aura', num:'040', lang:'EN', price:9, rarity:'Super Rare', cond:'NM', finish:'Holo', tcg:'Dragon Ball', type:'water'},
+  {id:'s29', name:'Gengar ex', set:'Mega Evolution', num:'179', lang:'EN', price:26, rarity:'Illustration Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'psychic', hp:300},
+  {id:'s30', name:'Charmander (JP)', set:'Pokemon Card 151', num:'168', lang:'JP', price:14, rarity:'Art Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'fire', hp:70},
+  {id:'s31', name:'Squirtle (JP)', set:'Pokemon Card 151', num:'170', lang:'JP', price:12, rarity:'Art Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'water', hp:70},
+  {id:'s32', name:'Bulbasaur (JP)', set:'Pokemon Card 151', num:'166', lang:'JP', price:11, rarity:'Art Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'grass', hp:70},
+  {id:'s33', name:'Mew ex', set:'Paldean Fates', num:'232', lang:'EN', price:34, rarity:'Special Illustration Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'psychic', hp:180},
+  {id:'s34', name:'Iono', set:'Paldea Evolved', num:'269', lang:'EN', price:58, rarity:'Special Illustration Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'electric'},
+  {id:'s35', name:'Rayquaza VMAX', set:'Evolving Skies', num:'218', lang:'EN', price:190, rarity:'Secret Rare', cond:'NM-', finish:'Holo', tcg:'Pokémon', type:'dragon', hp:320},
+  {id:'s36', name:'Snorlax (JP)', set:'Wild Force', num:'078', lang:'JP', price:6, rarity:'Art Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'colorless', hp:150},
+  {id:'s37', name:'Lapras ex', set:'Paldea Evolved', num:'223', lang:'EN', price:8, rarity:'Ultra Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'water', hp:220},
+  {id:'s38', name:'Dragonite V', set:'Evolving Skies', num:'192', lang:'EN', price:16, rarity:'Ultra Rare', cond:'LP', finish:'Holo', tcg:'Pokémon', type:'dragon', hp:230},
+  {id:'s39', name:'Espeon (JP)', set:'Terastal Festival', num:'201', lang:'JP', price:21, rarity:'Special Art Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'psychic', hp:120},
+  {id:'s40', name:'Jolteon (JP)', set:'Terastal Festival', num:'199', lang:'JP', price:19, rarity:'Special Art Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'electric', hp:110},
+  {id:'s41', name:'Leafeon (JP)', set:'Terastal Festival', num:'196', lang:'JP', price:17, rarity:'Special Art Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'grass', hp:110},
+  {id:'s42', name:'Glaceon (JP)', set:'Terastal Festival', num:'203', lang:'JP', price:18, rarity:'Special Art Rare', cond:'NM', finish:'Holo', tcg:'Pokémon', type:'water', hp:110}
+];
+SINGLES.forEach(s => s.single = true);
+
+const CATEGORIES = ['Accesorios','Booster Boxes','Booster Packs','Cartas gradeadas','Collection Boxes','Deck Estructurado','Dragon Ball','Elite Trainer Boxes','Model Kits'];
+const TCGS = ['Pokémon','Magic: The Gathering','Riftbound','Dragon Ball'];
+const LANGS = {EN:'Inglés', JP:'Japonés', ES:'Español'};
+const LANG_LABEL = {EN:'English', JP:'Japones', ES:'Español'};
+const ALL = [...PRODUCTS, ...SINGLES];
+const byId = id => ALL.find(p => p.id === id);
+
+/* ===================== IMÁGENES DE MARCADOR =====================
+   Ilustraciones genéricas en SVG. Para usar fotos reales, agrega
+   a cada producto un campo img:'data:image/...' o la ruta del archivo. */
+const TYPE_HUE = {fire:12, water:205, grass:110, electric:50, psychic:290, dark:255, dragon:40, metal:210, fighting:25, colorless:230};
+const svgURI = s => 'data:image/svg+xml;utf8,' + encodeURIComponent(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function seed(str){let h=0;for(const c of str)h=(h*31+c.charCodeAt(0))|0;return Math.abs(h)}
+function shortName(n){return n.replace(/^(Pokemon|Dragon Ball Fusion World|Magic: The Gathering|One Piece Card Game) - /,'').split(' - ')[0].slice(0,22)}
+function stars(cx,cy,r,n,col){let o='';for(let i=0;i<n;i++){const a=i*2.4,d=r*(.3+((i*37)%70)/100);o+=`<circle cx="${(cx+Math.cos(a)*d).toFixed(1)}" cy="${(cy+Math.sin(a)*d).toFixed(1)}" r="${1+(i%3)}" fill="${col}" opacity=".7"/>`}return o}
+
+function imgFor(p){
+  if (p.img) return p.img;
+  if (p._img) return p._img;
+  const h = p.hue ?? TYPE_HUE[p.type] ?? 260, s = p.sat ?? 70, sd = seed(p.id);
+  const c1 = `hsl(${h},${s}%,58%)`, c2 = `hsl(${(h+40)%360},${s}%,35%)`, c3 = `hsl(${(h+200)%360},${s}%,60%)`;
+  const label = esc(shortName(p.name).toUpperCase());
+  let svg;
+  if (p.single){
+    const tcgBorder = {'Pokémon':'#e9c94a','Magic: The Gathering':'#1a1a1a','Riftbound':'#3a2f5a','Dragon Ball':'#c8c8d0'}[p.tcg];
+    svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 350">
+      <defs><linearGradient id="a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient>
+      <radialGradient id="b" cx=".5" cy=".45" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="${c3}" stop-opacity="0"/></radialGradient>
+      <linearGradient id="f" x1="0" y1="0" x2="1" y2="1"><stop offset=".3" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".35"/><stop offset=".7" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>
+      <rect width="250" height="350" rx="12" fill="${tcgBorder}"/>
+      <rect x="10" y="10" width="230" height="330" rx="7" fill="url(#a)"/>
+      <text x="20" y="34" font-family="Arial" font-weight="700" font-size="15" fill="#fff">${esc(p.name.replace(/\s*\(.*?\)/g,'').slice(0,20))}</text>
+      ${p.hp?`<text x="230" y="34" text-anchor="end" font-family="Arial" font-weight="700" font-size="13" fill="#fff">HP${p.hp}</text>`:''}
+      <rect x="20" y="44" width="210" height="150" rx="4" fill="${c2}"/>
+      ${stars(125,119,90,18,'#fff')}
+      <circle cx="125" cy="119" r="${42+sd%14}" fill="url(#b)"/>
+      <path d="M125 ${88+sd%8} l10 22 24 3 -18 16 5 24 -21 -12 -21 12 5 -24 -18 -16 24 -3z" fill="#fff" opacity=".9"/>
+      <rect x="20" y="206" width="210" height="16" rx="3" fill="#fff" opacity=".25"/>
+      <rect x="20" y="232" width="150" height="9" rx="3" fill="#fff" opacity=".35"/>
+      <rect x="20" y="248" width="190" height="9" rx="3" fill="#fff" opacity=".25"/>
+      <rect x="20" y="272" width="130" height="9" rx="3" fill="#fff" opacity=".35"/>
+      <rect x="20" y="288" width="170" height="9" rx="3" fill="#fff" opacity=".25"/>
+      <text x="20" y="328" font-family="Arial" font-size="10" fill="#fff" opacity=".8">${esc(p.num)} · ${esc(p.rarity)}</text>
+      <rect x="10" y="10" width="230" height="330" rx="7" fill="url(#f)"/>
+    </svg>`;
+  } else if (p.kind==='pack'){
+    svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 320">
+      <defs><linearGradient id="a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset=".55" stop-color="${c2}"/><stop offset="1" stop-color="${c3}"/></linearGradient></defs>
+      <path d="M20 14 h160 l-4 10 4 10 v252 l-4 10 4 10 h-160 l4 -10 -4 -10 v-252 l4 -10z" fill="url(#a)"/>
+      <path d="M20 14 h160 v18 h-160z" fill="#000" opacity=".25"/><path d="M20 288 h160 v18 h-160z" fill="#000" opacity=".25"/>
+      ${stars(100,150,80,16,'#fff')}
+      <circle cx="100" cy="150" r="48" fill="#fff" opacity=".18"/>
+      <path d="M100 112 l11 25 27 3 -20 18 6 27 -24 -14 -24 14 6 -27 -20 -18 27 -3z" fill="#fff" opacity=".85"/>
+      <rect x="30" y="226" width="140" height="40" rx="6" fill="#000" opacity=".35"/>
+      <text x="100" y="251" text-anchor="middle" font-family="Arial" font-weight="800" font-size="13" fill="#fff">${label.slice(0,18)}</text>
+      <text x="100" y="62" text-anchor="middle" font-family="Arial" font-weight="900" font-size="17" fill="#fff" letter-spacing="2">BOOSTER</text>
+    </svg>`;
+  } else if (p.kind==='graded'){
+    svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 340">
+      <defs><linearGradient id="a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs>
+      <rect x="6" y="6" width="208" height="328" rx="10" fill="#dfe6ee" stroke="#9aa6b5" stroke-width="3"/>
+      <rect x="18" y="18" width="184" height="54" rx="4" fill="#fff" stroke="#c0392b" stroke-width="3"/>
+      <text x="28" y="40" font-family="Arial" font-weight="700" font-size="11" fill="#222">${label.slice(0,20)}</text>
+      <text x="28" y="58" font-family="Arial" font-size="10" fill="#555">GEM MINT</text>
+      <text x="192" y="58" text-anchor="end" font-family="Arial" font-weight="900" font-size="22" fill="#c0392b">10</text>
+      <rect x="28" y="86" width="164" height="232" rx="6" fill="#e9c94a"/>
+      <rect x="36" y="94" width="148" height="216" rx="4" fill="url(#a)"/>
+      ${stars(110,170,60,12,'#fff')}
+      <circle cx="110" cy="170" r="34" fill="#fff" opacity=".35"/>
+    </svg>`;
+  } else if (p.kind==='binder'){
+    svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 240">
+      <defs><linearGradient id="a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs>
+      <path d="M40 30 L150 20 L150 220 L40 210z" fill="url(#a)"/><path d="M150 20 L260 30 L260 210 L150 220z" fill="${c2}"/>
+      <rect x="146" y="20" width="8" height="200" fill="#111"/>
+      ${stars(95,120,60,12,'#fff')}${stars(205,120,60,12,'#fff')}
+      <path d="M205 90 l9 20 22 2 -16 15 5 22 -20 -11 -20 11 5 -22 -16 -15 22 -2z" fill="#fff" opacity=".8"/>
+    </svg>`;
+  } else if (p.kind==='sleeves'){
+    svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 260">
+      <rect x="20" y="20" width="220" height="220" fill="#fff"/>
+      <rect x="120" y="58" width="96" height="140" rx="6" fill="#222"/>
+      <rect x="48" y="44" width="104" height="160" rx="6" fill="hsl(${h},55%,45%)"/>
+      <rect x="58" y="56" width="84" height="40" rx="3" fill="#000" opacity=".3"/>
+      <text x="100" y="82" text-anchor="middle" font-family="Arial" font-weight="900" font-size="13" fill="#fff">SLEEVES</text>
+      <circle cx="100" cy="140" r="30" fill="#fff" opacity=".3"/>
+      <text x="100" y="192" text-anchor="middle" font-family="Arial" font-size="10" fill="#fff">x100</text>
+    </svg>`;
+  } else if (p.kind==='kit'){
+    svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 220">
+      <rect x="30" y="40" width="200" height="140" rx="6" fill="hsl(${h},85%,55%)"/>
+      <rect x="30" y="40" width="200" height="26" rx="6" fill="#d33"/>
+      <text x="130" y="59" text-anchor="middle" font-family="Arial" font-weight="900" font-size="13" fill="#fff">MODEL KIT</text>
+      <circle cx="130" cy="125" r="40" fill="#fff" opacity=".85"/><circle cx="118" cy="118" r="5" fill="#222"/><circle cx="142" cy="118" r="5" fill="#222"/>
+      <path d="M118 136 q12 10 24 0" stroke="#222" stroke-width="3" fill="none"/>
+    </svg>`;
+  } else if (p.kind==='tin'){
+    svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 240">
+      <defs><linearGradient id="a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs>
+      <rect x="40" y="60" width="180" height="140" rx="14" fill="url(#a)"/><rect x="34" y="48" width="192" height="36" rx="10" fill="${c2}"/>
+      ${stars(130,140,60,10,'#fff')}<circle cx="130" cy="140" r="32" fill="#fff" opacity=".3"/>
+    </svg>`;
+  } else {
+    // cajas: box / etb / collection / deck
+    const w = p.kind==='deck'?150:p.kind==='box'?190:220, hh = p.kind==='box'?150:p.kind==='deck'?190:150;
+    const x = (300-w)/2 - 10, y = (300-hh)/2 + 10, d = 30;
+    svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+      <defs><linearGradient id="a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs>
+      <path d="M${x} ${y} l${d} -${d} h${w} l-${d} ${d}z" fill="${c3}"/>
+      <path d="M${x+w} ${y} l${d} -${d} v${hh} l-${d} ${d}z" fill="${c2}" opacity=".85"/>
+      <rect x="${x}" y="${y}" width="${w}" height="${hh}" fill="url(#a)"/>
+      ${stars(x+w/2,y+hh/2,Math.min(w,hh)/2,14,'#fff')}
+      <circle cx="${x+w/2}" cy="${y+hh/2-8}" r="${Math.min(w,hh)/4}" fill="#fff" opacity=".2"/>
+      <path d="M${x+w/2} ${y+hh/2-36} l9 20 22 2 -16 15 5 22 -20 -11 -20 11 5 -22 -16 -15 22 -2z" fill="#fff" opacity=".85"/>
+      <rect x="${x+10}" y="${y+hh-40}" width="${w-20}" height="28" rx="4" fill="#000" opacity=".35"/>
+      <text x="${x+w/2}" y="${y+hh-21}" text-anchor="middle" font-family="Arial" font-weight="800" font-size="11" fill="#fff">${label.slice(0, Math.floor(w/8))}</text>
+      ${p.kind==='etb'?`<text x="${x+w-8}" y="${y+16}" text-anchor="end" font-family="Arial" font-weight="700" font-size="9" fill="#fff" opacity=".85">ELITE TRAINER BOX</text>`:''}
+    </svg>`;
+  }
+  return p._img = svgURI(svg);
+}
+
+
+/* ===================== UTILIDADES ===================== */
+const KIND_LABEL = {box:'Booster Box', pack:'Sobre', etb:'Elite Trainer Box', collection:'Colección', graded:'Gradeada', binder:'Carpeta', sleeves:'Protectores', deck:'Mazo', kit:'Model Kit', tin:'Lata'};
+const CAT_ICON = {'Accesorios':['🗂️','#e0f2fe'],'Booster Boxes':['📦','#ffedd5'],'Booster Packs':['✨','#fce7f3'],'Cartas gradeadas':['🏅','#fef9c3'],'Collection Boxes':['🎁','#ede9fe'],'Deck Estructurado':['🃏','#dcfce7'],'Dragon Ball':['🐉','#fee2e2'],'Elite Trainer Boxes':['⭐','#e0e7ff'],'Model Kits':['🧩','#f5f5f4']};
+const I = {
+  plus:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>',
+  check:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5 9-10"/></svg>',
+  eye:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+  arrow:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+  left:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 6l-6 6 6 6"/></svg>',
+  right:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg>',
+  sliders:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg>',
+  wa:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3.5 20.5l1.3-4.2A8.5 8.5 0 1 1 8 19.4z"/></svg>',
+  x:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 6l12 12M18 6L6 18"/></svg>'
+};
+const store = {
+  get(k,d){try{const v=localStorage.getItem('astral2_'+k);return v?JSON.parse(v):d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem('astral2_'+k,JSON.stringify(v))}catch(e){}}
+};
+let cart = store.get('cart', []);
+let currency = store.get('cur', 'USD');
+let theme = store.get('theme', 'light');
+let order = store.get('order', {name:'', city:'', delivery:'envio', pay:'Zelle', notes:''});
+const bs = usd => !CONFIG.tasaBs ? 'Bs. —' : 'Bs. ' + (usd*CONFIG.tasaBs).toLocaleString('es-VE',{minimumFractionDigits:2,maximumFractionDigits:2});
+const usd = v => '$' + v.toFixed(2);
+const money = v => currency==='VES' ? bs(v) : usd(v);
+const altMoney = v => currency==='VES' ? usd(v) : bs(v);
+const stockOf = p => p.stock ?? (p.single ? 1 : 10);
+const inCart = id => cart.some(l => l.id===id);
+const typeOf = p => p.single ? p.tcg : (KIND_LABEL[p.kind] || p.cat);
+
+/* ===================== TARJETAS ===================== */
+function addBtn(p){
+  const on = inCart(p.id);
+  return `<button class="add ${on?'in':''}" data-add="${p.id}" aria-label="Añadir ${esc(p.name)} al carrito">${on?I.check:I.plus}</button>`;
+}
+function card(p){
+  const off = p.old ? Math.round((1-p.price/p.old)*100) : 0;
+  return `<article class="card ${p.single?'single':''}">
+    <div class="media" data-view="${p.id}">
+      <div class="chips"><span class="chip">${p.lang}</span>${off?`<span class="chip sale">-${off}%</span>`:''}${p.isNew?'<span class="chip new">Nuevo</span>':''}</div>
+      <span class="peek">${I.eye}</span>
+      <img src="${imgFor(p)}" alt="${esc(p.name)}">
+    </div>
+    <div class="body">
+      <span class="kind">${esc(typeOf(p))}</span>
+      <h4 class="name" title="${esc(p.name)}">${esc(p.name)}</h4>
+      ${p.single?`<div class="set">${esc(p.set)} · #${esc(p.num)}</div><div class="tags"><span>${esc(p.rarity)}</span><span>${esc(p.cond)}</span></div>`:''}
+      <div class="buy"><div class="price">${money(p.price)}${p.old?`<s>${money(p.old)}</s>`:''}</div>${addBtn(p)}</div>
+    </div>
+  </article>`;
+}
+function refreshAddButtons(){
+  document.querySelectorAll('[data-add].add').forEach(b => { const on = inCart(b.dataset.add); b.classList.toggle('in', on); b.innerHTML = on ? I.check : I.plus; });
+}
+
+/* ===================== CATÁLOGO ===================== */
+const SEALED = PRODUCTS.filter(p => p.cat!=='Accesorios');
+const ROUTES = {
+  sellado:{title:'Producto sellado', desc:'Booster boxes, sobres, ETBs y colecciones originales en inglés, japonés y español.', base:()=>SEALED, chips:()=>CATEGORIES.filter(c=>c!=='Accesorios'), chipOf:p=>p.cat},
+  singles:{title:'Singles', desc:'Cartas sueltas revisadas una por una. Se envían en sleeve y toploader.', base:()=>SINGLES, chips:()=>TCGS, chipOf:p=>p.tcg, singles:true},
+  accesorios:{title:'Accesorios', desc:'Protege tu colección: carpetas, protectores, toploaders y deck boxes.', base:()=>PRODUCTS.filter(p=>p.cat==='Accesorios'), chips:()=>[...new Set(PRODUCTS.filter(p=>p.cat==='Accesorios').map(p=>KIND_LABEL[p.kind]))], chipOf:p=>KIND_LABEL[p.kind]},
+  ofertas:{title:'Ofertas', desc:'Precios rebajados por tiempo limitado, mientras haya existencia.', base:()=>ALL.filter(p=>p.old), chips:()=>[], chipOf:p=>p.cat, noOfferToggle:true},
+  buscar:{title:'Resultados', desc:'', base:()=>ALL, chips:()=>['Sellado','Singles','Accesorios'], chipOf:p=>p.single?'Singles':p.cat==='Accesorios'?'Accesorios':'Sellado'}
+};
+const freshState = () => ({chip:'', q:'', min:'', max:'', langs:new Set(), conds:new Set(), offers:false, sort:'feat', shown:12});
+const states = Object.fromEntries(Object.keys(ROUTES).map(k => [k, freshState()]));
+
+function filtered(r){
+  const R = ROUTES[r], s = states[r];
+  let items = R.base().filter(p =>
+    (!s.chip || R.chipOf(p)===s.chip) &&
+    (!s.q || (p.name+' '+(p.set||'')+' '+(p.cat||'')+' '+(p.tcg||'')).toLowerCase().includes(s.q.toLowerCase())) &&
+    (!s.langs.size || s.langs.has(p.lang)) &&
+    (!s.conds.size || s.conds.has(p.cond)) &&
+    (s.min==='' || p.price >= +s.min) && (s.max==='' || p.price <= +s.max) &&
+    (!s.offers || p.old));
+  if (s.sort==='asc') items.sort((a,b)=>a.price-b.price);
+  if (s.sort==='desc') items.sort((a,b)=>b.price-a.price);
+  if (s.sort==='az') items.sort((a,b)=>a.name.localeCompare(b.name));
+  return items;
+}
+function filterCount(s){return (s.min!==''||s.max!==''?1:0) + s.langs.size + s.conds.size + (s.offers?1:0)}
+
+function viewCatalog(r){
+  const R = ROUTES[r], s = states[r], items = filtered(r);
+  const chips = R.chips();
+  const counts = {}; R.base().forEach(p => { const k = R.chipOf(p); counts[k]=(counts[k]||0)+1; });
+  const shown = items.slice(0, s.shown), fc = filterCount(s);
+  const tags = [];
+  if (s.q) tags.push(['q', `“${s.q}”`]);
+  if (s.min!==''||s.max!=='') tags.push(['price', `${s.min||0} – ${s.max||'∞'} $`]);
+  s.langs.forEach(l => tags.push(['lang:'+l, LANGS[l]]));
+  s.conds.forEach(c => tags.push(['cond:'+c, 'Condición '+c]));
+  if (s.offers) tags.push(['offers','Solo ofertas']);
+  return `<div class="wrap">
+    <div class="phead"><div><span class="eyebrow">Catálogo</span><h1>${r==='buscar'&&s.q?`Resultados para “${esc(s.q)}”`:R.title}</h1>${R.desc?`<p>${R.desc}</p>`:''}</div>
+      <span class="eyebrow">${items.length} artículo${items.length===1?'':'s'}</span></div>
+    <div class="bar">
+      <div class="fchips">
+        ${chips.length?`<button class="fchip ${!s.chip?'on':''}" data-chip="">Todo</button>`:''}
+        ${chips.map(c=>`<button class="fchip ${s.chip===c?'on':''}" data-chip="${esc(c)}">${esc(c)}<span class="c">${counts[c]||0}</span></button>`).join('')}
+      </div>
+      <select class="sortsel" data-sort aria-label="Ordenar">
+        ${[['feat','Destacados'],['asc','Precio: menor a mayor'],['desc','Precio: mayor a menor'],['az','Nombre A–Z']].map(([v,l])=>`<option value="${v}" ${s.sort===v?'selected':''}>${l}</option>`).join('')}
+      </select>
+      <button class="fbtn" data-open-filters>${I.sliders} Filtros ${fc?`<span class="dot">${fc}</span>`:''}</button>
+    </div>
+    ${tags.length?`<div class="active">${tags.map(([k,l])=>`<button class="tag" data-untag="${esc(k)}">${esc(l)} ${I.x}</button>`).join('')}<button class="clr" data-clear>Borrar todo</button></div>`:''}
+    <div class="grid ${R.singles?'six':''}">${shown.length?shown.map(card).join(''):'<div class="empty"><b>Nada por aquí</b>Prueba con otros filtros o búsqueda.</div>'}</div>
+    ${items.length?`<div class="more"><span>Mostrando ${shown.length} de ${items.length}</span><div class="progress"><i style="width:${shown.length/items.length*100}%"></i></div>${shown.length<items.length?'<button class="btn line" data-more>Mostrar más</button>':''}</div>`:''}
+  </div>`;
+}
+function renderFilters(){
+  const r = route(); if (!ROUTES[r]) return;
+  const R = ROUTES[r], s = states[r];
+  const opt = (group,val,label,on) => `<button class="fchip ${on?'on':''}" data-fopt="${group}" data-val="${esc(val)}">${esc(label)}</button>`;
+  document.getElementById('filterBody').innerHTML = `
+    <div class="fgroup"><h4>Precio (USD)</h4>
+      <div class="two"><div class="field"><label>Desde</label><input type="number" min="0" placeholder="0" value="${s.min}" data-fprice="min"></div>
+      <div class="field"><label>Hasta</label><input type="number" min="0" placeholder="Sin límite" value="${s.max}" data-fprice="max"></div></div></div>
+    <div class="fgroup"><h4>Idioma</h4><div class="opts">${Object.entries(LANGS).map(([k,l])=>opt('lang',k,l,s.langs.has(k))).join('')}</div></div>
+    ${R.singles?`<div class="fgroup"><h4>Condición</h4><div class="opts">${['NM','NM-','LP'].map(c=>opt('cond',c,c,s.conds.has(c))).join('')}</div></div>`:''}
+    ${R.noOfferToggle?'':`<div class="fgroup"><div class="sw">Solo productos en oferta <button class="switch ${s.offers?'on':''}" data-foffers aria-label="Solo ofertas"></button></div></div>`}`;
+  document.getElementById('seeResults').textContent = `Ver ${filtered(r).length} resultados`;
+}
+
+/* ===================== INICIO ===================== */
+function viewHome(){
+  const hero = byId('p14');
+  const newest = [...PRODUCTS.filter(p=>p.isNew), ...PRODUCTS.filter(p=>!p.isNew)].slice(0,10);
+  const offers = ALL.filter(p=>p.old).slice(0,4);
+  const showcase = SINGLES.filter(s=>s.featured).slice(0,6);
+  const cheapest = Math.min(...SINGLES.map(s=>s.price));
+  const reviews = [
+    {n:'Andrea M.', c:'Caracas', t:'Pedí una booster box un martes y el jueves ya la estaba abriendo. Todo sellado y perfecto.', h:20},
+    {n:'Luis R.', c:'Valencia', t:'Las singles llegaron en toploader y exactamente como en la descripción. Repetiré.', h:170},
+    {n:'Carla P.', c:'Puerto Ordaz', t:'La atención por WhatsApp es rapidísima y me ayudaron a armar mi mazo.', h:280}
+  ];
+  return `<div class="wrap">
+    <section class="bento">
+      <div class="tile t-hero">
+        <span class="eyebrow">Nuevo lanzamiento</span>
+        <h1>Pitch Black ya llegó</h1>
+        <p>Elite Trainer Box en inglés. Unidades limitadas.</p>
+        <button class="btn" data-add="${hero.id}" style="margin-top:28px">Agregar · ${money(hero.price)}</button>
+        <img src="${imgFor(hero)}" alt="">
+      </div>
+      <a class="tile t-orange" href="#singles"><span class="eyebrow" style="color:#fff;opacity:.8">Singles</span><h2>Encuentra la carta que te falta</h2><span class="go">Desde ${money(cheapest)} ${I.arrow}</span>
+        <svg class="deco" width="140" height="140" viewBox="0 0 24 24" fill="#fff"><rect x="5" y="3" width="12" height="17" rx="2" transform="rotate(-10 11 11)"/></svg></a>
+      <div class="tile t-teal"><span class="eyebrow" style="color:#fff;opacity:.8">Tasa BCV${TASA.fecha?' · '+TASA.fecha:''}</span><div class="big">${CONFIG.tasaBs?'Bs. '+fmtTasa():'—'}</div><p>${CONFIG.tasaBs?'por cada dólar, tasa oficial del día. Cambia a Bs. arriba y verás todos los precios convertidos.':(TASA.fallo?'No pudimos leer la tasa de hoy; los precios en $ siguen vigentes.':'Buscando la tasa oficial del día…')}</p></div>
+      <div class="tile t-paper"><span class="eyebrow">Envíos</span><h2>Gratis desde $${CONFIG.envioGratisDesde}</h2><p style="color:var(--muted)">En producto sellado y accesorios, a todo el país.</p></div>
+      <a class="tile t-surface" data-wa-sell href="#"><span class="eyebrow">Compramos</span><h2>¿Vendes tu colección?</h2><span class="go" style="color:var(--accent)">Cotiza por WhatsApp ${I.arrow}</span></a>
+    </section>
+
+    <section class="sec">
+      <div class="sec-h"><div><span class="eyebrow">Recién llegados</span><h2>Lo nuevo en tienda</h2></div>
+        <div class="ctrl"><button class="round" data-rail="-1" aria-label="Anterior">${I.left}</button><button class="round" data-rail="1" aria-label="Siguiente">${I.right}</button><a class="btn line" href="#sellado">Ver todo</a></div></div>
+      <div class="rail" id="rail">${newest.map(card).join('')}</div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-h"><div><span class="eyebrow">Explora</span><h2>Compra por categoría</h2></div></div>
+      <div class="cats">${CATEGORIES.map(c=>{const [ic,bg]=CAT_ICON[c]||['•','#eee'];const n=PRODUCTS.filter(p=>p.cat===c).length;
+        return `<a class="cat" href="#" data-gocat="${esc(c)}"><span class="ic" style="background:${bg}">${ic}</span><span><b>${esc(c)}</b><small>${n} producto${n===1?'':'s'}</small></span></a>`}).join('')}
+        <a class="cat" href="#singles"><span class="ic" style="background:#ffedd5">🔥</span><span><b>Singles</b><small>${SINGLES.length} cartas</small></span></a>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-h"><div><span class="eyebrow">Ofertas</span><h2>Rebajados esta semana</h2></div><a class="btn line" href="#ofertas">Ver ofertas</a></div>
+      <div class="grid">${offers.map(card).join('')}</div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-h"><div><span class="eyebrow">Vitrina</span><h2>Singles destacadas</h2></div><a class="btn line" href="#singles">Ver singles</a></div>
+      <div class="grid six">${showcase.map(card).join('')}</div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-h"><div><span class="eyebrow">Reseñas</span><h2>Lo que dicen los coleccionistas</h2></div></div>
+      <div class="reviews">${reviews.map(r=>`<div class="review"><span class="st">★★★★★</span><q>${esc(r.t)}</q>
+        <div class="who"><span class="av" style="background:hsl(${r.h},55%,45%)">${r.n[0]}</span><span>${esc(r.n)}<small>${esc(r.c)}</small></span></div></div>`).join('')}</div>
+    </section>
+  </div>`;
+}
+
+/* ===================== CARRITO ===================== */
+const lines = () => cart.map(l=>({p:byId(l.id), qty:l.qty})).filter(l=>l.p);
+const total = () => lines().reduce((s,l)=>s+l.p.price*l.qty,0);
+const sealedTotal = () => lines().filter(l=>!l.p.single).reduce((s,l)=>s+l.p.price*l.qty,0);
+function stepper(p, qty){
+  return `<div class="stepper"><button data-qty="${p.id}:-1" ${qty<=1?'disabled':''} aria-label="Menos">−</button><span>${qty}</span><button data-qty="${p.id}:1" ${qty>=stockOf(p)?'disabled':''} aria-label="Más">+</button></div>`;
+}
+function shipBox(){
+  const s = sealedTotal(), goal = CONFIG.envioGratisDesde, pct = Math.min(100, s/goal*100);
+  const msg = s>=goal ? '<b>¡Tienes envío gratis!</b>' : s>0 ? `Agrega <b>${money(goal-s)}</b> en sellado o accesorios para envío gratis.` : `Envío gratis en compras de sellado desde <b>${money(goal)}</b>.`;
+  return `<div class="ship">${msg}<div class="bar2"><i style="width:${pct}%"></i></div></div>`;
+}
+function lineHTML({p,qty}){
+  return `<div class="cline"><img src="${imgFor(p)}" alt=""><div><b>${esc(p.name)}</b><small>${p.single?esc(p.set)+' · '+esc(p.cond):esc(typeOf(p))} · ${money(p.price)}</small></div>
+    <div class="r">${stepper(p,qty)}<button class="rm" data-remove="${p.id}">Quitar</button></div></div>`;
+}
+function renderCart(){
+  const n = cart.reduce((s,l)=>s+l.qty,0), t = total(), L = lines();
+  document.getElementById('cartCount').textContent = n;
+  document.getElementById('cartTotalHdr').textContent = money(t);
+  document.getElementById('cartBody').innerHTML = L.length ? shipBox() + L.map(lineHTML).join('')
+    : `<div class="empty"><b>Tu carrito está vacío</b>Explora el catálogo y agrega lo que te guste.<br><br><a class="btn" href="#sellado" data-close-sheet>Ir a la tienda</a></div>`;
+  document.getElementById('cartFoot').innerHTML = L.length ? `<div class="tot"><span>Total</span><b>${money(t)}</b></div><div class="tot-alt">≈ ${altMoney(t)}</div>
+    <a class="btn accent block" href="#pedido">Finalizar pedido ${I.arrow}</a>` : '';
+  refreshAddButtons();
+  if (route()==='pedido') render();
+}
+function save(){ store.set('cart', cart); renderCart(); }
+function add(id){
+  const p = byId(id), l = cart.find(x=>x.id===id);
+  if (l){ if (l.qty>=stockOf(p)) { toast(p, p.single?'Ya está en tu carrito (pieza única)':'Sin más unidades disponibles'); return; } l.qty++; }
+  else cart.push({id, qty:1});
+  save(); toast(p, 'Añadido al carrito');
+}
+function openSheet(id){ document.getElementById(id).classList.add('on'); document.getElementById('scrim').classList.add('on'); }
+function closeSheets(){ document.querySelectorAll('.sheet').forEach(s=>s.classList.remove('on')); document.getElementById('scrim').classList.remove('on'); }
+
+/* ===================== PEDIDO ===================== */
+const PAYS = ['Divisas en efectivo','Zelle','Binance (USDT)','Pago Móvil (Bs.)','Transferencia (Bs.)'];
+function viewCheckout(){
+  const L = lines();
+  if (!L.length) return `<div class="wrap"><div class="phead"><div><span class="eyebrow">Pedido</span><h1>Finalizar pedido</h1></div></div>
+    <div class="box"><div class="empty"><b>Tu carrito está vacío</b><br><a class="btn" href="#sellado">Ir a la tienda</a></div></div></div>`;
+  const t = total(), free = sealedTotal() >= CONFIG.envioGratisDesde;
+  return `<div class="wrap">
+    <div class="phead"><div><span class="eyebrow">Pedido</span><h1>Finalizar pedido</h1><p>Completa tus datos y te enviaremos a WhatsApp con el pedido listo. Allí confirmamos disponibilidad, pago y envío.</p></div></div>
+    <div class="checkout">
+      <div style="display:grid;gap:20px">
+        <div class="box"><h3><span class="num">1</span>Tus datos</h3>
+          <div class="form two"><div class="field"><label>Nombre y apellido</label><input data-order="name" value="${esc(order.name)}" placeholder="Ej. María Pérez"></div>
+          <div class="field"><label>Ciudad</label><input data-order="city" value="${esc(order.city)}" placeholder="Ej. Caracas"></div></div></div>
+        <div class="box"><h3><span class="num">2</span>Entrega</h3>
+          <div class="radios">
+            <div class="radio ${order.delivery==='envio'?'on':''}" data-delivery="envio"><i></i><span><b>Envío nacional</b><small>${free?'Gratis en este pedido':'Por cobrar (gratis en sellado desde $'+CONFIG.envioGratisDesde+')'}</small></span></div>
+            <div class="radio ${order.delivery==='retiro'?'on':''}" data-delivery="retiro"><i></i><span><b>Retiro personal</b><small>Coordinamos punto de encuentro</small></span></div>
+          </div></div>
+        <div class="box"><h3><span class="num">3</span>Pago</h3>
+          <div class="form"><div class="field"><label>Método de pago</label><select data-order="pay">${PAYS.map(p=>`<option ${order.pay===p?'selected':''}>${p}</option>`).join('')}</select></div>
+          <div class="field"><label>Notas (opcional)</label><textarea rows="3" data-order="notes" placeholder="¿Algo que debamos saber?">${esc(order.notes)}</textarea></div></div></div>
+      </div>
+      <div class="box sticky"><h3>Resumen</h3>
+        ${L.map(lineHTML).join('')}
+        <div class="sumrow"><span>Subtotal</span><span>${money(t)}</span></div>
+        <div class="sumrow"><span>Envío</span><span>${order.delivery==='retiro'?'—':free?'Gratis':'Por cobrar'}</span></div>
+        <div class="sumrow t"><span>Total</span><span>${money(t)}</span></div>
+        <div class="tot-alt">≈ ${altMoney(t)} · tasa BCV ${CONFIG.tasaBs?fmtTasa():'—'}</div>
+        <button class="btn accent block" data-send>${I.wa} Enviar pedido por WhatsApp</button>
+        <p class="note">No se cobra nada aún: confirmamos todo contigo por chat.</p>
+      </div>
+    </div>
+  </div>`;
+}
+function orderText(){
+  const t = total();
+  let m = `¡Hola ${CONFIG.brand}! Quiero hacer este pedido:\n\n`;
+  lines().forEach(({p,qty}) => m += `• ${qty} × ${p.name}${p.single?` (${p.set} #${p.num}, ${p.cond})`:''} — $${(p.price*qty).toFixed(2)}\n`);
+  m += `\nTotal: $${t.toFixed(2)} (${bs(t)})\n\nNombre: ${order.name}\nCiudad: ${order.city || '—'}\nEntrega: ${order.delivery==='envio'?'Envío nacional':'Retiro personal'}\nPago: ${order.pay}`;
+  if (order.notes) m += `\nNotas: ${order.notes}`;
+  return m;
+}
+const waURL = text => `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`;
+function sendOrder(){
+  if (!order.name.trim()){ const el=document.querySelector('[data-order="name"]'); el.focus(); el.style.borderColor='var(--sale)'; toast(null,'Escribe tu nombre para continuar'); return; }
+  const m = orderText();
+  openModal(`<button class="round x" data-close aria-label="Cerrar">✕</button><span class="eyebrow">Último paso</span><h3 style="margin-top:6px">Envía tu pedido</h3>
+    <p style="color:var(--muted);margin-top:8px">Se abrirá WhatsApp (${esc(CONFIG.whatsappDisplay)}) con este mensaje:</p><pre>${esc(m)}</pre>
+    <div class="two"><a class="btn accent" href="${waURL(m)}" target="_blank" rel="noopener">${I.wa} Abrir WhatsApp</a><button class="btn line" data-copy>Copiar mensaje</button></div>`, true);
+}
+
+/* ===================== MODAL / TOAST ===================== */
+function openModal(html, narrow){ const b=document.getElementById('mbox'); b.className='mbox'+(narrow?' narrow':''); b.innerHTML=html; document.getElementById('modal').classList.add('on'); }
+function closeModal(){ document.getElementById('modal').classList.remove('on'); }
+function quickView(id){
+  const p = byId(id);
+  openModal(`<button class="round x" data-close aria-label="Cerrar">✕</button>
+    <div class="mm"><img src="${imgFor(p)}" alt="${esc(p.name)}"></div>
+    <div class="mi"><span class="kind">${esc(typeOf(p))} · ${LANGS[p.lang]}</span><h3>${esc(p.name)}</h3>
+      ${p.single?`<div class="tags"><span>${esc(p.set)} #${esc(p.num)}</span><span>${esc(p.rarity)}</span><span>${esc(p.cond)}</span><span>${esc(p.finish)}</span></div>`:''}
+      <div class="price" style="font-size:32px">${money(p.price)}${p.old?`<s>${money(p.old)}</s>`:''}</div>
+      <div style="color:var(--muted);font-size:14px">≈ ${altMoney(p.price)}</div>
+      <p style="color:var(--muted)">${p.single?`Carta original de ${esc(p.tcg)} en condición ${esc(p.cond)}. Pieza única: se envía protegida en sleeve y toploader.`:'Producto original y sellado de fábrica. Envío a todo el país o retiro personal coordinado por WhatsApp.'}</p>
+      <span style="color:var(--ok);font-weight:700;font-size:14px">● Disponible</span>
+      <button class="btn accent block" data-add="${p.id}" data-and-close style="margin-top:auto">Agregar al carrito</button>
+    </div>`);
+}
+const INFO = {
+  faq:['Preguntas frecuentes',`<b>¿Cómo compro?</b><br>Agrega productos al carrito, completa tus datos en “Finalizar pedido” y envíalo por WhatsApp.<br><br><b>¿Los productos son originales?</b><br>Sí, todo el sellado viene de distribuidores oficiales y cada single se revisa a mano.<br><br><b>¿Cuánto tarda el envío?</b><br>Entre 1 y 4 días hábiles según tu ciudad.`],
+  devoluciones:['Devoluciones','Aceptamos cambios de producto sellado dentro de los 7 días siguientes a la entrega si el empaque está intacto. Las singles se fotografían antes del envío y solo se devuelven si no coinciden con la descripción.'],
+  pagos:['Métodos de pago','Divisas en efectivo, Zelle, Binance (USDT), Pago Móvil y transferencia en bolívares a la tasa del día.']
+};
+let tT;
+function toast(p, msg){
+  const t = document.getElementById('toast');
+  t.innerHTML = (p?`<img src="${imgFor(p)}" alt="">`:'') + `<span>${esc(msg)}</span>` + (p&&msg.startsWith('Añadido')?`<button class="btn accent" style="padding:6px 14px;font-size:13px" data-open-cart>Ver carrito</button>`:'');
+  t.style.paddingLeft = p ? '' : '20px';
+  t.classList.add('on'); clearTimeout(tT); tT = setTimeout(()=>t.classList.remove('on'), 2800);
+}
+
+
+/* ===================== TASA BCV AUTOMÁTICA ===================== */
+const TASA = {fecha:'', fuente:''};
+const fmtTasa = () => CONFIG.tasaBs.toLocaleString('es-VE',{minimumFractionDigits:2,maximumFractionDigits:2});
+function fechaCorta(f){
+  if (!f) return '';
+  const solo = String(f).match(/^(\d{4})-(\d{2})-(\d{2})$/); if (solo) return `${solo[3]}/${solo[2]}/${solo[1]}`;
+  const d = new Date(f); if (isNaN(d)) return String(f);
+  return d.toLocaleDateString('es-VE',{day:'2-digit',month:'2-digit',year:'numeric',timeZone:'America/Caracas'});
+}
+function leerValor(j){
+  const cand = [j?.promedio, j?.venta, j?.usd, j?.dolar, j?.valor, j?.rate, j?.price, j?.monitors?.usd?.price];
+  for (const c of cand){ const n = typeof c==='string' ? parseFloat(c.replace(/\./g,'').replace(',','.')) : c; if (n>0) return n; }
+  return 0;
+}
+function aplicarTasa(valor, fecha, fuente){
+  CONFIG.tasaBs = valor; TASA.fecha = fechaCorta(fecha); TASA.fuente = fuente;
+  paintTicker(); render(); renderCart();
+}
+// Solo se consulta internet cuando la web está publicada (http/https).
+const PUBLICADA = (() => { try { return /^https?:$/.test(location.protocol) && !!location.hostname; } catch(e){ return false; } })();
+async function cargarTasa(){
+  const cache = store.get('tasa', null);
+  if (cache && cache.valor>0) aplicarTasa(cache.valor, cache.fecha, cache.fuente);
+  if (cache && Date.now()-cache.ts < 2*3600e3) return;
+  if (!PUBLICADA) return;
+  const fuentes = [CONFIG.api ? CONFIG.api.replace(/\/$/,'')+'/tasa' : '', ...(CONFIG.tasaFuentes||[])].filter(Boolean);
+  for (const url of fuentes){
+    try{
+      const ctrl = new AbortController(), to = setTimeout(()=>ctrl.abort(), 6000);
+      const r = await fetch(url, {signal:ctrl.signal, cache:'no-store'}); clearTimeout(to);
+      if (!r.ok) continue;
+      const j = await r.json(), v = leerValor(j);
+      if (v>0){ const fecha = j.fecha || j.fechaActualizacion || j.date || j.fecha_valor || '';
+        store.set('tasa', {valor:v, fecha, fuente:url, ts:Date.now()}); aplicarTasa(v, fecha, url); return; }
+    }catch(e){ /* siguiente fuente */ }
+  }
+  TASA.fallo = true; render();
+}
+
+/* ===================== ROUTER ===================== */
+const route = () => (location.hash||'#inicio').slice(1) || 'inicio';
+function render(){
+  const r = route(), app = document.getElementById('app');
+  if (ROUTES[r]) app.innerHTML = viewCatalog(r);
+  else if (r==='pedido') app.innerHTML = viewCheckout();
+  else app.innerHTML = viewHome();
+  document.querySelectorAll('[data-nav]').forEach(a => a.classList.toggle('on', a.dataset.nav===r || (r==='' && a.dataset.nav==='inicio')));
+  document.querySelectorAll('[data-cur] button').forEach(b => b.classList.toggle('on', b.dataset.c===currency));
+  bindWa();
+}
+function onRoute(){ closeSheets(); closeModal(); render(); window.scrollTo(0,0); }
+function bindWa(){
+  document.querySelectorAll('[data-wa-sell]').forEach(a => { a.href = waURL(`¡Hola ${CONFIG.brand}! Quiero vender unas cartas, ¿me ayudan a cotizarlas?`); a.target='_blank'; a.rel='noopener'; });
+  document.querySelectorAll('[data-wa]').forEach(a => { a.href = waURL(`¡Hola ${CONFIG.brand}!`); a.target='_blank'; a.rel='noopener'; });
+}
+
+/* ===================== EVENTOS ===================== */
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-add],[data-view],[data-close],[data-close-sheet],[data-qty],[data-remove],[data-c],[data-chip],[data-more],[data-open-filters],[data-fopt],[data-foffers],[data-clear],[data-untag],[data-rail],[data-gocat],[data-delivery],[data-send],[data-copy],[data-info],[data-open-cart]');
+  if (!t) return;
+  const d = t.dataset, r = route(), s = states[r];
+  if (d.add){ e.stopPropagation(); add(d.add); if ('andClose' in d) closeModal(); return; }
+  if (d.view){ quickView(d.view); return; }
+  if ('close' in d){ closeModal(); return; }
+  if ('closeSheet' in d){ closeSheets(); return; }
+  if ('openCart' in d){ openSheet('cartSheet'); return; }
+  if (d.qty){ const [id,dl]=d.qty.split(':'), l=cart.find(x=>x.id===id); if(l){ l.qty=Math.max(1,Math.min(stockOf(byId(id)),l.qty+ +dl)); save(); } return; }
+  if (d.remove){ cart=cart.filter(l=>l.id!==d.remove); save(); return; }
+  if (d.c){ if (d.c==='VES' && !CONFIG.tasaBs){ toast(null,'Aún no tenemos la tasa BCV de hoy'); return; } currency=d.c; store.set('cur',currency); render(); renderCart(); return; }
+  if (d.chip!==undefined){ s.chip=d.chip; s.shown=12; render(); return; }
+  if ('more' in d){ s.shown+=12; render(); return; }
+  if ('openFilters' in d){ renderFilters(); openSheet('filterSheet'); return; }
+  if (d.fopt){ const set = d.fopt==='lang'?s.langs:s.conds; set.has(d.val)?set.delete(d.val):set.add(d.val); s.shown=12; render(); renderFilters(); return; }
+  if ('foffers' in d){ s.offers=!s.offers; s.shown=12; render(); renderFilters(); return; }
+  if ('clear' in d){ if (s){ Object.assign(s, freshState()); render(); renderFilters(); } return; }
+  if (d.untag){ const k=d.untag; if(k==='q') s.q=''; else if(k==='price'){s.min='';s.max=''} else if(k==='offers') s.offers=false; else { const [g,v]=k.split(':'); (g==='lang'?s.langs:s.conds).delete(v); } render(); return; }
+  if (d.rail){ const rl=document.getElementById('rail'); rl.scrollBy({left:+d.rail*rl.clientWidth*.75,behavior:'smooth'}); return; }
+  if (d.gocat){ e.preventDefault(); if (d.gocat==='Accesorios'){ location.hash='accesorios'; return; } states.sellado.chip=d.gocat; location.hash='sellado'; return; }
+  if (d.delivery){ order.delivery=d.delivery; store.set('order',order); render(); return; }
+  if ('send' in d){ sendOrder(); return; }
+  if ('copy' in d){ navigator.clipboard?.writeText(orderText()).then(()=>toast(null,'Mensaje copiado')).catch(()=>toast(null,'No se pudo copiar')); return; }
+  if (d.info){ e.preventDefault(); const [h,b]=INFO[d.info]; openModal(`<button class="round x" data-close aria-label="Cerrar">✕</button><h3>${h}</h3><p style="margin-top:16px;line-height:1.7;color:var(--muted)">${b}</p>`, true); return; }
+});
+document.addEventListener('input', e => {
+  const t = e.target;
+  if (t.dataset.order){ order[t.dataset.order]=t.value; store.set('order',order); t.style.borderColor=''; }
+  if (t.dataset.fprice){ const s=states[route()]; s[t.dataset.fprice]=t.value; s.shown=12; render(); document.getElementById('seeResults').textContent=`Ver ${filtered(route()).length} resultados`; }
+});
+document.addEventListener('change', e => {
+  if ('sort' in e.target.dataset){ states[route()].sort=e.target.value; render(); }
+});
+document.getElementById('gsearch').addEventListener('submit', e => {
+  e.preventDefault(); const q = e.target.querySelector('input').value.trim();
+  Object.assign(states.buscar, freshState(), {q}); if (route()==='buscar') render(); else location.hash='buscar';
+});
+document.addEventListener('keydown', e => { if (e.key==='Escape'){ closeModal(); closeSheets(); } });
+document.getElementById('cartBtn').onclick = () => openSheet('cartSheet');
+document.getElementById('scrim').onclick = closeSheets;
+document.getElementById('themeBtn').onclick = () => { theme = theme==='light'?'dark':'light'; document.documentElement.dataset.theme=theme; store.set('theme',theme); };
+window.addEventListener('hashchange', onRoute);
+
+/* ===================== INICIO ===================== */
+document.documentElement.dataset.theme = theme;
+function paintTicker(){
+  const tick = [`Envío gratis desde $${CONFIG.envioGratisDesde} en sellado`, CONFIG.tasaBs?`Tasa BCV${TASA.fecha?' del '+TASA.fecha:''}: Bs. ${fmtTasa()} por $`:'Precios en $ y en Bs. a tasa BCV', 'Compramos tu colección', 'Pagos: Zelle · Binance · Pago Móvil · Efectivo', 'Singles revisadas a mano'];
+  document.getElementById('ticker').innerHTML = [...tick, ...tick, ...tick, ...tick].map(x=>`<span>${esc(x)}</span>`).join('');
+}
+paintTicker();
+document.getElementById('footWa').textContent = CONFIG.whatsappDisplay;
+document.getElementById('footIg').textContent = CONFIG.instagram;
+document.getElementById('footCity').textContent = CONFIG.city;
+document.getElementById('year').textContent = new Date().getFullYear();
+render(); renderCart(); cargarTasa();
+
+</script>
+</body>
+</html>

@@ -21,3 +21,10 @@ Web: https://josecolinar.github.io/gamexdrive/
 - Bio de Instagram: `https://josecolinar.github.io/gamexdrive/?utm_source=instagram`
 - Estado / perfil de WhatsApp: `https://josecolinar.github.io/gamexdrive/?utm_source=whatsapp`
 - El código QR ya incluye `?utm_source=qr`.
+
+## Tienda TCG (`tcg/`)
+Tienda aparte de cartas coleccionables (Pokémon, Magic, Riftbound, Dragon Ball): sellado, singles y accesorios.
+Web: https://josecolinar.github.io/gamexdrive/tcg/
+- `tcg/index.html` — la tienda completa. Configuración (`CONFIG`) y productos (`PRODUCTS`, `SINGLES`) al inicio del script.
+- **Tasa BCV automática**: igual que la tienda principal; usa `CONFIG.api` (tu worker, si lo pones) y luego `ve.dolarapi.com`. Se guarda 2 horas. `tasaBs` es solo un respaldo manual.
+- Antes de publicarla: cambia en `CONFIG` el nombre, el número de WhatsApp (ahora es de ejemplo), Instagram y ciudad.
