@@ -27,7 +27,8 @@ function semilla(str){ let h = 2166136261; for(const c of str){ h ^= c.charCodeA
 function aleatorio(seed){ return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 PRODUCTOS.forEach(p => { if (typeof p.cantidad === "number") p.stock = p.cantidad > 0; });
 const cfg = CONFIG.ofertaMensual;
-const elegibles = PRODUCTOS.filter(p => p.stock && !p.preventa && !p.precioAntes && !(cfg.excluirCategorias || []).includes(p.cat)).sort((a, b) => a.id - b.id);
+const inicioMes = mes + "-01";
+const elegibles = PRODUCTOS.filter(p => p.stock && !p.preventa && !p.precioAntes && !(cfg.excluirCategorias || []).includes(p.cat) && !(p.desde && p.desde >= inicioMes)).sort((a, b) => a.id - b.id);
 const rnd = aleatorio(semilla("gamexdrive-" + mes));
 for (let i = elegibles.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [elegibles[i], elegibles[j]] = [elegibles[j], elegibles[i]]; }
 const tope = Math.max(1, Math.floor(elegibles.length * (cfg.maxPctCatalogo || 100) / 100));
