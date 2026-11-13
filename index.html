@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GameX Drive</title>
+<title>Gamexdrive</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Squada+One&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -33,6 +33,7 @@
   .bar{display:flex;align-items:center;justify-content:space-between;height:70px;gap:1rem}
   .logo{font-family:'Squada One',Anton,sans-serif;font-size:1.9rem;letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;gap:.5rem;text-decoration:none;white-space:nowrap;line-height:1}
   .logo span{color:var(--red)}
+  .logo .lt{font-weight:inherit;white-space:nowrap}
   .logo img{width:44px;height:44px;border-radius:50%;flex:0 0 auto}
   .hsearch{flex:1;max-width:420px;position:relative}
   .hsearch input{border-radius:999px;padding-left:2.6rem;background:var(--panel)}
@@ -427,7 +428,7 @@
    CONFIGURACIÓN — cambia aquí los datos de tu tienda
    ========================================================= */
 const CONFIG = {
-  nombre: "GameX Drive",
+  nombre: "Gamexdrive",
   descripcion: "Figuras de anime, peluches, Funko Pop, gift cards y artículos gamer. Compra fácil y recibe en toda Venezuela.",
   // Número de WhatsApp con código de país, solo dígitos. Ej: "584141234567"
   whatsapp: "584264111692",
@@ -562,14 +563,16 @@ $("cur").onclick = e => {
 /* ---------- Bloques fijos ---------- */
 const categorias = () => [...new Set(PRODUCTOS.map(p=>p.cat))];
 function logoHTML(){
-  const w = CONFIG.nombre.toUpperCase().split(" ");
-  return `<img src="${LOGO}" alt="">` + esc(w[0]) + (w.length>1 ? "<span>"+esc(w.slice(1).join(" "))+"</span>" : "");
+  // Se escribe "Gamexdrive" (una sola palabra); en el logo "DRIVE" va en rojo
+  const n = CONFIG.nombre.toUpperCase(), i = n.lastIndexOf("DRIVE");
+  const txt = i > 0 ? esc(n.slice(0,i)) + "<span>" + esc(n.slice(i)) + "</span>" : esc(n);
+  return `<img src="${LOGO}" alt=""><b class="lt">${txt}</b>`;
 }
 function pintarFijos(){
   document.title = CONFIG.nombre;
   $("logo").innerHTML = $("flogo").innerHTML = logoHTML();
   $("logo").setAttribute("aria-label", CONFIG.nombre);
-  $("waHead").href = waLink("¡Hola GameX Drive! Tengo una consulta");
+  $("waHead").href = waLink(`¡Hola ${CONFIG.nombre}! Tengo una consulta`);
   const frases = CONFIG.franja.map(f=>`<span>${esc(f)}</span>`).join("");
   $("ticker").innerHTML = frases + frases;
   $("cats").innerHTML = categorias().map(c=>{

@@ -1,5 +1,5 @@
 /**
- * GameX Drive — Tasa BCV automática
+ * Gamexdrive — Tasa BCV automática
  * ------------------------------------------------------------
  * Cloudflare Worker que lee la tasa oficial del dólar desde
  * https://www.bcv.org.ve/ y la entrega en formato JSON a tu web.
@@ -46,7 +46,7 @@ export default {
 
     try {
       const r = await fetch(BCV_URL, {
-        headers: { "User-Agent": "Mozilla/5.0 (GameXDrive tasa BCV)" },
+        headers: { "User-Agent": "Mozilla/5.0 (Gamexdrive tasa BCV)" },
         cf: { cacheTtl: CACHE_SEGUNDOS },
       });
       if (!r.ok) throw new Error("BCV respondió " + r.status);

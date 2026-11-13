@@ -1,4 +1,4 @@
-# GameX Drive — Tienda web
+# Gamexdrive — Tienda web
 
 Tienda de figuras de anime, peluches, Funko Pop y gift cards. Pedidos por WhatsApp.
 
