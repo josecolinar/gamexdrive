@@ -660,7 +660,7 @@ const CONFIG = {
     "https://ve.dolarapi.com/v1/dolares/oficial"
   ],
   // Dirección de tu worker de Cloudflare (tasa BCV propia + contador de visitas).
-  // Vacío = automático: si la web está en Cloudflare (workers.dev) usa su propia dirección.
+  // Vacío = automático: si la web está en Cloudflare (gamexdrive.work o workers.dev) usa su propia dirección.
   // Desde GitHub Pages, pega aquí la dirección de Cloudflare, ej: "https://gamexdrive.TUUSUARIO.workers.dev"
   api: "",
   // Ofertas del mes: cada mes se eligen solos estos productos al azar (iguales para todos los visitantes)
@@ -1479,7 +1479,7 @@ function aplicarOfertasMes(){
 let TOP = [];
 const apiURL = () => {
   if(CONFIG.api) return CONFIG.api.replace(/\/$/,"");
-  try { if(/\.workers\.dev$/.test(location.hostname)) return location.origin; } catch(e){}
+  try { if(/\.workers\.dev$|(^|\.)gamexdrive\.work$/.test(location.hostname)) return location.origin; } catch(e){}
   return "";
 };
 function hoyCaracas(){ try { return new Intl.DateTimeFormat("en-CA",{timeZone:"America/Caracas"}).format(new Date()); } catch(e){ return new Date().toISOString().slice(0,10); } }

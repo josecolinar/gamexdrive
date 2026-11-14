@@ -14,5 +14,10 @@
   "kv_namespaces": [
     { "binding": "VISITAS", "id": "fbbf06120f4e4735a0a07c08941266ec" }
   ],
+  // Dominio propio: Cloudflare lo conecta solo al publicar (el dominio debe estar en esta cuenta de Cloudflare)
+  "routes": [
+    { "pattern": "gamexdrive.work", "custom_domain": true },
+    { "pattern": "www.gamexdrive.work", "custom_domain": true }
+  ],
   "observability": { "enabled": true }
 }
