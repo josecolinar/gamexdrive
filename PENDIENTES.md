@@ -14,11 +14,7 @@ _Actualizada: 14/11/2026_
 ## Productos por subir (fotos listas, faltan datos)
 | # | Producto | Categoría | Fotos | Precio | Unid. | Original / genérico / 3D | Notas |
 |---|---|---|---|---|---|---|---|
-| 1 | Funko Pop Boruto with Rasengan #1356 (Amazon Exclusive, brilla en la oscuridad) | Funko Pop | 2 | | | | |
-| 2 | Funko Pop War Machine #1149 — Civil War (Amazon Exclusive) | Funko Pop | 1 | | | | |
 | 3 | Peluche Aki Hayakawa — Chainsaw Man | Peluches | 1 | | | | Medida? |
-| 4 | Figura Marin Kitagawa Cheerleader — Luminasta SEGA (My Dress-Up Darling) | Figuras | 2 | | | | |
-| 5 | Nendoroid Dante #1233 — Devil May Cry 5 | Figuras | 2 | | | | Foto de tienda china: ¿réplica? |
 | 6 | Soporte de control Hollow Knight | Impresión 3D | 7 | | | 3D | |
 | 7 | Boo — Super Mario | Impresión 3D | 5 | | | 3D | ¿Decorativo o soporte? |
 | 8 | Soporte de control Fruta del Diablo (color durazno) — One Piece | Impresión 3D | 8 | | | 3D | ¿Qué fruta es? |
@@ -29,12 +25,9 @@ _Actualizada: 14/11/2026_
 | 13 | Star Wars: Squadrons — PS4 | Videojuegos | 1 | | | | ¿Nuevo o usado? |
 | 14 | Cuadro / busto de Master Chief — Halo | Impresión 3D | 8 | | | 3D | Colores: verde, verde agua y plateado. Se pega en la pared con cinta |
 | 15 | Gomu Gomu no Mi decorativa con base de barril — One Piece | Impresión 3D | 3 | | | 3D | |
-| 16 | Figura Yuji Itadori — Jukon no Kata (Jujutsu Kaisen, Banpresto) | Figuras | 2 | | | | |
-| 17 | Figura Yuta Okkotsu — Jukon no Kata (Jujutsu Kaisen 0, Banpresto) | Figuras | 1 | | | | |
 | 18 | The Outer Worlds — PS4 | Videojuegos | 1 | | | | ¿Nuevo o usado? |
 | 19 | The Witcher 3: Wild Hunt Complete Edition — PS4 | Videojuegos | 1 | | | | ¿Nuevo o usado? |
 | 20 | Peluche Power — Chainsaw Man (10 cm) | Peluches | 1 | | | Genérico | |
-| 21 | Figura The Knight — Hollow Knight (10 cm, PVC, con base) | Figuras | 2 | | | Genérico | ¿Con caja o sin caja? |
 | 22 | Peluche Johnny Joestar — JoJo's Bizarre Adventure: Steel Ball Run (10 cm) | Peluches | 1 | | | | ¿Genérico? |
 
 ## Me toca a mí (cuando me des lo de arriba)
@@ -56,4 +49,5 @@ _Actualizada: 14/11/2026_
 - [x] Booster Box 30th Celebration (china): confirmados 20 sobres
 - [x] Hollow Knight y Demon Slayer: genéricos, 1 unidad de cada uno
 - [x] Política: sin devoluciones (solo si no se entregó), garantía de 1 semana
+- [x] Subidos: Funko Boruto y War Machine, Marin Cheering, Dante (réplica), Yuji y Yuta Jukon no Kata, figura Hollow Knight 10 cm
 - [x] Dominio propio **gamexdrive.work** en Cloudflare, con HTTPS y publicación automática
