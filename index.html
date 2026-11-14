@@ -281,6 +281,13 @@
   .pre-item .pp b{font-size:1.15rem;font-weight:800}
   .pre-item .pp b.g{color:var(--ok)}
   .pre-item .cont{font-size:.85rem;font-weight:700;margin:-.2rem 0 .55rem;color:var(--text)}
+  .pre-item .abono{font-size:.84rem;margin:-.15rem 0 .6rem;color:var(--muted)}
+  .pre-item .abono b{color:var(--ok);font-size:.95rem}
+  .pre-item .abono span{font-size:.75rem}
+  .preabono{border-radius:12px;padding:.75rem .9rem;background:rgba(37,211,102,.07);border:1px solid rgba(37,211,102,.35);font-size:.86rem;display:grid;gap:.3rem}
+  .preabono .r{display:flex;justify-content:space-between;gap:1rem}
+  .preabono b{font-size:1rem}
+  .preabono .hoy b{color:var(--ok);font-size:1.15rem}
   .pre-item .bsline{margin-top:.55rem;font-size:.82rem;color:var(--muted);background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:.45rem .7rem}
   .pre-item .bsline b{color:var(--text)}
   .pre-item .bsline span{font-size:.74rem}
@@ -457,7 +464,7 @@
   <section class="hero" id="hero" aria-label="Destacados"><div id="slides"></div><div class="hnav" id="hnav"></div></section>
 
   <section class="block" id="secPre" style="margin-top:2.2rem">
-    <div class="sec"><h3><span class="n">01</span>Preventas</h3><p>Aparta lo que viene con un abono y asegura tu unidad antes que nadie.</p></div>
+    <div class="sec"><h3><span class="n">01</span>Preventas</h3><p id="preInfo">Aparta lo que viene con un abono y asegura tu unidad antes que nadie.</p></div>
     <div class="pre-list" id="pre"></div>
   </section>
 
@@ -616,14 +623,15 @@ const CONFIG = {
   ],
   envioGratisDesde: 20,       // $ mínimo para envío gratis. 0 = sin promoción
   envioGratisMinArticulos: 2, // cantidad mínima de artículos físicos
+  abonoPreventa: 20,          // % que se paga para reservar una preventa; el resto se paga al llegar
   envioGratisNota: "no aplica para gift cards, son digitales",
   // Frases de la franja roja animada
-  franja: ["Envío gratis desde $20 llevando 2 artículos", "Pago Móvil a tasa BCV · Divisas con descuento", "Zelle · Binance · PayPal · Efectivo", "Envíos a toda Venezuela", "¿No lo ves? ¡Te lo conseguimos!"],
+  franja: ["Envío gratis desde $20 llevando 2 artículos", "Pago Móvil a tasa BCV · Divisas con descuento", "Preventas: reserva con solo el 20%", "Zelle · Binance · PayPal · Efectivo", "Envíos a toda Venezuela", "¿No lo ves? ¡Te lo conseguimos!"],
   iconosCategoria: {"Pokémon TCG":"🃏", "Controles":"🎮", "Figuras":"🐉", "Funko Pop":"🍥", "Peluches":"🧸", "Gift Cards":"💳"},
   // Banners del inicio. En "titulo", lo que va entre *asteriscos* sale en rojo.
   banners: [
-    {producto:16, etiqueta:"Preventa · Japonés", titulo:"Booster Box *Abyss Eye*", texto:"30 sobres × 5 cartas con Mega Darkrai ex. Aparta la tuya con un abono."},
-    {producto:17, etiqueta:"Preventa · Chino", titulo:"*30th* Celebration", texto:"20 sobres × 6 cartas, todas foil, con 1 Pikachu por sobre. Aparta la tuya."},
+    {producto:16, etiqueta:"Preventa · Japonés", titulo:"Booster Box *Abyss Eye*", texto:"30 sobres × 5 cartas con Mega Darkrai ex. Apártala con solo el 20%."},
+    {producto:17, etiqueta:"Preventa · Chino", titulo:"*30th* Celebration", texto:"20 sobres × 6 cartas, todas foil, con 1 Pikachu por sobre. Apártala con solo el 20%."},
     {producto:14, etiqueta:"Nuevo · Quedan pocas", titulo:"Control *Mario Time*", texto:"Control con cable PowerA con licencia oficial para Nintendo Switch 2."},
     {producto:15, etiqueta:"Original FuRyu", titulo:"Miku *BiCute Bunnies*", texto:"Figura original de 31 cm a precio especial por caja dañada."},
     {producto:1, etiqueta:"Unidades limitadas", titulo:"Luffy *Gear 5*", texto:"La figura más pedida de One Piece ya llegó. Asegura la tuya."}
@@ -634,7 +642,7 @@ const CONFIG = {
     {p:"¿Cómo compro?", r:"Agrega tus productos al carrito, entra al carrito, elige forma de pago y entrega, y toca “Comprar por WhatsApp”. Te escribimos para confirmar disponibilidad y coordinar el pago."},
     {p:"¿Por qué hay dos precios?", r:"“Divisas” es el precio pagando en dólares (Zelle, Binance, PayPal o efectivo). “Tasa BCV” es el precio pagando en bolívares por Pago Móvil, calculado a la tasa oficial BCV del día."},
     {p:"¿Hacen envíos?", r:"Sí, enviamos a todo el país por MRW, Zoom o Tealca, y hacemos delivery en la ciudad. El envío es gratis en órdenes desde $20 con mínimo 2 artículos (no aplica para gift cards, que son digitales). Si no aplica, te informamos el costo al confirmar."},
-    {p:"¿Cómo funcionan las preventas?", r:"Reservas el producto con un abono y pagas el resto cuando llegue. Te avisamos por WhatsApp apenas esté disponible."},
+    {p:"¿Cómo funcionan las preventas?", r:"Para reservar pagas solo el 20% del precio. Cuando el producto llega te avisamos por WhatsApp y pagas el 80% restante para recibirlo. Ejemplo: una caja de $120 se aparta con $24 y al llegar pagas $96."},
     {p:"¿Cómo recibo una gift card?", r:"Al confirmar tu pago te enviamos el código por WhatsApp."},
     {p:"¿Aceptan cambios o devoluciones?", r:"Aceptamos cambios por defectos de fábrica en los primeros días tras recibir el producto, siempre que esté en su empaque original."}
   ]
@@ -672,8 +680,8 @@ const PRODUCTOS = [
   {id:12, nombre:"League of Legends $10", cat:"Gift Cards", precio:11, emoji:"🎟️", origen:["🇺🇸","US"], desc:"Tarjeta de Riot Points. Código digital por WhatsApp.", stock:true, digital:true},
   {id:14, desde:"2026-11-13", nombre:"Control con cable PowerA Advantage Mario Time — Nintendo Switch 2", cat:"Controles", precio:50, cantidad:2, autenticidad:"original", emoji:"🎮", fotos:["img/productos/14-1.webp","img/productos/14-2.webp","img/productos/14-3.webp","img/productos/14-4.webp"], desc:"🔌 Control CABLEADO (con cable, no es inalámbrico): se conecta a la Nintendo Switch 2 con el cable USB-C desmontable de 3 m incluido, sin pilas ni carga. Licencia oficial de Nintendo, diseño Mario Time, sticks Hall Effect (más precisos y duraderos), 2 botones traseros programables y botón C para GameChat. Funciona con la consola en modo dock (conectada al TV). No es compatible con HD rumble, cámara IR, controles de movimiento ni amiibo NFC.", nuevo:true},
   {id:15, desde:"2026-11-13", nombre:"Figura Hatsune Miku BiCute Bunnies — FuRyu", cat:"Figuras", precio:40, cantidad:1, autenticidad:"original", origen:["🇯🇵","JP"], emoji:"🐰", fotos:["img/productos/15-3.webp","img/productos/15-4.webp","img/productos/15-5.webp"], etiqueta:"Caja dañada", desc:"Figura original de FuRyu, línea BiCute Bunnies, con licencia oficial de Hatsune Miku. Altura aprox. 31 cm. Figura tipo prize, pintada, fija (sin articulaciones) y con base. Materiales: PVC, ABS y poliéster (las medias de red son de tela real). ⚠️ La caja tiene daños; por eso tiene precio especial. Las fotos son oficiales de FuRyu: pídenos por WhatsApp fotos reales de la caja antes de comprar.", nuevo:true},
-  {id:16, desde:"2026-11-13", nombre:"Booster Box Abyss Eye (M5) — Pokémon TCG Japonés", cat:"Pokémon TCG", precio:120, autenticidad:"original", origen:["🇯🇵","JP"], emoji:"🃏", contenido:"30 sobres × 5 cartas (150 cartas)", fotos:["img/productos/16-1.webp"], preventa:true, stock:true, desc:"Caja sellada de fábrica de la expansión japonesa Abyss Eye (M5, serie MEGA), con Mega Darkrai ex como carta estrella. Trae 30 sobres de 5 cartas cada uno: 150 cartas por caja. Cartas en japonés. Preventa: apártala con un abono y te avisamos por WhatsApp cuando llegue."},
-  {id:17, desde:"2026-11-13", nombre:"Booster Box 30th Celebration — Pokémon TCG Chino", cat:"Pokémon TCG", precio:130, autenticidad:"original", origen:["🇨🇳","CN"], emoji:"🃏", contenido:"20 sobres × 6 cartas foil (120 cartas)", fotos:["img/productos/17-1.webp"], preventa:true, stock:true, desc:"Caja sellada de la expansión 30th Celebration (30 aniversario de Pokémon TCG), edición en chino simplificado. Trae 20 sobres de 6 cartas cada uno: 120 cartas por caja, y todas las cartas son foil (brillantes). Cada sobre incluye 1 carta de Pikachu de una colección de 30 diseños distintos. Preventa: apártala con un abono y te avisamos por WhatsApp cuando llegue."}
+  {id:16, desde:"2026-11-13", nombre:"Booster Box Abyss Eye (M5) — Pokémon TCG Japonés", cat:"Pokémon TCG", precio:120, autenticidad:"original", origen:["🇯🇵","JP"], emoji:"🃏", contenido:"30 sobres × 5 cartas (150 cartas)", fotos:["img/productos/16-1.webp"], preventa:true, stock:true, desc:"Caja sellada de fábrica de la expansión japonesa Abyss Eye (M5, serie MEGA), con Mega Darkrai ex como carta estrella. Trae 30 sobres de 5 cartas cada uno: 150 cartas por caja. Cartas en japonés. Preventa: apártala pagando el 20% y paga el 80% restante cuando llegue; te avisamos por WhatsApp."},
+  {id:17, desde:"2026-11-13", nombre:"Booster Box 30th Celebration — Pokémon TCG Chino", cat:"Pokémon TCG", precio:130, autenticidad:"original", origen:["🇨🇳","CN"], emoji:"🃏", contenido:"20 sobres × 6 cartas foil (120 cartas)", fotos:["img/productos/17-1.webp"], preventa:true, stock:true, desc:"Caja sellada de la expansión 30th Celebration (30 aniversario de Pokémon TCG), edición en chino simplificado. Trae 20 sobres de 6 cartas cada uno: 120 cartas por caja, y todas las cartas son foil (brillantes). Cada sobre incluye 1 carta de Pikachu de una colección de 30 diseños distintos. Preventa: apártala pagando el 20% y paga el 80% restante cuando llegue; te avisamos por WhatsApp."}
 ];
 
 /* ========================================================= */
@@ -823,6 +831,7 @@ function boton(p){
   if(p.preventa) return `<button class="plus res" data-add="${p.id}" aria-label="Reservar ${esc(p.nombre)}" title="Reservar">${ICON_BOOK}</button>`;
   return `<button class="plus" data-add="${p.id}" aria-label="Añadir ${esc(p.nombre)} al carrito" title="Añadir al carrito">${ICON_PLUS}</button>`;
 }
+const abonoDe = n => r2(n * (CONFIG.abonoPreventa||0) / 100);
 const pocas = p => p.stock && typeof p.cantidad === "number" && p.cantidad > 0 && p.cantidad <= (CONFIG.pocasUnidades||0);
 const maxUnidades = p => typeof p.cantidad === "number" ? p.cantidad : Infinity;
 function authTag(p){
@@ -859,13 +868,15 @@ function tarjeta(p){
 function pintarSecciones(){
   const pre = PRODUCTOS.filter(p=>p.preventa && p.stock).sort((a,b)=>(b.desde||"").localeCompare(a.desde||""));
   const nuevos = PRODUCTOS.filter(p=>p.nuevo && !p.preventa).sort((a,b)=>(b.desde||"").localeCompare(a.desde||"") || b.id-a.id).slice(0,4);
+  $("preInfo").textContent = `Reserva pagando solo el ${CONFIG.abonoPreventa}% hoy y paga el resto cuando llegue. Te avisamos por WhatsApp.`;
   $("pre").innerHTML = pre.map(p=>`
     <div class="pre-item">
       <div class="pi" data-ver="${p.id}">${vis(p)}</div>
       <div>
         <h4 data-ver="${p.id}">${esc(p.nombre)}</h4>
-        <div class="meta">${esc(p.cat)}${p.origen?` · ${p.origen[0]} ${esc(p.origen[1])}`:""} · Reserva con abono</div>
+        <div class="meta">${esc(p.cat)}${p.origen?` · ${p.origen[0]} ${esc(p.origen[1])}`:""} · Reserva con ${CONFIG.abonoPreventa}%</div>
         ${p.contenido?`<div class="cont">📦 ${esc(p.contenido)}</div>`:""}
+        <div class="abono">🔖 Apártala hoy con <b>${fmtUsd(abonoDe(pDiv(p)))}</b> <span>(${CONFIG.abonoPreventa}% en divisas)</span> y paga el resto al llegar</div>
         <div class="row">
           <span class="pp"><span><b class="g">${fmtUsd(pDiv(p))}</b><small>Divisas</small></span><span><b>${fmtUsd(pBCV(p))}</b><small>Tasa BCV</small></span></span>
           <button class="btn" data-add="${p.id}">${ICON_BOOK} Reservar</button>
@@ -964,6 +975,7 @@ function verProducto(id){
       ${p.precioAntes?`<span class="was">Antes en divisas:<s>${fmtUsd(p.precioAntes)}</s></span>`:""}
       ${CONFIG.tasaBs && moneda!=="bs"?`<span class="was">Tasa BCV en bolívares: ${fmtBs(pBCV(p))}</span>`:""}
       ${p.contenido?`<div class="authbox"><b>📦 Contenido:</b> ${esc(p.contenido)}</div>`:""}
+      ${p.preventa?`<div class="preabono"><div class="r hoy"><span>🔖 Reserva hoy (${CONFIG.abonoPreventa}%)</span><b>${fmtUsd(abonoDe(pDiv(p)))}</b></div><div class="r"><span>Al llegar pagas el resto</span><b>${fmtUsd(r2(pDiv(p)-abonoDe(pDiv(p))))}</b></div><small style="color:var(--muted)">Montos en divisas. Con Pago Móvil se calculan sobre el precio tasa BCV.</small></div>`:""}
       <p class="d">${esc(p.desc)}</p>
       ${p.autenticidad==="original" ? `<div class="authbox original"><b>✓ Original</b> · Producto oficial / licenciado de la marca.</div>`
         : p.autenticidad==="generico" ? `<div class="authbox"><b>Genérico</b> · No es producto oficial de la marca. Te lo indicamos siempre para que sepas lo que compras.</div>` : ""}
@@ -1056,7 +1068,7 @@ function pintarPaginaCarrito(){
     $("cpContent").innerHTML = `<div class="cempty"><span class="e">🛒</span><b style="color:var(--text);font-size:1.15rem">Tu carrito está vacío</b><br>Agrega tu próxima figura, peluche o gift card.<br><button class="btn" data-store>Ir a la tienda</button></div>`;
     return;
   }
-  const bcv = esBCV(), lbl = bcv ? "Tasa BCV" : "Divisas", env = estadoEnvio(), C = calcular(), t = C.total;
+  const bcv = esBCV(), lbl = bcv ? "Tasa BCV" : "Divisas", env = estadoEnvio(), C = calcular(), t = C.total, PA = pagoAbono(C);
   const filas = C.items.map(({p,q,pu,pct,bruto,neto})=>{
     return `<div class="crow">
       <div class="c-prod"><div class="cthumb" data-ver="${p.id}">${vis(p)}</div>
@@ -1102,6 +1114,11 @@ function pintarPaginaCarrito(){
               : `<p class="cmsg bad">El cupón “${esc(sel.cupon)}” no es válido o ya venció.<button data-quitarcupon>Quitar</button></p>`) : ""}
         </div>
         <div class="tline"><span>Total</span><span><b>${fmtUsd(t)}</b></span></div>
+        ${PA.pre>0 ? `<div class="preabono">
+          <div class="r hoy"><span>🔖 Pagas hoy</span><b>${fmtUsd(PA.hoy)}</b></div>
+          <div class="r"><span>Al llegar la preventa</span><b>${fmtUsd(PA.luego)}</b></div>
+          <small style="color:var(--muted)">Hoy pagas el ${CONFIG.abonoPreventa}% de la preventa${PA.normal>0?" + el resto de productos":""}${bcv && CONFIG.tasaBs?` · hoy ≈ ${fmtBs(PA.hoy)}`:""}</small>
+        </div>` : ""}
         ${bcv && CONFIG.tasaBs ? `<div class="bsbox">
           <div class="row1"><span>En bolívares</span><b>${fmtBs(t)}</b></div>
           <div class="rate"><span>Tasa BCV${TASA.fecha?` · ${TASA.fecha}`:""}</span><span><b>Bs. ${fmtTasa()}</b> por $1</span></div>
@@ -1119,6 +1136,11 @@ function pintarPaginaCarrito(){
   actualizarWA();
 }
 
+function pagoAbono(C){
+  const pre = r2(C.items.filter(i=>i.p.preventa).reduce((s,i)=>s+i.neto,0));
+  const normal = r2(C.total - pre), ab = abonoDe(pre);
+  return { pre, normal, hoy: r2(normal + ab), luego: r2(pre - ab) };
+}
 function actualizarWA(){
   const btn = $("waBtn"); if(!btn) return;
   const L = lineas(); if(!L.length){ btn.classList.add("off"); return; }
@@ -1133,6 +1155,11 @@ function actualizarWA(){
   }
   m += `\n💳 Pago: ${sel.pago} (precio ${bcv?"tasa BCV":"divisas"})`;
   m += `\n*Total: ${fmtUsd(t)}*${bcv && CONFIG.tasaBs?` (≈ ${fmtBs(t)})`:""}`;
+  const PA = pagoAbono(C);
+  if(PA.pre > 0){
+    m += `\n🔖 *Pago hoy: ${fmtUsd(PA.hoy)}*${bcv && CONFIG.tasaBs?` (≈ ${fmtBs(PA.hoy)})`:""} — reserva ${CONFIG.abonoPreventa}% de la preventa${PA.normal>0?" + resto de productos":""}`;
+    m += `\n⏳ Al llegar la preventa: ${fmtUsd(PA.luego)}`;
+  }
   m += `\n🚚 Entrega: ${sel.entrega} — envío ${env.gratis ? env.txt.replace(/[¡!]/g,"").toLowerCase() : "por confirmar"}${cumpleGratis() && entregaSel().envio ? " 🎉" : ""}`;
   m += `\n\n👤 Nombre: ${sel.nombre.trim()||"-"}`;
   if(sel.notas.trim()) m += `\n📝 Notas: ${sel.notas.trim()}`;
