@@ -7,11 +7,9 @@ _Actualizada: 14/11/2026_
 - [ ] Mandar 2 fotos reales de la caja de la Miku BiCute Bunnies
 - [ ] Mandar el link de tu tienda de Mercado Libre (reputación, botón e inventario)
 - [ ] Decidir si los precios de la web y de Mercado Libre son iguales o distintos
-- [ ] Confirmar si son originales o genéricos, y cuántas unidades hay: Hollow Knight y los 4 de Demon Slayer
 - [ ] Decidir qué productos de ejemplo (los del principio) se quitan
 - [ ] Mandar fotos de clientes (destacados de Instagram) para la sección Clientes
 - [ ] Definir cupones y combos reales (GAMEX10 es de ejemplo)
-- [ ] Definir la política de cambios y devoluciones para las preguntas frecuentes
 
 ## Me toca a mí (cuando me des lo de arriba)
 - [ ] Cargar el inventario de Mercado Libre, la reputación y el botón a tu tienda
@@ -30,4 +28,6 @@ _Actualizada: 14/11/2026_
 - [x] Menú hamburguesa en celular y mega menú en computadora
 - [x] Productos nuevos: control Mario Time, Miku, booster boxes, Hollow Knight y 4 de Demon Slayer
 - [x] Booster Box 30th Celebration (china): confirmados 20 sobres
+- [x] Hollow Knight y Demon Slayer: genéricos, 1 unidad de cada uno
+- [x] Política: sin devoluciones (solo si no se entregó), garantía de 1 semana
 - [x] Dominio propio **gamexdrive.work** en Cloudflare, con HTTPS y publicación automática
