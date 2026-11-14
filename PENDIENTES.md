@@ -1,6 +1,9 @@
 # Gamexdrive — lista de pendientes
 _Actualizada: 14/11/2026_
 
+## Regla
+- Cada producto real que coincida con uno de relleno (de ejemplo) reemplaza al de relleno: se elimina el de ejemplo.
+
 ## Te toca a ti
 - [ ] Crear el secreto `STATS_CLAVE` en Cloudflare (Workers & Pages → gamexdrive → Settings → Variables and Secrets → Add → Secret) para las estadísticas privadas
 - [ ] Cambiar el link de la bio de Instagram y de WhatsApp Business a **gamexdrive.work**
