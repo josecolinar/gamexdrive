@@ -280,6 +280,10 @@
   .pre-item .pp{display:flex;gap:1rem;align-items:baseline}
   .pre-item .pp b{font-size:1.15rem;font-weight:800}
   .pre-item .pp b.g{color:var(--ok)}
+  .pre-item .cont{font-size:.85rem;font-weight:700;margin:-.2rem 0 .55rem;color:var(--text)}
+  .pre-item .bsline{margin-top:.55rem;font-size:.82rem;color:var(--muted);background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:.45rem .7rem}
+  .pre-item .bsline b{color:var(--text)}
+  .pre-item .bsline span{font-size:.74rem}
   .pre-item .pp small{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-left:.25rem}
 
   /* ===== Página del carrito ===== */
@@ -615,7 +619,7 @@ const CONFIG = {
   envioGratisNota: "no aplica para gift cards, son digitales",
   // Frases de la franja roja animada
   franja: ["Envío gratis desde $20 llevando 2 artículos", "Pago Móvil a tasa BCV · Divisas con descuento", "Zelle · Binance · PayPal · Efectivo", "Envíos a toda Venezuela", "¿No lo ves? ¡Te lo conseguimos!"],
-  iconosCategoria: {"Controles":"🎮", "Figuras":"🐉", "Funko Pop":"🍥", "Peluches":"🧸", "Gift Cards":"💳"},
+  iconosCategoria: {"Pokémon TCG":"🃏", "Controles":"🎮", "Figuras":"🐉", "Funko Pop":"🍥", "Peluches":"🧸", "Gift Cards":"💳"},
   // Banners del inicio. En "titulo", lo que va entre *asteriscos* sale en rojo.
   banners: [
     {producto:1, etiqueta:"Unidades limitadas", titulo:"Luffy *Gear 5*", texto:"La figura más pedida de One Piece ya llegó. Asegura la tuya."},
@@ -642,6 +646,7 @@ const CONFIG = {
    digital: true para gift cards (no cuentan para el envío gratis)
    autenticidad: "original" o "generico" (se muestra en la tarjeta)
    cantidad: unidades disponibles (opcional). 0 = agotado; con pocas sale "¡Quedan N!"
+   contenido: qué trae la caja (opcional), ej. "30 sobres × 5 cartas"
    etiqueta: texto corto extra en la tarjeta (opcional), ej. "Caja dañada"
    desde: fecha en que se agregó (AAAA-MM-DD). Entra a las ofertas del mes a partir del mes siguiente,
           así las ofertas del mes en curso no cambian al agregar productos.
@@ -664,7 +669,9 @@ const PRODUCTOS = [
   {id:11, nombre:"Fortnite 1.000 V-Bucks", cat:"Gift Cards", precio:10, emoji:"🎮", origen:["🇺🇸","US"], desc:"Código digital. Te lo enviamos por WhatsApp al confirmar el pago.", nuevo:true, stock:true, digital:true},
   {id:12, nombre:"League of Legends $10", cat:"Gift Cards", precio:11, emoji:"🎟️", origen:["🇺🇸","US"], desc:"Tarjeta de Riot Points. Código digital por WhatsApp.", stock:true, digital:true},
   {id:14, desde:"2026-11-13", nombre:"Control con cable PowerA Advantage Mario Time — Nintendo Switch 2", cat:"Controles", precio:50, cantidad:2, autenticidad:"original", emoji:"🎮", fotos:["img/productos/14-1.webp","img/productos/14-2.webp","img/productos/14-3.webp","img/productos/14-4.webp"], desc:"🔌 Control CABLEADO (con cable, no es inalámbrico): se conecta a la Nintendo Switch 2 con el cable USB-C desmontable de 3 m incluido, sin pilas ni carga. Licencia oficial de Nintendo, diseño Mario Time, sticks Hall Effect (más precisos y duraderos), 2 botones traseros programables y botón C para GameChat. Funciona con la consola en modo dock (conectada al TV). No es compatible con HD rumble, cámara IR, controles de movimiento ni amiibo NFC.", nuevo:true},
-  {id:15, desde:"2026-11-13", nombre:"Figura Hatsune Miku BiCute Bunnies — FuRyu", cat:"Figuras", precio:40, cantidad:1, autenticidad:"original", origen:["🇯🇵","JP"], emoji:"🐰", fotos:["img/productos/15-3.webp","img/productos/15-4.webp","img/productos/15-5.webp"], etiqueta:"Caja dañada", desc:"Figura original de FuRyu, línea BiCute Bunnies, con licencia oficial de Hatsune Miku. Altura aprox. 31 cm. Figura tipo prize, pintada, fija (sin articulaciones) y con base. Materiales: PVC, ABS y poliéster (las medias de red son de tela real). ⚠️ La caja tiene daños; por eso tiene precio especial. Las fotos son oficiales de FuRyu: pídenos por WhatsApp fotos reales de la caja antes de comprar.", nuevo:true}
+  {id:15, desde:"2026-11-13", nombre:"Figura Hatsune Miku BiCute Bunnies — FuRyu", cat:"Figuras", precio:40, cantidad:1, autenticidad:"original", origen:["🇯🇵","JP"], emoji:"🐰", fotos:["img/productos/15-3.webp","img/productos/15-4.webp","img/productos/15-5.webp"], etiqueta:"Caja dañada", desc:"Figura original de FuRyu, línea BiCute Bunnies, con licencia oficial de Hatsune Miku. Altura aprox. 31 cm. Figura tipo prize, pintada, fija (sin articulaciones) y con base. Materiales: PVC, ABS y poliéster (las medias de red son de tela real). ⚠️ La caja tiene daños; por eso tiene precio especial. Las fotos son oficiales de FuRyu: pídenos por WhatsApp fotos reales de la caja antes de comprar.", nuevo:true},
+  {id:16, desde:"2026-11-13", nombre:"Booster Box Abyss Eye (M5) — Pokémon TCG Japonés", cat:"Pokémon TCG", precio:120, autenticidad:"original", origen:["🇯🇵","JP"], emoji:"🃏", contenido:"30 sobres × 5 cartas (150 cartas)", fotos:["img/productos/16-1.webp"], preventa:true, stock:true, desc:"Caja sellada de fábrica de la expansión japonesa Abyss Eye (M5, serie MEGA), con Mega Darkrai ex como carta estrella. Trae 30 sobres de 5 cartas cada uno: 150 cartas por caja. Cartas en japonés. Preventa: apártala con un abono y te avisamos por WhatsApp cuando llegue."},
+  {id:17, desde:"2026-11-13", nombre:"Booster Box 30th Celebration — Pokémon TCG Chino", cat:"Pokémon TCG", precio:130, autenticidad:"original", origen:["🇨🇳","CN"], emoji:"🃏", contenido:"20 sobres × 6 cartas foil (120 cartas)", fotos:["img/productos/17-1.webp"], preventa:true, stock:true, desc:"Caja sellada de la expansión 30th Celebration (30 aniversario de Pokémon TCG), edición en chino simplificado. Trae 20 sobres de 6 cartas cada uno: 120 cartas por caja, y todas las cartas son foil (brillantes). Cada sobre incluye 1 carta de Pikachu de una colección de 30 diseños distintos. Preventa: apártala con un abono y te avisamos por WhatsApp cuando llegue."}
 ];
 
 /* ========================================================= */
@@ -848,7 +855,7 @@ function tarjeta(p){
   </article>`;
 }
 function pintarSecciones(){
-  const pre = PRODUCTOS.filter(p=>p.preventa && p.stock);
+  const pre = PRODUCTOS.filter(p=>p.preventa && p.stock).sort((a,b)=>(b.desde||"").localeCompare(a.desde||""));
   const nuevos = PRODUCTOS.filter(p=>p.nuevo && !p.preventa).sort((a,b)=>(b.desde||"").localeCompare(a.desde||"") || b.id-a.id).slice(0,4);
   $("pre").innerHTML = pre.map(p=>`
     <div class="pre-item">
@@ -856,10 +863,12 @@ function pintarSecciones(){
       <div>
         <h4 data-ver="${p.id}">${esc(p.nombre)}</h4>
         <div class="meta">${esc(p.cat)}${p.origen?` · ${p.origen[0]} ${esc(p.origen[1])}`:""} · Reserva con abono</div>
+        ${p.contenido?`<div class="cont">📦 ${esc(p.contenido)}</div>`:""}
         <div class="row">
-          <span class="pp"><span><b class="g">${fmtUsd(pDiv(p))}</b><small>Divisas</small></span><span><b>${showBCV(pBCV(p))}</b><small>BCV</small></span></span>
+          <span class="pp"><span><b class="g">${fmtUsd(pDiv(p))}</b><small>Divisas</small></span><span><b>${fmtUsd(pBCV(p))}</b><small>Tasa BCV</small></span></span>
           <button class="btn" data-add="${p.id}">${ICON_BOOK} Reservar</button>
         </div>
+        ${CONFIG.tasaBs?`<div class="bsline">En bolívares: <b>${fmtBs(pBCV(p))}</b> <span>(tasa BCV ${TASA.fecha||"de hoy"}: Bs. ${fmtTasa()})</span></div>`:`<div class="bsline">En bolívares: se calcula con la tasa BCV del día</div>`}
       </div>
     </div>`).join("");
   $("nuevos").innerHTML = nuevos.map(tarjeta).join("");
@@ -952,6 +961,7 @@ function verProducto(id){
       ${preciosHTML(p,true)}
       ${p.precioAntes?`<span class="was">Antes en divisas:<s>${fmtUsd(p.precioAntes)}</s></span>`:""}
       ${CONFIG.tasaBs && moneda!=="bs"?`<span class="was">Tasa BCV en bolívares: ${fmtBs(pBCV(p))}</span>`:""}
+      ${p.contenido?`<div class="authbox"><b>📦 Contenido:</b> ${esc(p.contenido)}</div>`:""}
       <p class="d">${esc(p.desc)}</p>
       ${p.autenticidad==="original" ? `<div class="authbox original"><b>✓ Original</b> · Producto oficial / licenciado de la marca.</div>`
         : p.autenticidad==="generico" ? `<div class="authbox"><b>Genérico</b> · No es producto oficial de la marca. Te lo indicamos siempre para que sepas lo que compras.</div>` : ""}
