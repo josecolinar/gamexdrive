@@ -456,6 +456,11 @@
  <div id="store">
   <section class="hero" id="hero" aria-label="Destacados"><div id="slides"></div><div class="hnav" id="hnav"></div></section>
 
+  <section class="block" id="secPre" style="margin-top:2.2rem">
+    <div class="sec"><h3><span class="n">01</span>Preventas</h3><p>Aparta lo que viene con un abono y asegura tu unidad antes que nadie.</p></div>
+    <div class="pre-list" id="pre"></div>
+  </section>
+
   <div class="ticker" aria-hidden="true"><div class="track" id="ticker"></div></div>
 
   <div class="cats" id="cats"></div>
@@ -474,11 +479,6 @@
   <section class="block" id="secTop">
     <div class="sec"><h3><span class="n">02</span>Destacados</h3><p id="topInfo">Lo más visto por la comunidad Gamexdrive.</p></div>
     <div class="grid" id="top"></div>
-  </section>
-
-  <section class="block" id="secPre">
-    <div class="sec"><h3><span class="n">01</span>Preventas</h3><p>Aparta lo que viene con un abono y asegura tu unidad antes que nadie.</p></div>
-    <div class="pre-list" id="pre"></div>
   </section>
 
   <section class="block" id="secNuevos">
@@ -622,9 +622,11 @@ const CONFIG = {
   iconosCategoria: {"Pokémon TCG":"🃏", "Controles":"🎮", "Figuras":"🐉", "Funko Pop":"🍥", "Peluches":"🧸", "Gift Cards":"💳"},
   // Banners del inicio. En "titulo", lo que va entre *asteriscos* sale en rojo.
   banners: [
-    {producto:1, etiqueta:"Unidades limitadas", titulo:"Luffy *Gear 5*", texto:"La figura más pedida de One Piece ya llegó. Asegura la tuya."},
-    {producto:8, etiqueta:"Nuevo", titulo:"Llegó *Pochita*", texto:"Peluches de Chainsaw Man suaves, originales y listos para regalar."},
-    {producto:11, etiqueta:"Entrega digital", titulo:"*V-Bucks* al instante", texto:"Recarga Fortnite y recibe tu código por WhatsApp."}
+    {producto:16, etiqueta:"Preventa · Japonés", titulo:"Booster Box *Abyss Eye*", texto:"30 sobres × 5 cartas con Mega Darkrai ex. Aparta la tuya con un abono."},
+    {producto:17, etiqueta:"Preventa · Chino", titulo:"*30th* Celebration", texto:"20 sobres × 6 cartas, todas foil, con 1 Pikachu por sobre. Aparta la tuya."},
+    {producto:14, etiqueta:"Nuevo · Quedan pocas", titulo:"Control *Mario Time*", texto:"Control con cable PowerA con licencia oficial para Nintendo Switch 2."},
+    {producto:15, etiqueta:"Original FuRyu", titulo:"Miku *BiCute Bunnies*", texto:"Figura original de 31 cm a precio especial por caja dañada."},
+    {producto:1, etiqueta:"Unidades limitadas", titulo:"Luffy *Gear 5*", texto:"La figura más pedida de One Piece ya llegó. Asegura la tuya."}
   ],
   faq: [
     {p:"¿Los productos son originales?", r:"Cada producto dice si es Original (oficial o licenciado) o Genérico (no oficial). Siempre te lo indicamos para que sepas exactamente qué compras. Si tienes dudas, pregúntanos por WhatsApp antes de comprar."},
@@ -890,7 +892,7 @@ function pintarSecciones(){
 }
 function numerar(){
   let n = 0;
-  ["secOfertas","secTop","secPre","secNuevos","productos","secClientes","faqSec"].forEach(id=>{
+  ["secPre","secOfertas","secTop","secNuevos","productos","secClientes","faqSec"].forEach(id=>{
     const el = $(id); if(!el || el.style.display==="none") return;
     const s = el.querySelector(".sec .n"); if(s) s.textContent = String(++n).padStart(2,"0");
   });
