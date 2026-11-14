@@ -35,6 +35,7 @@ _Actualizada: 14/11/2026_
 | 19 | The Witcher 3: Wild Hunt Complete Edition — PS4 | Videojuegos | 1 | | | | ¿Nuevo o usado? |
 | 20 | Peluche Power — Chainsaw Man (10 cm) | Peluches | 1 | | | Genérico | |
 | 21 | Figura The Knight — Hollow Knight (10 cm, PVC, con base) | Figuras | 2 | | | Genérico | ¿Con caja o sin caja? |
+| 22 | Peluche Johnny Joestar — JoJo's Bizarre Adventure: Steel Ball Run (10 cm) | Peluches | 1 | | | | ¿Genérico? |
 
 ## Me toca a mí (cuando me des lo de arriba)
 - [ ] Cargar el inventario de Mercado Libre, la reputación y el botón a tu tienda
