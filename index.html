@@ -153,8 +153,12 @@
   @media (max-width:640px){ .sec{flex-direction:column;align-items:flex-start} .sec p{text-align:left} }
 
   /* ===== Preventas (lista) ===== */
-  .pre-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1rem}
-  .pre-item{display:grid;grid-template-columns:130px 1fr;gap:1.1rem;align-items:center;background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--red);border-radius:16px;padding:1rem}
+  .pre-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr));gap:1rem}
+  .pre-item{min-width:0}
+  .pre-item>div{min-width:0}
+  .pre-item h4{overflow-wrap:anywhere}
+  .pre-item .row{flex-wrap:wrap}
+  .pre-item{display:grid;grid-template-columns:130px minmax(0,1fr);gap:1.1rem;align-items:center;background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--red);border-radius:16px;padding:1rem}
   .pre-item .pi{width:130px;height:130px;border-radius:12px;background:radial-gradient(circle at 50% 60%,var(--glow),transparent 70%),var(--panel2);display:grid;place-items:center;font-size:4rem;cursor:pointer}
   .pre-item .pi{position:relative;overflow:hidden}
   .pre-item .pi img{position:absolute;inset:7%;width:86%;height:86%;object-fit:contain}
@@ -163,7 +167,7 @@
   .pre-item .row{display:flex;align-items:center;justify-content:space-between;gap:.6rem;flex-wrap:wrap}
   .pre-item .pz{font-weight:800;font-size:1.3rem}
   .pre-item .btn{padding:.6rem 1.1rem;font-size:.9rem}
-  @media (max-width:420px){ .pre-list{grid-template-columns:1fr} .pre-item{grid-template-columns:96px 1fr} .pre-item .pi{width:96px;height:96px;font-size:3rem} }
+  @media (max-width:420px){ .pre-list{grid-template-columns:1fr} .pre-item{grid-template-columns:96px minmax(0,1fr)} .pre-item .pi{width:96px;height:96px;font-size:3rem} }
 
   /* ===== Tarjetas ===== */
   .controls{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center;margin-bottom:1rem}
@@ -277,7 +281,9 @@
   .hero .pr2 b{font-size:1.7rem;font-weight:800;line-height:1.1}
   .hero .pr2 .dvh b{color:#2fe27a}
   .hero .pr2 small{font-size:.66rem;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#bdbdbd}
-  .pre-item .pp{display:flex;gap:1rem;align-items:baseline}
+  .pre-item .pp{display:flex;flex-wrap:wrap;gap:.3rem 1rem;align-items:baseline;min-width:0}
+  .pre-item .pp>span{white-space:nowrap}
+  @media (max-width:520px){ .pre-item{grid-template-columns:1fr !important} .pre-item .pi{width:100% !important;height:190px !important} }
   .pre-item .pp b{font-size:1.15rem;font-weight:800}
   .pre-item .pp b.g{color:var(--ok)}
   .pre-item .cont{font-size:.85rem;font-weight:700;margin:-.2rem 0 .55rem;color:var(--text)}
@@ -379,6 +385,12 @@
   .toast span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:60vw}
   .toast button{background:var(--red);color:#fff;border-radius:999px;padding:.35rem .8rem;font-weight:700;font-size:.85rem;white-space:nowrap}
   [hidden]{display:none !important}
+  /* Nunca permitir desplazamiento lateral en celulares */
+  html,body{max-width:100%;overflow-x:hidden}
+  @supports (overflow:clip){ html,body{overflow-x:clip} }
+  .slide>div{min-width:0}
+  .slide h2{overflow-wrap:anywhere}
+  @media (max-width:340px){ .logo{font-size:1.15rem} .logo img{width:28px;height:28px} .cur button{padding:.35rem .4rem} }
 
   /* ===== Cómo comprar + confianza ===== */
   .como{margin:-1.2rem 0 3.4rem;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:1.4rem 1.4rem 1.2rem}
