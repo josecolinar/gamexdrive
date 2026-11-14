@@ -40,7 +40,7 @@ const ofertas = elegibles.slice(0, Math.min(cfg.cantidad, tope)).map(p => {
 });
 const [y, m] = mes.split("-").map(Number);
 const ultimoDia = new Date(y, m, 0).getDate();
-const salida = { mes, descuento: cfg.descuento, vence: `${mes}-${String(ultimoDia).padStart(2, "0")}`, web: "https://josecolinar.github.io/gamexdrive/", ofertas };
+const salida = { mes, descuento: cfg.descuento, vence: `${mes}-${String(ultimoDia).padStart(2, "0")}`, web: "https://gamexdrive.work/", ofertas };
 
 if (json) console.log(JSON.stringify(salida, null, 2));
 else {

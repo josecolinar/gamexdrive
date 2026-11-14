@@ -33,6 +33,8 @@ const CACHE_TASA = 3600; // 1 hora
 
 // Sitios que pueden usar este worker
 const ORIGENES = [
+  "https://gamexdrive.work",
+  "https://www.gamexdrive.work",
   "https://josecolinar.github.io",
   "https://gamexdrive.pages.dev",
   "https://gamexdrive.netlify.app",

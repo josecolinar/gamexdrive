@@ -1,7 +1,7 @@
 # Gamexdrive — Tienda web
 
 Tienda de figuras de anime, peluches, Funko Pop y gift cards en Caracas. Pedidos por WhatsApp.
-Web: https://josecolinar.github.io/gamexdrive/
+Web: https://gamexdrive.work/
 
 ## Archivos
 - `index.html` — la web completa. Productos (`PRODUCTOS`) y configuración (`CONFIG`) al inicio del script.
@@ -18,6 +18,6 @@ Web: https://josecolinar.github.io/gamexdrive/
 - **Clientes**: lo que subas a `clientes/` aparece solo.
 
 ## Enlaces para medir de dónde llegan tus clientes
-- Bio de Instagram: `https://josecolinar.github.io/gamexdrive/?utm_source=instagram`
-- Estado / perfil de WhatsApp: `https://josecolinar.github.io/gamexdrive/?utm_source=whatsapp`
+- Bio de Instagram: `https://gamexdrive.work/?utm_source=instagram`
+- Estado / perfil de WhatsApp: `https://gamexdrive.work/?utm_source=whatsapp`
 - El código QR ya incluye `?utm_source=qr`.
