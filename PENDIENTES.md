@@ -11,6 +11,23 @@ _Actualizada: 14/11/2026_
 - [ ] Mandar fotos de clientes (destacados de Instagram) para la sección Clientes
 - [ ] Definir cupones y combos reales (GAMEX10 es de ejemplo)
 
+## Productos por subir (fotos listas, faltan datos)
+| # | Producto | Categoría | Fotos | Precio | Unid. | Original / genérico / 3D | Notas |
+|---|---|---|---|---|---|---|---|
+| 1 | Funko Pop Boruto with Rasengan #1356 (Amazon Exclusive, brilla en la oscuridad) | Funko Pop | 2 | | | | |
+| 2 | Funko Pop War Machine #1149 — Civil War (Amazon Exclusive) | Funko Pop | 1 | | | | |
+| 3 | Peluche Aki Hayakawa — Chainsaw Man | Peluches | 1 | | | | Medida? |
+| 4 | Figura Marin Kitagawa Cheerleader — Luminasta SEGA (My Dress-Up Darling) | Figuras | 1 | | | | |
+| 5 | Nendoroid Dante #1233 — Devil May Cry 5 | Figuras | 1 | | | | Foto de tienda china: ¿réplica? |
+| 6 | Soporte de control Hollow Knight | Impresión 3D | 7 | | | 3D | |
+| 7 | Boo — Super Mario | Impresión 3D | 5 | | | 3D | ¿Decorativo o soporte? |
+| 8 | Soporte de control Fruta del Diablo (color durazno) — One Piece | Impresión 3D | 6 | | | 3D | ¿Qué fruta es? |
+| 9 | Soporte de control Gomu Gomu no Mi (morado) — One Piece | Impresión 3D | 4 | | | 3D | |
+| 10 | Fruta del Diablo con base de barril — One Piece | Impresión 3D | 2 | | | 3D | ¿Qué fruta es? |
+| 11 | T-Rex articulado (flexi) | Impresión 3D | 3 | | | 3D | ¿Otros colores? |
+| 12 | Batarang de Batman con base | Impresión 3D | 2 | | | 3D | |
+| 13 | Star Wars: Squadrons — PS4 | Videojuegos | 1 | | | | ¿Nuevo o usado? |
+
 ## Me toca a mí (cuando me des lo de arriba)
 - [ ] Cargar el inventario de Mercado Libre, la reputación y el botón a tu tienda
 - [ ] Base de datos de pedidos en Google Sheets, con registro automático de cada venta
