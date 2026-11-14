@@ -83,10 +83,10 @@ async function tasa(ctx, cors, debug = false) {
       "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36",
       "Accept": "text/html,application/xhtml+xml", "Accept-Language": "es-VE,es;q=0.9" } });
     const html = await r.text();
-    if (debug) { const i = html.search(/dolar|USD/i); const j = html.search(/>\s*USD\s*</); errores.push({ bcv_status: r.status, largo: html.length, cerca: html.slice(Math.max(0,i-200), i+500), cercaUSD: j>=0 ? html.slice(j-300, j+400) : "" }); }
+    if (debug) errores.push({ bcv_status: r.status, largo: html.length });
     if (!r.ok) throw new Error("BCV respondió " + r.status);
-    const m = html.match(/id="dolar"[\s\S]*?<strong>\s*([\d.,]+)\s*<\/strong>/i)
-           || html.match(/>\s*USD\s*<[\s\S]{0,400}?<strong>\s*([\d.,]+)\s*<\/strong>/i);
+    const m = html.match(/id="dolar"[\s\S]*?<strong[^>]*>\s*([\d.,]+)\s*<\/strong>/i)
+           || html.match(/>\s*USD\s*<[\s\S]{0,400}?<strong[^>]*>\s*([\d.,]+)\s*<\/strong>/i);
     if (!m) throw new Error("No se encontró la tasa en la página del BCV");
     const usd = parseFloat(m[1].replace(/\./g, "").replace(",", "."));
     if (!(usd > 0)) throw new Error("Tasa inválida");
