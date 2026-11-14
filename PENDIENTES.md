@@ -14,7 +14,6 @@ _Actualizada: 14/11/2026_
 ## Productos por subir (fotos listas, faltan datos)
 | # | Producto | Categoría | Fotos | Precio | Unid. | Original / genérico / 3D | Notas |
 |---|---|---|---|---|---|---|---|
-| 3 | Peluche Aki Hayakawa — Chainsaw Man | Peluches | 1 | | | | Medida? |
 | 6 | Soporte de control Hollow Knight | Impresión 3D | 7 | | | 3D | |
 | 7 | Boo — Super Mario | Impresión 3D | 5 | | | 3D | ¿Decorativo o soporte? |
 | 8 | Soporte de control Fruta del Diablo (color durazno) — One Piece | Impresión 3D | 8 | | | 3D | ¿Qué fruta es? |
@@ -27,8 +26,6 @@ _Actualizada: 14/11/2026_
 | 15 | Gomu Gomu no Mi decorativa con base de barril — One Piece | Impresión 3D | 3 | | | 3D | |
 | 18 | The Outer Worlds — PS4 | Videojuegos | 1 | | | | ¿Nuevo o usado? |
 | 19 | The Witcher 3: Wild Hunt Complete Edition — PS4 | Videojuegos | 1 | | | | ¿Nuevo o usado? |
-| 20 | Peluche Power — Chainsaw Man (10 cm) | Peluches | 1 | | | Genérico | |
-| 22 | Peluche Johnny Joestar — JoJo's Bizarre Adventure: Steel Ball Run (10 cm) | Peluches | 1 | | | | ¿Genérico? |
 
 ## Me toca a mí (cuando me des lo de arriba)
 - [ ] Cargar el inventario de Mercado Libre, la reputación y el botón a tu tienda
@@ -50,4 +47,5 @@ _Actualizada: 14/11/2026_
 - [x] Hollow Knight y Demon Slayer: genéricos, 1 unidad de cada uno
 - [x] Política: sin devoluciones (solo si no se entregó), garantía de 1 semana
 - [x] Subidos: Funko Boruto y War Machine, Marin Cheering, Dante (réplica), Yuji y Yuta Jukon no Kata, figura Hollow Knight 10 cm
+- [x] Subidos: peluches Aki (20 cm), Power y Johnny Joestar (10 cm)
 - [x] Dominio propio **gamexdrive.work** en Cloudflare, con HTTPS y publicación automática
