@@ -281,6 +281,8 @@
   .pre-item .pp b{font-size:1.15rem;font-weight:800}
   .pre-item .pp b.g{color:var(--ok)}
   .pre-item .cont{font-size:.85rem;font-weight:700;margin:-.2rem 0 .55rem;color:var(--text)}
+  #preInfo{max-width:46ch;background:rgba(37,211,102,.08);border:1px solid rgba(37,211,102,.35);border-radius:12px;padding:.6rem .85rem;color:var(--text);text-align:left}
+  #preInfo b{color:var(--ok)}
   .pre-item .abono{font-size:.84rem;margin:-.15rem 0 .6rem;color:var(--muted)}
   .pre-item .abono b{color:var(--ok);font-size:.95rem}
   .pre-item .abono span{font-size:.75rem}
@@ -464,7 +466,7 @@
   <section class="hero" id="hero" aria-label="Destacados"><div id="slides"></div><div class="hnav" id="hnav"></div></section>
 
   <section class="block" id="secPre" style="margin-top:2.2rem">
-    <div class="sec"><h3><span class="n">01</span>Preventas</h3><p id="preInfo">Aparta lo que viene con un abono y asegura tu unidad antes que nadie.</p></div>
+    <div class="sec"><h3><span class="n">01</span>Preventas</h3><p id="preInfo">Reserva pagando solo el 20% del precio. Cuando llegue el producto pagas el 80% restante.</p></div>
     <div class="pre-list" id="pre"></div>
   </section>
 
@@ -868,7 +870,7 @@ function tarjeta(p){
 function pintarSecciones(){
   const pre = PRODUCTOS.filter(p=>p.preventa && p.stock).sort((a,b)=>(b.desde||"").localeCompare(a.desde||""));
   const nuevos = PRODUCTOS.filter(p=>p.nuevo && !p.preventa).sort((a,b)=>(b.desde||"").localeCompare(a.desde||"") || b.id-a.id).slice(0,4);
-  $("preInfo").textContent = `Reserva pagando solo el ${CONFIG.abonoPreventa}% hoy y paga el resto cuando llegue. Te avisamos por WhatsApp.`;
+  $("preInfo").innerHTML = `🔖 <b>Reserva pagando solo el ${CONFIG.abonoPreventa}% del precio.</b> Cuando llegue el producto te avisamos por WhatsApp y pagas el ${100-CONFIG.abonoPreventa}% restante.`;
   $("pre").innerHTML = pre.map(p=>`
     <div class="pre-item">
       <div class="pi" data-ver="${p.id}">${vis(p)}</div>
