@@ -53,7 +53,7 @@ export default {
     if (request.method === "OPTIONS") return new Response(null, { headers: cors });
 
     try {
-      if (url.pathname === "/tasa") return await tasa(ctx, cors);
+      if (url.pathname === "/tasa") return await tasa(ctx, cors, url.searchParams.get("debug") === "1");
       if (url.pathname === "/visto" && request.method === "POST") return await visto(url, env, request, cors);
       if (url.pathname === "/top") return await top(url, env, cors);
       if (url.pathname === "/evento" && request.method === "POST") return await evento(url, env, request, cors);
@@ -69,31 +69,50 @@ export default {
 };
 
 /* ---------------- Tasa BCV ---------------- */
-async function tasa(ctx, cors) {
+async function tasa(ctx, cors, debug = false) {
   const cache = caches.default;
   const clave = new Request("https://cache.local/tasa-bcv");
   const ultimaClave = new Request("https://cache.local/tasa-bcv-ultima");
-  const guardada = await cache.match(clave);
-  if (guardada) return conCors(guardada, cors);
+  if (!debug) { const guardada = await cache.match(clave); if (guardada) return conCors(guardada, cors); }
+  const h = { "Content-Type": "application/json; charset=utf-8" };
+  const errores = [];
+  let dato = null;
+  // 1) Página oficial del BCV
   try {
-    const r = await fetch(BCV_URL, { headers: { "User-Agent": "Mozilla/5.0 (Gamexdrive tasa BCV)" }, cf: { cacheTtl: CACHE_TASA } });
-    if (!r.ok) throw new Error("BCV respondió " + r.status);
+    const r = await fetch(BCV_URL, { headers: {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36",
+      "Accept": "text/html,application/xhtml+xml", "Accept-Language": "es-VE,es;q=0.9" } });
     const html = await r.text();
-    const m = html.match(/id="dolar"[\s\S]*?<strong>\s*([\d.,]+)\s*<\/strong>/i);
+    if (debug) errores.push({ bcv_status: r.status, largo: html.length, inicio: html.slice(0, 300) });
+    if (!r.ok) throw new Error("BCV respondió " + r.status);
+    const m = html.match(/id="dolar"[\s\S]*?<strong>\s*([\d.,]+)\s*<\/strong>/i)
+           || html.match(/>\s*USD\s*<[\s\S]{0,400}?<strong>\s*([\d.,]+)\s*<\/strong>/i);
     if (!m) throw new Error("No se encontró la tasa en la página del BCV");
     const usd = parseFloat(m[1].replace(/\./g, "").replace(",", "."));
     if (!(usd > 0)) throw new Error("Tasa inválida");
     const f = html.match(/Fecha Valor[\s\S]*?content="([^"]+)"/i);
-    const cuerpo = JSON.stringify({ usd, fecha: f ? f[1].slice(0, 10) : "", fuente: "bcv.org.ve", actualizado: new Date().toISOString() });
-    const h = { "Content-Type": "application/json; charset=utf-8" };
+    dato = { usd, fecha: f ? f[1].slice(0, 10) : "", fuente: "bcv.org.ve" };
+  } catch (e) { errores.push(String(e.message || e)); }
+  // 2) Respaldo: dolarapi (publica la tasa oficial del BCV)
+  if (!dato) {
+    try {
+      const r = await fetch("https://ve.dolarapi.com/v1/dolares/oficial", { headers: { "Accept": "application/json" } });
+      const j = await r.json();
+      const usd = Number(j.promedio || j.venta || j.compra);
+      if (!(usd > 0)) throw new Error("dolarapi sin tasa");
+      dato = { usd, fecha: String(j.fechaActualizacion || "").slice(0, 10), fuente: "BCV (vía dolarapi)" };
+    } catch (e) { errores.push("dolarapi: " + String(e.message || e)); }
+  }
+  if (debug) return json({ dato, errores }, cors);
+  if (dato) {
+    const cuerpo = JSON.stringify({ ...dato, actualizado: new Date().toISOString() });
     ctx.waitUntil(cache.put(clave, new Response(cuerpo, { headers: { ...h, "Cache-Control": `public, max-age=${CACHE_TASA}` } })));
     ctx.waitUntil(cache.put(ultimaClave, new Response(cuerpo, { headers: { ...h, "Cache-Control": "public, max-age=604800" } })));
     return new Response(cuerpo, { headers: { ...h, ...cors } });
-  } catch (err) {
-    const ultima = await cache.match(ultimaClave);
-    if (ultima) return conCors(ultima, cors);
-    throw err;
   }
+  const ultima = await cache.match(ultimaClave);
+  if (ultima) return conCors(ultima, cors);
+  return json({ error: errores.join(" | ") }, cors, 502);
 }
 
 /* ---------------- Visitas ---------------- */
