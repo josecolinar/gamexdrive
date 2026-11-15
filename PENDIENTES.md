@@ -21,8 +21,8 @@ _Actualizada: 14/11/2026_
 | 10 | Fruta del Diablo naranja con base de barril — One Piece | Impresión 3D | 3 | | | 3D | ¿Qué fruta es? |
 | 15 | Gomu Gomu no Mi decorativa con base de barril — One Piece | Impresión 3D | 3 | | | 3D | |
 
-## Ideas para después
-- [ ] "Pedidos abiertos" de productos Gamexdrive (figuras, Funko, peluches, juegos, TCG por encargo): ventana con fecha de inicio y cierre, reserva con 60% y llegada estimada, con sus stories, como hace @chibishonen.ve
+## Para retomar
+- [ ] Seguir con la estrategia de Instagram: posts y stories del cupón de apertura GAMEX10 (10%), reels animados con fotos de productos, conectar Instagram en Metricool y publicar el calendario de 4 semanas
 
 ## Me toca a mí (cuando me des lo de arriba)
 - [ ] Cargar el inventario de Mercado Libre, la reputación y el botón a tu tienda
