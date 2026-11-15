@@ -552,7 +552,7 @@
   <section class="hero" id="hero" aria-label="Destacados"><div id="slides"></div><div class="hnav" id="hnav"></div></section>
 
   <section class="block" id="secPre" style="margin-top:2.2rem">
-    <div class="sec"><h3><span class="n">01</span>Preventas</h3><p id="preInfo">Reserva pagando solo el 20% del precio. Cuando llegue el producto pagas el 80% restante.</p></div>
+    <div class="sec"><h3><span class="n">01</span>Preventas</h3><p id="preInfo">Reserva pagando el 60% del precio. Cuando llegue el producto pagas el 40% restante.</p></div>
     <div class="pre-list" id="pre"></div>
   </section>
 
@@ -721,15 +721,15 @@ const CONFIG = {
   ],
   envioGratisDesde: 20,       // $ mínimo para envío gratis. 0 = sin promoción
   envioGratisMinArticulos: 2, // cantidad mínima de artículos físicos
-  abonoPreventa: 20,          // % que se paga para reservar una preventa; el resto se paga al llegar
+  abonoPreventa: 60,          // % que se paga para reservar una preventa; el resto se paga al llegar
   envioGratisNota: "no aplica para gift cards, son digitales",
   // Frases de la franja roja animada
-  franja: ["Envío gratis desde $20 llevando 2 artículos", "Pago Móvil a tasa BCV · Divisas con descuento", "Preventas: reserva con solo el 20%", "Zelle · Binance · PayPal · Efectivo", "Envíos a toda Venezuela", "¿No lo ves? ¡Te lo conseguimos!"],
+  franja: ["Envío gratis desde $20 llevando 2 artículos", "Pago Móvil a tasa BCV · Divisas con descuento", "Preventas: reserva con el 60%", "Zelle · Binance · PayPal · Efectivo", "Envíos a toda Venezuela", "¿No lo ves? ¡Te lo conseguimos!"],
   iconosCategoria: {"Pokémon TCG":"🃏", "Controles":"🎮", "Figuras":"🐉", "Funko Pop":"🍥", "Peluches":"🧸", "Gift Cards":"💳", "Videojuegos":"🕹️", "Impresión 3D":"🖨️"},
   // Banners del inicio. En "titulo", lo que va entre *asteriscos* sale en rojo.
   banners: [
-    {producto:16, etiqueta:"Preventa · Japonés", titulo:"Booster Box *Abyss Eye*", texto:"30 sobres × 5 cartas con Mega Darkrai ex. Apártala con solo el 20%."},
-    {producto:17, etiqueta:"Preventa · Chino", titulo:"*30th* Celebration", texto:"20 sobres × 6 cartas, todas foil, con 1 Pikachu por sobre. Apártala con solo el 20%."},
+    {producto:16, etiqueta:"Preventa · Japonés", titulo:"Booster Box *Abyss Eye*", texto:"30 sobres × 5 cartas con Mega Darkrai ex. Apártala con el 60%."},
+    {producto:17, etiqueta:"Preventa · Chino", titulo:"*30th* Celebration", texto:"20 sobres × 6 cartas, todas foil, con 1 Pikachu por sobre. Apártala con el 60%."},
     {producto:14, etiqueta:"Nuevo · Quedan pocas", titulo:"Control *Mario Time*", texto:"Control con cable PowerA con licencia oficial para Nintendo Switch 2."},
     {producto:15, etiqueta:"Original FuRyu", titulo:"Miku *BiCute Bunnies*", texto:"Figura original de 31 cm a precio especial por caja dañada."},
     {producto:67, etiqueta:"Original Banpresto", titulo:"Luffy *Gear 5*", texto:"King of Artist II: la figura más pedida de One Piece ya llegó. Asegura la tuya."}
@@ -740,7 +740,7 @@ const CONFIG = {
     {p:"¿Cómo compro?", r:"Agrega tus productos al carrito, entra al carrito, elige forma de pago y entrega, y toca “Comprar por WhatsApp”. Te escribimos para confirmar disponibilidad y coordinar el pago."},
     {p:"¿Por qué hay dos precios?", r:"“Divisas” es el precio pagando en dólares (Zelle, Binance, PayPal o efectivo). “Tasa BCV” es el precio pagando en bolívares por Pago Móvil, calculado a la tasa oficial BCV del día."},
     {p:"¿Hacen envíos?", r:"Sí, enviamos a todo el país por MRW, Zoom o Tealca, y hacemos delivery en la ciudad. El envío es gratis en órdenes desde $20 con mínimo 2 artículos (no aplica para gift cards, que son digitales). Si no aplica, te informamos el costo al confirmar."},
-    {p:"¿Cómo funcionan las preventas?", r:"Para reservar pagas solo el 20% del precio. Cuando el producto llega te avisamos por WhatsApp y pagas el 80% restante para recibirlo. Ejemplo: una caja de $120 se aparta con $24 y al llegar pagas $96."},
+    {p:"¿Cómo funcionan las preventas?", r:"Para reservar pagas el 60% del precio. Cuando el producto llega te avisamos por WhatsApp y pagas el 40% restante para recibirlo. Ejemplo: una caja de $120 se aparta con $72 y al llegar pagas $48."},
     {p:"¿Cómo recibo una gift card?", r:"Al confirmar tu pago te enviamos el código por WhatsApp."},
     {p:"¿Aceptan cambios o devoluciones?", r:"No aceptamos devoluciones. Solo te devolvemos tu dinero si el producto no te fue entregado. Todos los productos tienen 1 semana de garantía desde que los recibes: si presenta una falla, escríbenos por WhatsApp con fotos o video y lo resolvemos."}
   ]
@@ -766,8 +766,8 @@ const PRODUCTOS = [
   {id:11, nombre:"Fortnite 1.000 V-Bucks", cat:"Gift Cards", precio:10, emoji:"🎮", origen:["🇺🇸","US"], desc:"Código digital. Te lo enviamos por WhatsApp al confirmar el pago.", nuevo:true, stock:true, digital:true},
   {id:14, desde:"2026-11-13", nombre:"Control con cable PowerA Advantage Mario Time — Nintendo Switch 2", cat:"Controles", precio:50, cantidad:2, autenticidad:"original", emoji:"🎮", fotos:["img/productos/14-1.webp","img/productos/14-2.webp","img/productos/14-3.webp","img/productos/14-4.webp"], desc:"🔌 Control CABLEADO (con cable, no es inalámbrico): se conecta a la Nintendo Switch 2 con el cable USB-C desmontable de 3 m incluido, sin pilas ni carga. Licencia oficial de Nintendo, diseño Mario Time, sticks Hall Effect (más precisos y duraderos), 2 botones traseros programables y botón C para GameChat. Funciona con la consola en modo dock (conectada al TV). No es compatible con HD rumble, cámara IR, controles de movimiento ni amiibo NFC.", nuevo:true},
   {id:15, desde:"2026-11-13", nombre:"Figura Hatsune Miku BiCute Bunnies — FuRyu", cat:"Figuras", precio:40, cantidad:1, autenticidad:"original", origen:["🇯🇵","JP"], emoji:"🐰", fotos:["img/productos/15-3.webp","img/productos/15-4.webp","img/productos/15-5.webp"], etiqueta:"Caja dañada", desc:"Figura original de FuRyu, línea BiCute Bunnies, con licencia oficial de Hatsune Miku. Altura aprox. 31 cm. Figura tipo prize, pintada, fija (sin articulaciones) y con base. Materiales: PVC, ABS y poliéster (las medias de red son de tela real). ⚠️ La caja tiene daños; por eso tiene precio especial. Las fotos son oficiales de FuRyu: pídenos por WhatsApp fotos reales de la caja antes de comprar.", nuevo:true},
-  {id:16, desde:"2026-11-13", nombre:"Booster Box Abyss Eye (M5) — Pokémon TCG Japonés", cat:"Pokémon TCG", precio:120, autenticidad:"original", origen:["🇯🇵","JP"], emoji:"🃏", contenido:"30 sobres × 5 cartas (150 cartas)", fotos:["img/productos/16-1.webp"], preventa:true, stock:true, desc:"Caja sellada de fábrica de la expansión japonesa Abyss Eye (M5, serie MEGA), con Mega Darkrai ex como carta estrella. Trae 30 sobres de 5 cartas cada uno: 150 cartas por caja. Cartas en japonés. Preventa: apártala pagando el 20% y paga el 80% restante cuando llegue; te avisamos por WhatsApp."},
-  {id:17, desde:"2026-11-13", nombre:"Booster Box 30th Celebration — Pokémon TCG Chino", cat:"Pokémon TCG", precio:130, autenticidad:"original", origen:["🇨🇳","CN"], emoji:"🃏", contenido:"20 sobres × 6 cartas foil (120 cartas)", fotos:["img/productos/17-1.webp"], preventa:true, stock:true, desc:"Caja sellada de la expansión 30th Celebration (30 aniversario de Pokémon TCG), edición en chino simplificado. Trae 20 sobres de 6 cartas cada uno: 120 cartas por caja, y todas las cartas son foil (brillantes). Cada sobre incluye 1 carta de Pikachu de una colección de 30 diseños distintos. Preventa: apártala pagando el 20% y paga el 80% restante cuando llegue; te avisamos por WhatsApp."},
+  {id:16, desde:"2026-11-13", nombre:"Booster Box Abyss Eye (M5) — Pokémon TCG Japonés", cat:"Pokémon TCG", precio:120, autenticidad:"original", origen:["🇯🇵","JP"], emoji:"🃏", contenido:"30 sobres × 5 cartas (150 cartas)", fotos:["img/productos/16-1.webp"], preventa:true, stock:true, desc:"Caja sellada de fábrica de la expansión japonesa Abyss Eye (M5, serie MEGA), con Mega Darkrai ex como carta estrella. Trae 30 sobres de 5 cartas cada uno: 150 cartas por caja. Cartas en japonés. Preventa: apártala pagando el 60% y paga el 40% restante cuando llegue; te avisamos por WhatsApp."},
+  {id:17, desde:"2026-11-13", nombre:"Booster Box 30th Celebration — Pokémon TCG Chino", cat:"Pokémon TCG", precio:130, autenticidad:"original", origen:["🇨🇳","CN"], emoji:"🃏", contenido:"20 sobres × 6 cartas foil (120 cartas)", fotos:["img/productos/17-1.webp"], preventa:true, stock:true, desc:"Caja sellada de la expansión 30th Celebration (30 aniversario de Pokémon TCG), edición en chino simplificado. Trae 20 sobres de 6 cartas cada uno: 120 cartas por caja, y todas las cartas son foil (brillantes). Cada sobre incluye 1 carta de Pikachu de una colección de 30 diseños distintos. Preventa: apártala pagando el 60% y paga el 40% restante cuando llegue; te avisamos por WhatsApp."},
   {id:18, desde:"2026-11-14", nuevo:true, nombre:"Peluche The Knight — Hollow Knight", cat:"Peluches", precio:25, autenticidad:"generico", emoji:"🗡️", fotos:["img/productos/18-1.webp","img/productos/18-2.webp","img/productos/18-3.webp","img/productos/18-4.webp"], cantidad:1, stock:true, desc:"Peluche del Caballero (The Knight) de Hollow Knight, con su capa gris y su aguijón. 📏 Mide 27 cm (10.6 in) de alto. Felpa suave, ideal para coleccionar o regalar."},
   {id:19, desde:"2026-11-14", nuevo:true, nombre:"Peluche Tanjiro Kamado — Demon Slayer", cat:"Peluches", precio:12, autenticidad:"generico", emoji:"🗡️", fotos:["img/productos/19-1.webp"], cantidad:1, stock:true, desc:"Peluche de Tanjiro Kamado de Demon Slayer (Kimetsu no Yaiba), en pose sentada con bordados en la cara. 📏 Mide 20 cm de alto y pesa 100 g. Felpa suave, ideal para coleccionar o regalar."},
   {id:20, desde:"2026-11-14", nuevo:true, nombre:"Peluche Zenitsu Agatsuma — Demon Slayer", cat:"Peluches", precio:12, autenticidad:"generico", emoji:"🗡️", fotos:["img/productos/20-1.webp"], cantidad:1, stock:true, desc:"Peluche de Zenitsu Agatsuma de Demon Slayer (Kimetsu no Yaiba), en pose sentada con bordados en la cara. 📏 Mide 20 cm de alto y pesa 100 g. Felpa suave, ideal para coleccionar o regalar."},
@@ -1081,7 +1081,7 @@ function tarjeta(p){
 function pintarSecciones(){
   const pre = PRODUCTOS.filter(p=>p.preventa && p.stock).sort((a,b)=>(b.desde||"").localeCompare(a.desde||""));
   const nuevos = PRODUCTOS.filter(p=>p.nuevo && !p.preventa).sort((a,b)=>(b.desde||"").localeCompare(a.desde||"") || b.id-a.id).slice(0,4);
-  $("preInfo").innerHTML = `🔖 <b>Reserva pagando solo el ${CONFIG.abonoPreventa}% del precio.</b> Cuando llegue el producto te avisamos por WhatsApp y pagas el ${100-CONFIG.abonoPreventa}% restante.`;
+  $("preInfo").innerHTML = `🔖 <b>Reserva pagando el ${CONFIG.abonoPreventa}% del precio.</b> Cuando llegue el producto te avisamos por WhatsApp y pagas el ${100-CONFIG.abonoPreventa}% restante.`;
   $("pre").innerHTML = pre.map(p=>`
     <div class="pre-item">
       <div class="pi" data-ver="${p.id}">${vis(p)}</div>

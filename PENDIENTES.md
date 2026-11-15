@@ -21,6 +21,9 @@ _Actualizada: 14/11/2026_
 | 10 | Fruta del Diablo naranja con base de barril — One Piece | Impresión 3D | 3 | | | 3D | ¿Qué fruta es? |
 | 15 | Gomu Gomu no Mi decorativa con base de barril — One Piece | Impresión 3D | 3 | | | 3D | |
 
+## Ideas para después
+- [ ] Pedidos abiertos de manga por editorial (Panini, Ovni, Ivrea, Kemuri): ventana de pedidos con fecha límite y llegada estimada, como hace @chibishonen.ve
+
 ## Me toca a mí (cuando me des lo de arriba)
 - [ ] Cargar el inventario de Mercado Libre, la reputación y el botón a tu tienda
 - [ ] Base de datos de pedidos en Google Sheets, con registro automático de cada venta
@@ -32,7 +35,7 @@ _Actualizada: 14/11/2026_
 - [x] Precios en divisas, tasa BCV y bolívares (tasa leída de bcv.org.ve)
 - [x] Envío gratis desde $20 con 2 artículos (sin gift cards)
 - [x] Ofertas del mes (10%), destacados por visitas y novedades
-- [x] Preventas con reserva del 20%
+- [x] Preventas con reserva del 60% (antes 20%)
 - [x] Íconos, vista previa al compartir, QR y post mensual de Instagram automático
 - [x] Arreglo para celulares (nada se sale de la pantalla)
 - [x] Menú hamburguesa en celular y mega menú en computadora
