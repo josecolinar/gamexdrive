@@ -308,6 +308,13 @@
   .modal .pz{font-size:1.7rem;font-weight:800;color:var(--red)}
   .modal .pz s{color:var(--muted);font-size:1rem;font-weight:500;margin-left:.4rem}
   .modal .x{position:absolute;top:.8rem;right:.8rem}
+  /* La ficha: el botón de cerrar queda fijo y lo que se desplaza es el contenido */
+  .modal{display:block;overflow:hidden;overscroll-behavior:contain}
+  .mscroll{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);max-height:90vh;overflow:auto;overscroll-behavior:contain;border-radius:inherit}
+  .mx{position:absolute;top:.7rem;right:.7rem;z-index:6;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-size:1.25rem;font-weight:700;color:#fff;background:rgba(10,10,10,.72);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:0 4px 14px rgba(0,0,0,.35);cursor:pointer}
+  .mx:hover{background:var(--red);border-color:var(--red)}
+  .mgrab{display:none;position:absolute;top:.55rem;left:50%;transform:translateX(-50%);width:44px;height:5px;border-radius:5px;background:rgba(255,255,255,.35);z-index:6}
+  @media (max-width:640px){ .mscroll{grid-template-columns:minmax(0,1fr)} .mgrab{display:block} }
   .modal .btn{width:100%}
   .qty{display:flex;align-items:center;gap:.45rem}
   .qty button{width:34px;height:34px;border-radius:50%;background:var(--panel2);border:1px solid var(--line);font-weight:700}
@@ -1133,11 +1140,13 @@ function verProducto(id){
   registrarVisita(p.id);
   modalQty = 1;
   $("modal").innerHTML = `
+    <button class="mx" data-close aria-label="Cerrar">✕</button>
+    <span class="mgrab" aria-hidden="true"></span>
+    <div class="mscroll" id="mscroll">
     <div class="mv"><div class="mv-main" id="mvMain">${vis(p)}</div>
       ${(p.fotos||[]).length > 1 ? `<div class="thumbs">${p.fotos.map((f,i)=>`<button class="thumb ${i===0?"on":""}" data-foto="${esc(f)}" aria-label="Foto ${i+1}"><img src="${esc(f)}" alt=""></button>`).join("")}</div>` : ""}
     </div>
     <div class="mi">
-      <button class="x" data-close aria-label="Cerrar">×</button>
       <span style="color:var(--red);font-size:.75rem;font-weight:800;letter-spacing:.8px;text-transform:uppercase">${esc(p.cat)}${p.origen?` · ${p.origen[0]} ${esc(p.origen[1])}`:""}${p.preventa?" · Preventa":""}</span>
       <h3>${esc(p.nombre)}</h3>
       ${preciosHTML(p,true)}
@@ -1157,10 +1166,36 @@ function verProducto(id){
         <a class="wa-btn" target="_blank" rel="noopener" href="${esc(waLink(`¡Hola! Tengo una pregunta sobre: ${p.nombre}`))}">Preguntar por WhatsApp</a>`
       : `<button class="btn" disabled>Agotado</button>
          <a class="wa-btn" target="_blank" rel="noopener" href="${esc(waLink(`¡Hola! ¿Les volverá a llegar ${p.nombre}?`))}">Avisarme cuando llegue</a>`}
+    </div>
     </div>`;
+  $("modal").style.transform = ""; $("modal").style.transition = "";
   $("modal").classList.add("on"); $("overlay").classList.add("on");
 }
-function cerrarModal(){ $("modal").classList.remove("on"); $("overlay").classList.remove("on"); }
+function cerrarModal(){ const m=$("modal"); m.classList.remove("on"); m.style.transform=""; m.style.transition=""; $("overlay").classList.remove("on"); $("overlay").style.opacity=""; }
+/* Deslizar hacia abajo para cerrar la ficha (celular) */
+(function(){
+  const m = $("modal"); let y0=0, x0=0, dy=0, t0=0, arrastrando=false, decidido=false;
+  m.addEventListener("touchstart", e=>{
+    if(!m.classList.contains("on") || e.touches.length!==1) return;
+    const sc = $("mscroll"); if(sc && sc.scrollTop > 0) { arrastrando=false; return; }
+    y0=e.touches[0].clientY; x0=e.touches[0].clientX; dy=0; t0=Date.now(); arrastrando=true; decidido=false;
+  }, {passive:true});
+  m.addEventListener("touchmove", e=>{
+    if(!arrastrando) return;
+    const ddy=e.touches[0].clientY-y0, ddx=e.touches[0].clientX-x0;
+    if(!decidido){ if(Math.abs(ddy)<8 && Math.abs(ddx)<8) return; decidido=true; if(ddy<=0 || Math.abs(ddx)>Math.abs(ddy)){ arrastrando=false; return; } }
+    dy=Math.max(0,ddy); e.preventDefault();
+    m.style.transition="none"; m.style.transform=`translate(-50%,calc(-50% + ${dy}px))`;
+    $("overlay").style.opacity = String(Math.max(0.2, 1 - dy/400));
+  }, {passive:false});
+  m.addEventListener("touchend", ()=>{
+    if(!arrastrando) return; arrastrando=false;
+    const v = dy/Math.max(1,Date.now()-t0);
+    m.style.transition="transform .2s ease, opacity .2s";
+    if(dy>110 || (dy>40 && v>0.6)){ m.style.transform=`translate(-50%,calc(-50% + ${innerHeight}px))`; setTimeout(cerrarModal,180); }
+    else { m.style.transform=""; $("overlay").style.opacity=""; setTimeout(()=>{ m.style.transition=""; },220); }
+  });
+})();
 
 /* ---------- Carrito: cálculos ---------- */
 const lineas = () => Object.entries(carrito).map(([id,q])=>({p:byId(id), q})).filter(l=>l.p);
