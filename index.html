@@ -293,7 +293,10 @@
   .modal .mv{display:flex;flex-direction:column;justify-content:center;gap:.8rem;padding:1rem}
   .modal .mv-main{position:relative;flex:1;min-height:300px;width:100%;display:grid;place-items:center}
   .modal .mv-main img{position:absolute;inset:4%;width:92%;height:92%;object-fit:contain;filter:drop-shadow(0 14px 24px rgba(0,0,0,.45))}
-  .thumbs{display:flex;gap:.5rem;justify-content:center}
+  .thumbs{display:flex;gap:.5rem;justify-content:safe center;overflow-x:auto;max-width:100%;padding:.2rem .1rem;scrollbar-width:thin}
+  .thumbs .thumb{flex:0 0 auto}
+  .modal>*{min-width:0}
+  @media (max-width:640px){ .modal{grid-template-columns:minmax(0,1fr)} }
   .thumb{width:58px;height:58px;border-radius:10px;background:var(--panel);border:2px solid var(--line);padding:4px;display:grid;place-items:center}
   .thumb{position:relative;overflow:hidden}
   .thumb img{position:absolute;inset:4px;width:calc(100% - 8px);height:calc(100% - 8px);object-fit:contain}
@@ -466,6 +469,7 @@
   .au{display:inline-block;margin-left:.35rem;font-size:.6rem;padding:.08rem .4rem;border-radius:4px;letter-spacing:.5px;vertical-align:1px}
   .au.original{background:rgba(37,211,102,.14);color:var(--ok)}
   .au.generico{background:var(--panel2);color:var(--muted);border:1px solid var(--line)}
+  .au.tres{background:rgba(59,130,246,.15);color:#7fb0ff}
   .tg.low{background:#ffb400;color:#111}
   .au.aviso{background:rgba(255,180,0,.14);color:#ffb400}
   .tg{white-space:nowrap}
@@ -575,6 +579,7 @@
         <option value="todos">Originales y genéricos</option>
         <option value="original">Solo originales</option>
         <option value="generico">Solo genéricos</option>
+        <option value="3d">Solo impresión 3D</option>
       </select>
       <select id="sort" aria-label="Ordenar">
         <option value="rel">Ordenar: relevancia</option>
@@ -710,7 +715,7 @@ const CONFIG = {
   envioGratisNota: "no aplica para gift cards, son digitales",
   // Frases de la franja roja animada
   franja: ["Envío gratis desde $20 llevando 2 artículos", "Pago Móvil a tasa BCV · Divisas con descuento", "Preventas: reserva con solo el 20%", "Zelle · Binance · PayPal · Efectivo", "Envíos a toda Venezuela", "¿No lo ves? ¡Te lo conseguimos!"],
-  iconosCategoria: {"Pokémon TCG":"🃏", "Controles":"🎮", "Figuras":"🐉", "Funko Pop":"🍥", "Peluches":"🧸", "Gift Cards":"💳"},
+  iconosCategoria: {"Pokémon TCG":"🃏", "Controles":"🎮", "Figuras":"🐉", "Funko Pop":"🍥", "Peluches":"🧸", "Gift Cards":"💳", "Videojuegos":"🕹️", "Impresión 3D":"🖨️"},
   // Banners del inicio. En "titulo", lo que va entre *asteriscos* sale en rojo.
   banners: [
     {producto:16, etiqueta:"Preventa · Japonés", titulo:"Booster Box *Abyss Eye*", texto:"30 sobres × 5 cartas con Mega Darkrai ex. Apártala con solo el 20%."},
@@ -737,7 +742,7 @@ const CONFIG = {
    precioAntes: precio tachado en divisas (opcional)
    nuevo / preventa: true o false · stock: false = agotado
    digital: true para gift cards (no cuentan para el envío gratis)
-   autenticidad: "original" o "generico" (se muestra en la tarjeta)
+   autenticidad: "original", "generico" o "3d" (se muestra en la tarjeta)
    cantidad: unidades disponibles (opcional). 0 = agotado; con pocas sale "¡Quedan N!"
    contenido: qué trae la caja (opcional), ej. "30 sobres × 5 cartas"
    etiqueta: texto corto extra en la tarjeta (opcional), ej. "Caja dañada"
@@ -776,7 +781,13 @@ const PRODUCTOS = [
   {id:43, desde:"2026-11-14", nuevo:true, nombre:"Figura The Knight — Hollow Knight (10 cm)", cat:"Figuras", precio:12, autenticidad:"generico", emoji:"🗡️", fotos:["img/productos/43-1.webp","img/productos/43-2.webp"], cantidad:1, stock:true, desc:"El Caballero (The Knight) de Hollow Knight con su aguijón y capa, sobre una base de roca y pedestal. 📏 Mide 10 cm, de PVC. Viene con caja."},
   {id:25, desde:"2026-11-14", nuevo:true, nombre:"Peluche Aki Hayakawa — Chainsaw Man", cat:"Peluches", precio:12, autenticidad:"generico", emoji:"🧸", fotos:["img/productos/25-1.webp"], stock:true, desc:"Peluche de Aki Hayakawa de Chainsaw Man, con su traje y su moño característico. 📏 Mide 20 cm. Felpa suave, ideal para coleccionar o regalar."},
   {id:42, desde:"2026-11-14", nuevo:true, nombre:"Peluche Power — Chainsaw Man", cat:"Peluches", precio:15, autenticidad:"generico", emoji:"🧸", fotos:["img/productos/42-1.webp"], stock:true, desc:"Peluche de Power de Chainsaw Man, con sus cuernos rojos y traje. 📏 Mide 10 cm. Felpa suave, ideal para coleccionar o regalar."},
-  {id:44, desde:"2026-11-14", nuevo:true, nombre:"Peluche Johnny Joestar — JoJo's Bizarre Adventure", cat:"Peluches", precio:16, autenticidad:"generico", emoji:"🧸", fotos:["img/productos/44-1.webp"], stock:true, desc:"Peluche de Johnny Joestar de JoJo's Bizarre Adventure: Steel Ball Run, con su gorro de estrellas y herradura. 📏 Mide 10 cm. Felpa suave, ideal para coleccionar o regalar."}
+  {id:44, desde:"2026-11-14", nuevo:true, nombre:"Peluche Johnny Joestar — JoJo's Bizarre Adventure", cat:"Peluches", precio:16, autenticidad:"generico", emoji:"🧸", fotos:["img/productos/44-1.webp"], stock:true, desc:"Peluche de Johnny Joestar de JoJo's Bizarre Adventure: Steel Ball Run, con su gorro de estrellas y herradura. 📏 Mide 10 cm. Felpa suave, ideal para coleccionar o regalar."},
+  {id:35, desde:"2026-11-14", nuevo:true, nombre:"Star Wars: Squadrons — PS4", cat:"Videojuegos", precio:20, autenticidad:"original", etiqueta:"Destapado", emoji:"🕹️", fotos:["img/productos/35-1.webp"], stock:true, desc:"Combates espaciales en primera persona a bordo de X-Wings y TIE Fighters, con modo para PlayStation VR. Juego físico original para PlayStation 4 (también corre en PS5). Destapado: el disco está en perfecto estado y viene con su caja."},
+  {id:39, desde:"2026-11-14", nuevo:true, nombre:"The Outer Worlds — PS4", cat:"Videojuegos", precio:20, autenticidad:"original", etiqueta:"Destapado", emoji:"🕹️", fotos:["img/productos/39-1.webp"], stock:true, desc:"RPG de ciencia ficción de Obsidian Entertainment: explora la colonia Halcyon y decide el destino de sus planetas. Juego físico original para PlayStation 4 (también corre en PS5). Destapado: el disco está en perfecto estado y viene con su caja."},
+  {id:40, desde:"2026-11-14", nuevo:true, nombre:"The Witcher 3: Wild Hunt Complete Edition — PS4", cat:"Videojuegos", precio:20, autenticidad:"original", etiqueta:"Destapado", emoji:"🕹️", fotos:["img/productos/40-1.webp"], stock:true, desc:"Edición completa con las expansiones Hearts of Stone y Blood and Wine y los 16 DLC: todo viene incluido en el disco, no necesitas descargar nada aparte. Juego físico original para PlayStation 4 (también corre en PS5). Destapado: el disco está en perfecto estado y viene con su caja."},
+  {id:30, desde:"2026-11-14", nuevo:true, nombre:"Base de control Mera Mera no Mi — One Piece", cat:"Impresión 3D", precio:15, autenticidad:"3d", emoji:"🔥", fotos:["img/productos/30-1.webp","img/productos/30-2.webp","img/productos/30-3.webp","img/productos/30-4.webp","img/productos/30-5.webp","img/productos/30-6.webp","img/productos/30-7.webp","img/productos/30-8.webp"], stock:true, desc:"Soporte para control con forma de la Mera Mera no Mi, la fruta del diablo de Ace. Sirve para controles de PS4, PS5, Xbox y similares. Hecho en impresión 3D."},
+  {id:31, desde:"2026-11-14", nuevo:true, nombre:"Base de control Gomu Gomu no Mi — One Piece", cat:"Impresión 3D", precio:13, autenticidad:"3d", emoji:"🍇", fotos:["img/productos/31-1.webp","img/productos/31-2.webp","img/productos/31-3.webp","img/productos/31-4.webp","img/productos/31-5.webp","img/productos/31-6.webp"], stock:true, desc:"Soporte para control con forma de la Gomu Gomu no Mi, la fruta del diablo de Luffy. Sirve para controles de PS4, PS5, Xbox y similares. Hecho en impresión 3D."},
+  {id:34, desde:"2026-11-14", nuevo:true, nombre:"Batarang con base — Batman", cat:"Impresión 3D", precio:12, autenticidad:"3d", emoji:"🦇", fotos:["img/productos/34-1.webp","img/productos/34-2.webp","img/productos/34-3.webp","img/productos/34-4.webp","img/productos/34-5.webp"], stock:true, desc:"Réplica del batarang de Batman (The Dark Knight) con su base de exhibición con el escudo de Gotham. Hecho en impresión 3D, ideal para tu escritorio o repisa."}
 ];
 
 /* ========================================================= */
@@ -993,6 +1004,7 @@ const maxUnidades = p => typeof p.cantidad === "number" ? p.cantidad : Infinity;
 function authTag(p){
   if(p.autenticidad === "original") return `<span class="au original">✓ Original</span>`;
   if(p.autenticidad === "generico") return `<span class="au generico">Genérico</span>`;
+  if(p.autenticidad === "3d") return `<span class="au tres">Impreso en 3D</span>`;
   return "";
 }
 const comboDe = p => (CONFIG.combos||[]).find(c => c.categoria === p.cat);
@@ -1135,7 +1147,8 @@ function verProducto(id){
       ${p.preventa?`<div class="preabono"><div class="r hoy"><span>🔖 Reserva hoy (${CONFIG.abonoPreventa}%)</span><b>${fmtUsd(abonoDe(pDiv(p)))}</b></div><div class="r"><span>Al llegar pagas el resto</span><b>${fmtUsd(r2(pDiv(p)-abonoDe(pDiv(p))))}</b></div><small style="color:var(--muted)">Montos en divisas. Con Pago Móvil se calculan sobre el precio tasa BCV.</small></div>`:""}
       <p class="d">${esc(p.desc)}</p>
       ${p.autenticidad==="original" ? `<div class="authbox original"><b>✓ Original</b> · Producto oficial / licenciado de la marca.</div>`
-        : p.autenticidad==="generico" ? `<div class="authbox"><b>Genérico</b> · No es producto oficial de la marca. Te lo indicamos siempre para que sepas lo que compras.</div>` : ""}
+        : p.autenticidad==="generico" ? `<div class="authbox"><b>Genérico</b> · No es producto oficial de la marca. Te lo indicamos siempre para que sepas lo que compras.</div>`
+        : p.autenticidad==="3d" ? `<div class="authbox"><b>Impreso en 3D</b> · Pieza hecha con impresión 3D y pintada a mano, inspirada en el personaje. No es producto oficial de la marca.</div>` : ""}
       ${pocas(p) ? `<div class="lowbox">⚠️ ${p.cantidad===1?"¡Solo queda 1 unidad!":"¡Solo quedan "+p.cantidad+" unidades!"}</div>` : ""}
       ${comboDe(p) && !p.ofertaMes && !p.precioAntes ? `<div class="combobox">🎁 Llévate ${comboDe(p).minimo} o más ${esc(p.cat)} y ahorra ${comboDe(p).descuento}%</div>` : ""}
       ${p.stock ? `

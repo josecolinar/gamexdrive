@@ -19,16 +19,10 @@ _Actualizada: 14/11/2026_
 |---|---|---|---|---|---|---|---|
 | 6 | Soporte de control Hollow Knight | Impresión 3D | 7 | | | 3D | |
 | 7 | Boo — Super Mario | Impresión 3D | 5 | | | 3D | ¿Decorativo o soporte? |
-| 8 | Soporte de control Fruta del Diablo (color durazno) — One Piece | Impresión 3D | 8 | | | 3D | ¿Qué fruta es? |
-| 9 | Soporte de control Gomu Gomu no Mi (morado) — One Piece | Impresión 3D | 6 | | | 3D | |
 | 10 | Fruta del Diablo naranja con base de barril — One Piece | Impresión 3D | 3 | | | 3D | ¿Qué fruta es? |
 | 11 | T-Rex articulado (flexi) | Impresión 3D | 5 | | | 3D | Hay uno azul grande y uno blanco pequeño: ¿tamaños/colores y precio de cada uno? |
-| 12 | Batarang de Batman con base | Impresión 3D | 5 | | | 3D | Hay base con 1 y con 3 batarangs, y bases negra y plateada: ¿precio de cada opción? |
-| 13 | Star Wars: Squadrons — PS4 | Videojuegos | 1 | | | | ¿Nuevo o usado? |
 | 14 | Cuadro / busto de Master Chief — Halo | Impresión 3D | 8 | | | 3D | Colores: verde, verde agua y plateado. Se pega en la pared con cinta |
 | 15 | Gomu Gomu no Mi decorativa con base de barril — One Piece | Impresión 3D | 3 | | | 3D | |
-| 18 | The Outer Worlds — PS4 | Videojuegos | 1 | | | | ¿Nuevo o usado? |
-| 19 | The Witcher 3: Wild Hunt Complete Edition — PS4 | Videojuegos | 1 | | | | ¿Nuevo o usado? |
 
 ## Me toca a mí (cuando me des lo de arriba)
 - [ ] Cargar el inventario de Mercado Libre, la reputación y el botón a tu tienda
@@ -51,4 +45,5 @@ _Actualizada: 14/11/2026_
 - [x] Política: sin devoluciones (solo si no se entregó), garantía de 1 semana
 - [x] Subidos: Funko Boruto y War Machine, Marin Cheering, Dante (réplica), Yuji y Yuta Jukon no Kata, figura Hollow Knight 10 cm
 - [x] Subidos: peluches Aki (20 cm), Power y Johnny Joestar (10 cm)
+- [x] Subidos: juegos PS4 (Squadrons, Outer Worlds, Witcher 3), bases Mera Mera y Gomu Gomu, Batarang
 - [x] Dominio propio **gamexdrive.work** en Cloudflare, con HTTPS y publicación automática
