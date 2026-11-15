@@ -19,8 +19,6 @@ _Actualizada: 14/11/2026_
 |---|---|---|---|---|---|---|---|
 | 6 | Soporte de control Hollow Knight | Impresión 3D | 7 | | | 3D | |
 | 10 | Fruta del Diablo naranja con base de barril — One Piece | Impresión 3D | 3 | | | 3D | ¿Qué fruta es? |
-| 11 | T-Rex articulado (flexi) | Impresión 3D | 5 | | | 3D | Hay uno azul grande y uno blanco pequeño: ¿tamaños/colores y precio de cada uno? |
-| 14 | Cuadro / busto de Master Chief — Halo | Impresión 3D | 8 | | | 3D | Colores: verde, verde agua y plateado. Se pega en la pared con cinta |
 | 15 | Gomu Gomu no Mi decorativa con base de barril — One Piece | Impresión 3D | 3 | | | 3D | |
 
 ## Me toca a mí (cuando me des lo de arriba)
