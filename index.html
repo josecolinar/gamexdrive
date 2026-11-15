@@ -310,8 +310,11 @@
   .modal .x{position:absolute;top:.8rem;right:.8rem}
   /* La ficha: el botón de cerrar queda fijo y lo que se desplaza es el contenido */
   .modal{display:block;overflow:hidden;overscroll-behavior:contain}
-  .mscroll{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);max-height:90vh;overflow:auto;overscroll-behavior:contain;border-radius:inherit}
-  .mx{position:absolute;top:.7rem;right:.7rem;z-index:6;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-size:1.25rem;font-weight:700;color:#fff;background:rgba(10,10,10,.72);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:0 4px 14px rgba(0,0,0,.35);cursor:pointer}
+  .mscroll{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);max-height:90vh;overflow:auto;overscroll-behavior:contain;border-radius:inherit;scrollbar-width:none}
+  .mscroll::-webkit-scrollbar{display:none}
+  .modal .mi{padding-top:1.6rem}
+  @media (min-width:641px){ .modal .mi h3{padding-right:2.6rem} }
+  .mx{position:absolute;top:.9rem;right:.9rem;z-index:6;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-size:1.25rem;font-weight:700;color:#fff;background:rgba(10,10,10,.72);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:0 4px 14px rgba(0,0,0,.35);cursor:pointer}
   .mx:hover{background:var(--red);border-color:var(--red)}
   .mgrab{display:none;position:absolute;top:.55rem;left:50%;transform:translateX(-50%);width:44px;height:5px;border-radius:5px;background:rgba(255,255,255,.35);z-index:6}
   @media (max-width:640px){ .mscroll{grid-template-columns:minmax(0,1fr)} .mgrab{display:block} }
