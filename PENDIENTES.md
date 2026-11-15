@@ -2,7 +2,7 @@
 _Actualizada: 14/11/2026_
 
 ## Reglas
-- Precio web = precio de Mercado Libre − 16% (exacto, sin redondear).
+- Figuras de Mercado Libre: precio web = precio ML − 16% (exacto). Videojuegos: mismo precio que en ML.
 - Cada producto real que coincida con uno de relleno (de ejemplo) reemplaza al de relleno: se elimina el de ejemplo.
 
 ## Te toca a ti
