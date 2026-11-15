@@ -18,7 +18,6 @@ _Actualizada: 14/11/2026_
 | # | Producto | Categoría | Fotos | Precio | Unid. | Original / genérico / 3D | Notas |
 |---|---|---|---|---|---|---|---|
 | 6 | Soporte de control Hollow Knight | Impresión 3D | 7 | | | 3D | |
-| 7 | Boo — Super Mario | Impresión 3D | 5 | | | 3D | ¿Decorativo o soporte? |
 | 10 | Fruta del Diablo naranja con base de barril — One Piece | Impresión 3D | 3 | | | 3D | ¿Qué fruta es? |
 | 11 | T-Rex articulado (flexi) | Impresión 3D | 5 | | | 3D | Hay uno azul grande y uno blanco pequeño: ¿tamaños/colores y precio de cada uno? |
 | 14 | Cuadro / busto de Master Chief — Halo | Impresión 3D | 8 | | | 3D | Colores: verde, verde agua y plateado. Se pega en la pared con cinta |
