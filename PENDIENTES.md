@@ -1,7 +1,8 @@
 # Gamexdrive — lista de pendientes
 _Actualizada: 14/11/2026_
 
-## Regla
+## Reglas
+- Precio web = precio de Mercado Libre − 16% (exacto, sin redondear).
 - Cada producto real que coincida con uno de relleno (de ejemplo) reemplaza al de relleno: se elimina el de ejemplo.
 
 ## Te toca a ti
@@ -9,7 +10,6 @@ _Actualizada: 14/11/2026_
 - [ ] Cambiar el link de la bio de Instagram y de WhatsApp Business a **gamexdrive.work**
 - [ ] Mandar 2 fotos reales de la caja de la Miku BiCute Bunnies
 - [ ] Mandar el link de tu tienda de Mercado Libre (reputación, botón e inventario)
-- [ ] Decidir si los precios de la web y de Mercado Libre son iguales o distintos
 - [ ] Decidir qué productos de ejemplo (los del principio) se quitan
 - [ ] Mandar fotos de clientes (destacados de Instagram) para la sección Clientes
 - [ ] Definir cupones y combos reales (GAMEX10 es de ejemplo)
