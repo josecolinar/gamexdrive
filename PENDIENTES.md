@@ -1,5 +1,5 @@
 # Gamexdrive — lista de pendientes
-_Actualizada: 16/11/2026_
+_Actualizada: 16/11/2026 (tarde)_
 
 ## Reglas
 - Precio a tasa BCV = precio en divisas + 20% (antes 30%).
@@ -10,8 +10,9 @@ _Actualizada: 16/11/2026_
 - [x] Secreto `STATS_CLAVE` creado en Cloudflare (estadísticas en gamexdrive.work/stats.html)
 - [x] Bio de Instagram con **gamexdrive.work/links** (falta WhatsApp Business)
 - [ ] Mandar 2 fotos reales de la caja de la Miku BiCute Bunnies
-- [ ] Mandar el link de tu tienda de Mercado Libre (reputación, botón e inventario)
-- [ ] Precio y montos de la gift card de V-Bucks (único producto de ejemplo que queda)
+- [ ] Poner gamexdrive.work/links en WhatsApp Business
+- [ ] Confirmar cuántas entradas se sortean (las piezas dicen 2) y activar los $30 de ads ($15 por reel)
+- [ ] V-Bucks: está pausado; definir montos y precio si se va a vender
 - [ ] Mandar fotos de clientes (destacados de Instagram) para la sección Clientes
 - [ ] Definir cupones y combos reales (GAMEX10 es de ejemplo)
 
@@ -21,8 +22,18 @@ _Actualizada: 16/11/2026_
 | 10 | Fruta del Diablo naranja con base de barril — One Piece | Impresión 3D | 3 | | | 3D | ¿Qué fruta es? |
 | 15 | Gomu Gomu no Mi decorativa con base de barril — One Piece | Impresión 3D | 3 | | | 3D | |
 
-## Para retomar
-- [ ] Seguir con la estrategia de Instagram: posts y stories del cupón de apertura GAMEX10 (10%), reels animados con fotos de productos, conectar Instagram en Metricool y publicar el calendario de 4 semanas
+## Campaña de lanzamiento (web + sorteo Gambare Fest)
+- [x] Reel de apertura de la tienda web y reel del sorteo (publicados 16/11)
+- [x] Página de links y bio de Instagram
+- [ ] Stories de seguimiento: recordar el sorteo y el cupón GAMEX10 cada 2–3 días
+- [ ] 1 dic: cerrar el sorteo · 2 dic: anunciar ganador en stories · 5 dic: Gambare Fest
+- [ ] Revisar resultados de los reels y los ads (alcance, visitas a la web, mensajes)
+
+## Para retomar (estrategia de Instagram)
+- [ ] Posts y stories del cupón de apertura GAMEX10 (10%)
+- [ ] Story de preventas (diseño listo en el canvas) y más reels animados de productos
+- [ ] Conectar Instagram en Metricool y publicar el calendario de 4 semanas
+- [ ] Recordatorio programado: miércoles 18/11, 10:13 am
 
 ## Me toca a mí (cuando me des lo de arriba)
 - [ ] Cargar el inventario de Mercado Libre, la reputación y el botón a tu tienda
