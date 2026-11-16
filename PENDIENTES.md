@@ -8,7 +8,7 @@ _Actualizada: 16/11/2026_
 
 ## Te toca a ti
 - [x] Secreto `STATS_CLAVE` creado en Cloudflare (estadísticas en gamexdrive.work/stats.html)
-- [ ] Cambiar el link de la bio de Instagram y de WhatsApp Business a **gamexdrive.work/links**
+- [x] Bio de Instagram con **gamexdrive.work/links** (falta WhatsApp Business)
 - [ ] Mandar 2 fotos reales de la caja de la Miku BiCute Bunnies
 - [ ] Mandar el link de tu tienda de Mercado Libre (reputación, botón e inventario)
 - [ ] Precio y montos de la gift card de V-Bucks (único producto de ejemplo que queda)
