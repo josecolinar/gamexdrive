@@ -18,7 +18,6 @@ _Actualizada: 14/11/2026_
 ## Productos por subir (fotos listas, faltan datos)
 | # | Producto | Categoría | Fotos | Precio | Unid. | Original / genérico / 3D | Notas |
 |---|---|---|---|---|---|---|---|
-| 6 | Soporte de control Hollow Knight | Impresión 3D | 7 | $8 en ML | | 3D | ¿Publicar a $8? |
 | 10 | Fruta del Diablo naranja con base de barril — One Piece | Impresión 3D | 3 | | | 3D | ¿Qué fruta es? |
 | 15 | Gomu Gomu no Mi decorativa con base de barril — One Piece | Impresión 3D | 3 | | | 3D | |
 
