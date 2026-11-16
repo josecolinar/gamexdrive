@@ -1075,7 +1075,7 @@ function tarjeta(p){
   else {
     if(p.preventa) t.push('<span class="tg pre">Preventa</span>');
     if(p.precioAntes) t.push(`<span class="tg off">-${Math.round((1-p.precio/p.precioAntes)*100)}%</span>`);
-    if(p.nuevo && !p.preventa) t.push('<span class="tg">Nuevo</span>');
+    if(p.nuevo && !p.preventa && !/destapado|usado/i.test(p.etiqueta||"")) t.push('<span class="tg">Nuevo</span>');
     if(pocas(p)) t.push(`<span class="tg low">¡${p.cantidad===1?"Queda 1":"Quedan "+p.cantidad}!</span>`);
   }
   return `<article class="card${p.ofertaMes?" mes":""}">
