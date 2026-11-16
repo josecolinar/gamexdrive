@@ -194,10 +194,13 @@
   .cat-tile:hover{border-color:var(--red);transform:translateY(-3px)}
   .cat-tile .e{position:absolute;right:-.4rem;bottom:-.8rem;font-size:5.2rem;opacity:.95;transition:transform .2s}
   .cat-tile:hover .e{transform:rotate(-8deg) scale(1.06)}
+  .cat-tile .e.foto{right:.5rem;bottom:.4rem;width:46%;height:58%;display:flex;align-items:flex-end;justify-content:flex-end}
+  .cat-tile .e.foto img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px;filter:drop-shadow(0 8px 14px rgba(0,0,0,.45));transform:rotate(-4deg)}
+  .cat-tile small{max-width:50%}
   .cat-tile b{font-family:Anton,Impact,sans-serif;font-weight:400;text-transform:uppercase;font-size:1.45rem;letter-spacing:.5px;position:relative}
   .cat-tile small{color:var(--muted);position:relative}
   .cat-tile::before{content:"";position:absolute;width:120px;height:120px;border-radius:50%;background:var(--glow);right:-25px;bottom:-35px}
-  @media (max-width:760px){ .cats{grid-template-columns:repeat(2,minmax(0,1fr))} .cat-tile{min-height:120px} .cat-tile .e{font-size:4rem} }
+  @media (max-width:760px){ .cats{grid-template-columns:repeat(2,minmax(0,1fr))} .cat-tile{min-height:150px;padding:1rem} .cat-tile .e{font-size:4rem} .cat-tile b{font-size:1.15rem} .cat-tile .e.foto{height:50%;width:46%} }
 
   /* ===== Secciones ===== */
   section.block{padding:0 0 3.6rem}
@@ -726,6 +729,8 @@ const CONFIG = {
   // Frases de la franja roja animada
   franja: ["Envío gratis desde $20 llevando 2 artículos", "Pago Móvil a tasa BCV · Divisas con descuento", "Preventas: reserva con el 60%", "Zelle · Binance · PayPal · Efectivo", "Envíos a toda Venezuela", "¿No lo ves? ¡Te lo conseguimos!"],
   iconosCategoria: {"Pokémon TCG":"🃏", "Controles":"🎮", "Figuras":"🐉", "Funko Pop":"🍥", "Peluches":"🧸", "Gift Cards":"💳", "Videojuegos":"🕹️", "Impresión 3D":"🖨️", "Llaveros":"🔑"},
+  // Producto cuya foto representa cada categoría (si no está o está pausado, se usa otro de la misma categoría)
+  fotoCategoria: {"Pokémon TCG":16, "Figuras":57, "Funko Pop":23, "Peluches":18, "Videojuegos":77, "Impresión 3D":29, "Controles":14, "Llaveros":87},
   // Banners del inicio. En "titulo", lo que va entre *asteriscos* sale en rojo.
   banners: [
     {producto:16, etiqueta:"Preventa · Japonés", titulo:"Booster Box *Abyss Eye*", texto:"30 sobres × 5 cartas con Mega Darkrai ex. Apártala con el 60%."},
@@ -921,7 +926,7 @@ function pintarFijos(){
   $("ticker").innerHTML = frases + frases;
   $("cats").innerHTML = categorias().map(c=>{
     const n = PRODUCTOS.filter(p=>p.cat===c && p.stock).length;
-    return `<button class="cat-tile" data-goto="${esc(c)}"><b>${esc(c)}</b><small>${n} disponible${n===1?"":"s"}</small><span class="e" aria-hidden="true">${CONFIG.iconosCategoria[c]||"⭐"}</span></button>`;
+    return `<button class="cat-tile" data-goto="${esc(c)}"><b>${esc(c)}</b><small>${n} disponible${n===1?"":"s"}</small>${(f=>f?`<span class="e foto" aria-hidden="true"><img src="${esc(f)}" alt="" loading="lazy"></span>`:`<span class="e" aria-hidden="true">${CONFIG.iconosCategoria[c]||"⭐"}</span>`)(fotoCategoria(c))}</button>`;
   }).join("");
   pintarNotaTasa();
   $("faq").innerHTML = CONFIG.faq.map(f=>`<details><summary>${esc(f.p)}</summary><p>${esc(f.r)}</p></details>`).join("");
@@ -939,7 +944,8 @@ function pintarFijos(){
 const CHEV = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
 function fotoCategoria(c){
   const ps = PRODUCTOS.filter(p=>p.cat===c && p.img);
-  const p = ps.find(p=>p.stock && !p.preventa) || ps.find(p=>p.stock) || ps[0];
+  const elegido = ps.find(p=>p.id===(CONFIG.fotoCategoria||{})[c]);
+  const p = elegido || ps.find(p=>p.stock && !p.preventa) || ps.find(p=>p.stock) || ps[0];
   return p ? p.img : "";
 }
 function icoCat(c, cls){
