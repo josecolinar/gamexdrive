@@ -1129,9 +1129,10 @@ function pintarChips(){
   pintarTabs();
 }
 function pintarCatalogo(){
-  const q = busqueda.trim().toLowerCase();
+  const sinAcento = x => String(x).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+  const q = sinAcento(busqueda.trim());
   const authF = ($("authF") && $("authF").value) || "todos";
-  let lista = PRODUCTOS.filter(p => (authF==="todos" || p.autenticidad===authF) && (filtro==="Todos"||p.cat===filtro) && (!q || `${p.nombre} ${p.cat} ${p.desc}`.toLowerCase().includes(q)));
+  let lista = PRODUCTOS.filter(p => (authF==="todos" || p.autenticidad===authF) && (filtro==="Todos"||p.cat===filtro) && (!q || sinAcento(`${p.nombre} ${p.cat} ${p.desc}`).includes(q)));
   if(orden==="asc") lista.sort((a,b)=>a.precio-b.precio);
   if(orden==="desc") lista.sort((a,b)=>b.precio-a.precio);
   if(orden==="sale") lista.sort((a,b)=>(b.precioAntes?1:0)-(a.precioAntes?1:0));
