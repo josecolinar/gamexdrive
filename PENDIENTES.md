@@ -1,5 +1,5 @@
 # Gamexdrive — lista de pendientes
-_Actualizada: 14/11/2026_
+_Actualizada: 16/11/2026_
 
 ## Reglas
 - Precio a tasa BCV = precio en divisas + 20% (antes 30%).
@@ -7,8 +7,8 @@ _Actualizada: 14/11/2026_
 - Cada producto real que coincida con uno de relleno (de ejemplo) reemplaza al de relleno: se elimina el de ejemplo.
 
 ## Te toca a ti
-- [ ] Crear el secreto `STATS_CLAVE` en Cloudflare (Workers & Pages → gamexdrive → Settings → Variables and Secrets → Add → Secret) para las estadísticas privadas
-- [ ] Cambiar el link de la bio de Instagram y de WhatsApp Business a **gamexdrive.work**
+- [x] Secreto `STATS_CLAVE` creado en Cloudflare (estadísticas en gamexdrive.work/stats.html)
+- [ ] Cambiar el link de la bio de Instagram y de WhatsApp Business a **gamexdrive.work/links**
 - [ ] Mandar 2 fotos reales de la caja de la Miku BiCute Bunnies
 - [ ] Mandar el link de tu tienda de Mercado Libre (reputación, botón e inventario)
 - [ ] Precio y montos de la gift card de V-Bucks (único producto de ejemplo que queda)
