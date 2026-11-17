@@ -21,8 +21,6 @@ _Actualizada: 16/11/2026 (tarde)_
 ## Productos por subir (fotos listas, faltan datos)
 | # | Producto | Categoría | Fotos | Precio | Unid. | Original / genérico / 3D | Notas |
 |---|---|---|---|---|---|---|---|
-| 10 | Fruta del Diablo naranja con base de barril — One Piece | Impresión 3D | 3 | | | 3D | ¿Qué fruta es? |
-| 15 | Gomu Gomu no Mi decorativa con base de barril — One Piece | Impresión 3D | 3 | | | 3D | |
 
 ## Campaña de lanzamiento (web + sorteo Gambare Fest)
 - [x] Reel de apertura de la tienda web y reel del sorteo (publicados 16/11)
