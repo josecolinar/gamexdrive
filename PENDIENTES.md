@@ -25,12 +25,16 @@ _Actualizada: 16/11/2026 (tarde)_
 ## Campaña de lanzamiento (web + sorteo Gambare Fest)
 - [x] Reel de apertura de la tienda web y reel del sorteo (publicados 16/11)
 - [x] Página de links y bio de Instagram
-- [ ] Stories de seguimiento: recordar el sorteo y el cupón GAMEX10 cada 2–3 días
+- [x] Stories listas: cupón GAMEX10 (ETB + Gojo), "¿Ya participaste?" y "Últimos días"
+- [ ] Publicar las stories según el calendario (cupón y sorteo cada 2–3 días; "Últimos días" el 28–30 nov)
 - [ ] 1 dic: cerrar el sorteo · 2 dic: anunciar ganador en stories · 5 dic: Gambare Fest
 - [ ] Revisar resultados de los reels y los ads (alcance, visitas a la web, mensajes)
 
+## Preventa ETB 30th Celebration ($150)
+- [x] Producto en la web, banner del inicio y story "¡Pedidos abiertos!"
+- [ ] Definir unidades y fecha de cierre de reservas → reel animado + carrusel + ads $10–15
+
 ## Para retomar (estrategia de Instagram)
-- [ ] Posts y stories del cupón de apertura GAMEX10 (10%)
 - [ ] Story de preventas (diseño listo en el canvas) y más reels animados de productos
 - [ ] Conectar Instagram en Metricool y publicar el calendario de 4 semanas
 - [ ] Recordatorio programado: miércoles 18/11, 10:13 am
