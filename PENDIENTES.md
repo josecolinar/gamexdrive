@@ -11,7 +11,9 @@ _Actualizada: 16/11/2026 (tarde)_
 - [x] Bio de Instagram con **gamexdrive.work/links** (falta WhatsApp Business)
 - [ ] Mandar 2 fotos reales de la caja de la Miku BiCute Bunnies
 - [ ] Poner gamexdrive.work/links en WhatsApp Business
-- [ ] Confirmar cuántas entradas se sortean (las piezas dicen 2) y activar los $30 de ads ($15 por reel)
+- [x] Sorteo: 2 entradas (confirmado). Ad del reel de la web activo ($21, 7 días, desde 16/11)
+- [ ] Quitar los corchetes de "[2]" en el texto del reel del sorteo
+- [ ] Promocionar el reel del sorteo (~$9, interacción, Margarita, 18–34)
 - [ ] V-Bucks: está pausado; definir montos y precio si se va a vender
 - [ ] Mandar fotos de clientes (destacados de Instagram) para la sección Clientes
 - [ ] Definir cupones y combos reales (GAMEX10 es de ejemplo)
@@ -26,7 +28,8 @@ _Actualizada: 16/11/2026 (tarde)_
 - [x] Reel de apertura de la tienda web y reel del sorteo (publicados 16/11)
 - [x] Página de links y bio de Instagram
 - [x] Stories listas: cupón GAMEX10 (ETB + Gojo), "¿Ya participaste?" y "Últimos días"
-- [ ] Publicar las stories según el calendario (cupón y sorteo cada 2–3 días; "Últimos días" el 28–30 nov)
+- [x] Reels de la web y del sorteo publicados; 4 stories el 16/11
+- [ ] Publicar el reel de la ETB y seguir las stories según el calendario (cupón y sorteo cada 2–3 días; "Últimos días" el 28–30 nov)
 - [ ] 1 dic: cerrar el sorteo · 2 dic: anunciar ganador en stories · 5 dic: Gambare Fest
 - [ ] Revisar resultados de los reels y los ads (alcance, visitas a la web, mensajes)
 
