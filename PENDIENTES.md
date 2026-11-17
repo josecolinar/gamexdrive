@@ -32,7 +32,8 @@ _Actualizada: 16/11/2026 (tarde)_
 
 ## Preventa ETB 30th Celebration ($150)
 - [x] Producto en la web, banner del inicio y story "¡Pedidos abiertos!"
-- [ ] Definir unidades y fecha de cierre de reservas → reel animado + carrusel + ads $10–15
+- [x] 1 sola unidad (marcada en la web: "¡Queda 1!")
+- [ ] Reel animado + carrusel "solo 1 unidad" + ads $10–15
 
 ## Para retomar (estrategia de Instagram)
 - [ ] Story de preventas (diseño listo en el canvas) y más reels animados de productos
