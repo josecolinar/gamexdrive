@@ -1646,6 +1646,23 @@ async function cargarTop(){
   } catch(e){}
 }
 
+/* ---------- Inventario en vivo: el stock que marcas en admin.html manda sobre el catálogo ---------- */
+async function cargarInventario(){
+  if(!PUBLICADA || !apiURL()) return;
+  try {
+    const r = await fetch(apiURL() + "/inventario", {cache:"no-store"});
+    if(!r.ok) return;
+    const j = await r.json(); let cambio = false;
+    Object.entries(j.items || {}).forEach(([id, v]) => {
+      const p = byId(id); if(!p || !v) return;
+      if(typeof v.cantidad === "number"){ p.cantidad = v.cantidad; p.stock = v.cantidad > 0; }
+      else if(typeof v.stock === "boolean") p.stock = v.stock;
+      cambio = true;
+    });
+    if(cambio){ pintarTodo(); pintarSecciones(); }
+  } catch(e){}
+}
+
 /* ---------- Estadísticas propias (worker): visitas por origen y pedidos ---------- */
 function fuenteVisita(){
   try { const s = sessionStorage.getItem("gx_src"); if(s) return s; } catch(e){}
@@ -1704,7 +1721,7 @@ async function cargarClientes(){
 try {
   PRODUCTOS.forEach(p => { if(typeof p.cantidad === "number") p.stock = p.cantidad > 0; if(!p.img && p.fotos && p.fotos.length) p.img = p.fotos[0]; });
   aplicarOfertasMes();
-  pintarFijos(); pintarTodo(); arrancarSlider(); syncURL(false); ruta(); cargarTasa(); cargarTop(); cargarClientes(); registrarPV();
+  pintarFijos(); pintarTodo(); arrancarSlider(); syncURL(false); ruta(); cargarTasa(); cargarInventario(); cargarTop(); cargarClientes(); registrarPV();
 } catch(err) {
   // Nunca dejar la página en blanco: mostrar la tienda y un aviso con el error
   console.error(err);

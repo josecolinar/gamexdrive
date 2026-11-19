@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Gamexdrive · Inventario</title>
+<link rel="icon" type="image/png" href="img/favicon-32.png">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#0a0a0a;color:#fff;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.4;padding:1rem}
+  .wrap{max-width:760px;margin:0 auto}
+  h1{font-size:1.5rem;margin-bottom:.2rem} h1 span{color:#ff1a1a}
+  p.sub{color:#a3a3a3;font-size:.88rem;margin-bottom:1rem}
+  input{font:inherit;color:#fff;background:#1c1c1c;border:1px solid #2a2a2a;border-radius:10px;padding:.65rem .8rem;width:100%}
+  button{font:inherit;font-weight:700;border:0;border-radius:10px;padding:.55rem .8rem;cursor:pointer;color:#fff;background:#2a2a2a}
+  button.rojo{background:#ff1a1a} button.verde{background:#16a34a} button:disabled{opacity:.45;cursor:default}
+  .login{display:grid;gap:.5rem;background:#141414;border:1px solid #262626;border-radius:14px;padding:.9rem;margin-bottom:1rem}
+  .msg{margin:.6rem 0;color:#ff8a8a;min-height:1.2em}
+  .ok{color:#86efac}
+  .barra{position:sticky;top:0;background:#0a0a0a;padding:.5rem 0 .7rem;z-index:2;display:grid;gap:.5rem}
+  .filtros{display:flex;gap:.4rem;flex-wrap:wrap}
+  .filtros button{padding:.4rem .7rem;font-size:.85rem}
+  .filtros button.on{background:#ff1a1a}
+  .item{display:grid;grid-template-columns:48px 1fr auto;gap:.7rem;align-items:center;background:#141414;border:1px solid #262626;border-radius:14px;padding:.6rem;margin-bottom:.5rem}
+  .item img{width:48px;height:48px;border-radius:8px;object-fit:cover;background:#1c1c1c}
+  .nom{font-size:.92rem;font-weight:600}
+  .meta{font-size:.78rem;color:#a3a3a3;margin-top:.15rem}
+  .est{display:inline-block;font-size:.72rem;font-weight:800;border-radius:999px;padding:.1rem .5rem;margin-right:.3rem}
+  .est.hay{background:#14532d;color:#86efac} .est.poco{background:#713f12;color:#fde68a} .est.no{background:#7f1d1d;color:#fecaca}
+  .acc{display:flex;gap:.35rem;flex-wrap:wrap;justify-content:flex-end}
+  h2{font-size:1rem;margin:1.4rem 0 .5rem;text-transform:uppercase;letter-spacing:.6px;color:#bbb}
+  table{width:100%;border-collapse:collapse;background:#141414;border:1px solid #262626;border-radius:14px;overflow:hidden;font-size:.88rem}
+  th,td{padding:.5rem .7rem;text-align:left;border-bottom:1px solid #222} th{background:#1c1c1c;color:#a3a3a3;font-size:.72rem;text-transform:uppercase}
+  td.n,th.n{text-align:right}
+  @media (max-width:520px){ .item{grid-template-columns:48px 1fr} .acc{grid-column:1/-1;justify-content:flex-start} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>GAMEX<span>DRIVE</span> · Inventario</h1>
+  <p class="sub">Página privada. Marca lo que vendes y la tienda se actualiza en segundos, sin tocar el código.</p>
+
+  <form class="login" id="f">
+    <input id="clave" type="password" placeholder="Tu clave (la misma de las estadísticas)" autocomplete="current-password" required>
+    <button class="rojo" type="submit">Entrar</button>
+  </form>
+  <div class="msg" id="msg"></div>
+
+  <div id="panel" hidden>
+    <div class="barra">
+      <input id="q" type="search" placeholder="Buscar producto…">
+      <div class="filtros" id="filtros"></div>
+    </div>
+    <div id="lista"></div>
+
+    <h2>Ventas anotadas (hoy y últimos días)</h2>
+    <table><thead><tr><th>Fecha</th><th>Producto</th><th class="n">Precio</th></tr></thead><tbody id="ventas"></tbody></table>
+    <p class="sub" style="margin-top:.6rem">Solo cuenta lo que marcas con «Vendí 1». «−1», «+1», «Agotar» y «Reponer» corrigen el stock sin anotar una venta.</p>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const API = location.origin;
+let CLAVE = "", PRODUCTOS = [], INV = {}, filtro = "Todos";
+
+const hdr = () => ({ "Content-Type":"application/json", "X-Clave": CLAVE });
+const msg = (t, ok) => { $("msg").textContent = t || ""; $("msg").className = "msg" + (ok ? " ok" : ""); };
+
+/* Lee el catálogo desde index.html sin abrirlo (así no cuenta como visita) */
+async function cargarCatalogo(){
+  const html = await (await fetch("index.html", {cache:"no-store"})).text();
+  const ini = html.indexOf("const PRODUCTOS = [");
+  const fin = html.indexOf("\n];", ini);
+  if(ini < 0 || fin < 0) throw new Error("No encontré el catálogo en index.html");
+  const arr = html.slice(ini + "const PRODUCTOS = ".length, fin + 2);
+  PRODUCTOS = new Function("return " + arr)().filter(p => !p.pausado);
+}
+async function cargarInv(){ INV = (await (await fetch(API + "/inventario", {cache:"no-store"})).json()).items || {}; }
+
+/* Estado efectivo = lo guardado en vivo manda sobre el código */
+function estado(p){
+  const v = INV[p.id];
+  let cantidad = typeof p.cantidad === "number" ? p.cantidad : null, stock = p.stock !== false;
+  if(v){ if(typeof v.cantidad === "number"){ cantidad = v.cantidad; stock = cantidad > 0; } else if(typeof v.stock === "boolean") stock = v.stock; }
+  if(cantidad !== null) stock = cantidad > 0;
+  return { cantidad, stock };
+}
+async function guardar(p, cantidad, stock, venta){
+  const cuerpo = { id:p.id, ...(cantidad === null ? { stock } : { cantidad }), ...(venta ? { venta:{ nombre:p.nombre, precio:p.precio } } : {}) };
+  const r = await fetch(API + "/admin/stock", { method:"POST", headers:hdr(), body:JSON.stringify(cuerpo) });
+  const j = await r.json().catch(() => ({}));
+  if(!r.ok) throw new Error(j.error || "No se pudo guardar");
+  INV[p.id] = j.item;
+}
+async function accion(id, tipo){
+  const p = PRODUCTOS.find(x => x.id == id); if(!p) return;
+  const e = estado(p);
+  try {
+    if(tipo === "vender"){
+      if(!e.stock) return msg("Ya está agotado.");
+      const nuevo = e.cantidad === null ? 0 : Math.max(0, e.cantidad - 1);
+      await guardar(p, nuevo, nuevo > 0, true);
+      msg("✔ Vendido: " + p.nombre + (nuevo === 0 ? " → AGOTADO" : " (quedan " + nuevo + ")"), true);
+    } else if(tipo === "menos"){ const n = Math.max(0, (e.cantidad ?? 1) - 1); await guardar(p, n, n > 0); msg("✔ " + p.nombre + ": " + n, true);
+    } else if(tipo === "mas"){ const n = (e.cantidad ?? 0) + 1; await guardar(p, n, true); msg("✔ " + p.nombre + ": " + n, true);
+    } else if(tipo === "agotar"){ await guardar(p, 0, false); msg("✔ Agotado: " + p.nombre, true);
+    } else if(tipo === "reponer"){ await guardar(p, e.cantidad === null ? null : 1, true); msg("✔ Disponible: " + p.nombre, true); }
+    pintar(); cargarVentas();
+  } catch(err){ msg(err.message); }
+}
+
+function pintarFiltros(){
+  const cats = ["Todos", "Agotados", ...new Set(PRODUCTOS.map(p => p.cat))];
+  $("filtros").innerHTML = cats.map(c => `<button type="button" class="${c === filtro ? "on" : ""}" data-c="${c}">${c}</button>`).join("");
+}
+function pintar(){
+  const q = $("q").value.trim().toLowerCase();
+  let ps = PRODUCTOS.filter(p => (!q || p.nombre.toLowerCase().includes(q)) &&
+    (filtro === "Todos" || (filtro === "Agotados" ? !estado(p).stock : p.cat === filtro)));
+  ps.sort((a, b) => (estado(a).stock ? 1 : 0) - (estado(b).stock ? 1 : 0) || a.nombre.localeCompare(b.nombre));
+  $("lista").innerHTML = ps.map(p => {
+    const e = estado(p);
+    const cls = !e.stock ? "no" : (e.cantidad !== null && e.cantidad <= 2 ? "poco" : "hay");
+    const txt = !e.stock ? "Agotado" : (e.cantidad !== null ? e.cantidad + " ud." : "Disponible");
+    const img = (p.fotos && p.fotos[0]) || p.img || "";
+    return `<div class="item"><img src="${img}" alt="" loading="lazy">
+      <div><div class="nom">${p.nombre}</div><div class="meta"><span class="est ${cls}">${txt}</span>$${p.precio} · ${p.cat}</div></div>
+      <div class="acc">
+        <button class="rojo" data-a="vender" data-id="${p.id}" ${e.stock ? "" : "disabled"}>Vendí 1</button>
+        <button data-a="menos" data-id="${p.id}" ${e.stock ? "" : "disabled"}>−1</button>
+        <button data-a="mas" data-id="${p.id}">+1</button>
+        ${e.stock ? `<button data-a="agotar" data-id="${p.id}">Agotar</button>` : `<button class="verde" data-a="reponer" data-id="${p.id}">Reponer</button>`}
+      </div></div>`;
+  }).join("") || '<p class="sub">Sin resultados.</p>';
+  pintarFiltros();
+}
+async function cargarVentas(){
+  try {
+    const r = await fetch(API + "/admin/ventas?dias=7", { headers:{ "X-Clave":CLAVE }, cache:"no-store" });
+    const j = await r.json(); const filas = [];
+    (j.dias || []).forEach(d => (d.ventas || []).forEach(v => filas.push(`<tr><td>${d.fecha}</td><td>${v.nombre}</td><td class="n">$${v.precio}</td></tr>`)));
+    $("ventas").innerHTML = filas.join("") || '<tr><td colspan="3" style="color:#777">Todavía no hay ventas anotadas.</td></tr>';
+  } catch(e){}
+}
+
+$("f").addEventListener("submit", async ev => {
+  ev.preventDefault(); CLAVE = $("clave").value.trim(); msg("Entrando…");
+  try {
+    const r = await fetch(API + "/admin/ventas?dias=1", { headers:{ "X-Clave":CLAVE }, cache:"no-store" });
+    if(r.status === 401) return msg("Clave incorrecta.");
+    if(!r.ok) return msg("No pude conectar con el worker (" + r.status + ").");
+    try { localStorage.setItem("gx_admin", CLAVE); } catch(e){}
+    await Promise.all([cargarCatalogo(), cargarInv()]);
+    $("f").hidden = true; $("panel").hidden = false; msg(""); pintar(); cargarVentas();
+  } catch(err){ msg(err.message); }
+});
+$("q").addEventListener("input", pintar);
+$("filtros").addEventListener("click", e => { const b = e.target.closest("button[data-c]"); if(b){ filtro = b.dataset.c; pintar(); } });
+$("lista").addEventListener("click", e => { const b = e.target.closest("button[data-a]"); if(b) accion(b.dataset.id, b.dataset.a); });
+try { const g = localStorage.getItem("gx_admin"); if(g){ $("clave").value = g; $("f").requestSubmit(); } } catch(e){}
+</script>
+</body>
+</html>

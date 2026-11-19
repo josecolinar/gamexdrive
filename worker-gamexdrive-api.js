@@ -10,6 +10,9 @@
  *                           { "mes": "2026-11", "top": [ { "id": 5, "visitas": 42 }, ... ] }
  *   POST /evento?tipo=visita&src=instagram   → cuenta una visita a la web (o tipo=pedido)
  *   GET  /stats?clave=TU_CLAVE&dias=30       → estadísticas privadas (para stats.html)
+ *   GET  /inventario                         → stock en vivo { items: { "27": { cantidad: 0, stock: false } } }
+ *   POST /admin/stock   (cabecera X-Clave)   → guarda el stock de un producto y, si es venta, la anota (admin.html)
+ *   GET  /admin/ventas  (cabecera X-Clave)   → ventas anotadas por día { dias: [ { fecha, ventas: [...] } ] }
  *
  * PUBLICACIÓN AUTOMÁTICA (recomendada)
  *   Este archivo se publica solo junto con la web gracias a wrangler.jsonc:
@@ -48,6 +51,7 @@ export default {
     const cors = {
       "Access-Control-Allow-Origin": permitido ? (origin || url.origin) : ORIGENES[0],
       "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, X-Clave",
       "Vary": "Origin",
     };
     if (request.method === "OPTIONS") return new Response(null, { headers: cors });
@@ -58,6 +62,9 @@ export default {
       if (url.pathname === "/top") return await top(url, env, cors);
       if (url.pathname === "/evento" && request.method === "POST") return await evento(url, env, request, cors);
       if (url.pathname === "/stats") return await stats(url, env, cors);
+      if (url.pathname === "/inventario") return await inventario(env, cors);
+      if (url.pathname === "/admin/stock" && request.method === "POST") return await adminStock(request, env, cors);
+      if (url.pathname === "/admin/ventas") return await adminVentas(url, request, env, cors);
       // Cualquier otra ruta: la web (cuando el worker se publica junto con los archivos)
       if (env.ASSETS) return env.ASSETS.fetch(request);
       if (url.pathname === "/") return await tasa(ctx, cors);
@@ -192,6 +199,55 @@ async function stats(url, env, cors) {
   const vistos = (await env.VISITAS.get("mes:" + mes, "json")) || {};
   const productos = Object.entries(vistos).map(([id, v]) => ({ id: Number(id), visitas: v })).sort((a, b) => b.visitas - a.visitas).slice(0, 20);
   return json({ mes, dias, productos }, privado);
+}
+
+/* ---------------- Inventario en vivo + registro de ventas (panel admin.html) ---------------- */
+function claveOk(request, env) {
+  const c = request.headers.get("X-Clave") || "";
+  return !!env.STATS_CLAVE && c === env.STATS_CLAVE;
+}
+
+// Público: la web lo lee al abrir y aplica el stock encima del catálogo del código
+async function inventario(env, cors) {
+  if (!env.VISITAS) return json({ items: {} }, { ...cors, "Cache-Control": "no-store" });
+  const items = (await env.VISITAS.get("inv", "json")) || {};
+  return json({ items }, { ...cors, "Cache-Control": "no-store" });
+}
+
+// Privado: { id, cantidad, stock, venta?: { nombre, precio } }
+async function adminStock(request, env, cors) {
+  const privado = { ...cors, "Cache-Control": "no-store" };
+  if (!claveOk(request, env)) return json({ error: "Clave incorrecta" }, privado, 401);
+  if (!env.VISITAS) return json({ error: "Falta conectar el KV 'VISITAS'" }, privado, 500);
+  const b = await request.json().catch(() => ({}));
+  const id = Number(b.id);
+  if (!Number.isFinite(id)) return json({ error: "Falta el id" }, privado, 400);
+  const cantidad = Number.isFinite(Number(b.cantidad)) ? Math.max(0, Math.floor(Number(b.cantidad))) : null;
+  const inv = (await env.VISITAS.get("inv", "json")) || {};
+  inv[id] = { stock: cantidad === null ? !!b.stock : cantidad > 0, ...(cantidad === null ? {} : { cantidad }) };
+  await env.VISITAS.put("inv", JSON.stringify(inv));
+  if (b.venta) {
+    const dia = "ventas:" + diaCaracas(new Date());
+    const lista = (await env.VISITAS.get(dia, "json")) || [];
+    lista.push({ id, nombre: String(b.venta.nombre || "").slice(0, 160), precio: Number(b.venta.precio) || 0, hora: new Date().toISOString() });
+    await env.VISITAS.put(dia, JSON.stringify(lista), { expirationTtl: 60 * 60 * 24 * 800 });
+  }
+  return json({ ok: true, item: inv[id] }, privado);
+}
+
+// Privado: ventas anotadas de los últimos N días (para el reporte / Google Sheets)
+async function adminVentas(url, request, env, cors) {
+  const privado = { ...cors, "Cache-Control": "no-store" };
+  if (!claveOk(request, env)) return json({ error: "Clave incorrecta" }, privado, 401);
+  if (!env.VISITAS) return json({ error: "Falta conectar el KV 'VISITAS'" }, privado, 500);
+  const n = Math.min(parseInt(url.searchParams.get("dias"), 10) || 7, 90);
+  const dias = [];
+  for (let i = 0; i < n; i++) {
+    const fecha = diaCaracas(new Date(Date.now() - i * 86400000));
+    const ventas = (await env.VISITAS.get("ventas:" + fecha, "json")) || [];
+    dias.push({ fecha, ventas });
+  }
+  return json({ dias }, privado);
 }
 
 /* ---------------- Utilidades ---------------- */

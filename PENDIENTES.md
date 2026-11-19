@@ -43,11 +43,12 @@ _Actualizada: 16/11/2026 (tarde)_
 
 ## Me toca a mí (cuando me des lo de arriba)
 - [ ] Cargar el inventario de Mercado Libre, la reputación y el botón a tu tienda
-- [ ] Base de datos de pedidos en Google Sheets, con registro automático de cada venta
+- [ ] Pasar las ventas anotadas en el panel (/admin/ventas) a Google Sheets y reporte diario (falta conectar Google Sheets)
 - [ ] Asistente de WhatsApp e Instagram hecho con Claude (API oficial de Meta, sin terceros)
 - [ ] Reporte diario de ventas
 
 ## Hecho
+- [x] Control de inventario: panel privado gamexdrive.work/admin.html (Vendí 1 / Agotar / Reponer), stock en vivo y registro de ventas
 - [x] Tienda web con carrito, pago y envío, y pedido por WhatsApp
 - [x] Precios en divisas, tasa BCV y bolívares (tasa leída de bcv.org.ve)
 - [x] Envío gratis desde $20 con 2 artículos (sin gift cards)
