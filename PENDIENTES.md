@@ -42,7 +42,8 @@ _Actualizada: 16/11/2026 (tarde)_
 - [ ] Recordatorio programado: miércoles 18/11, 10:13 am
 
 ## Me toca a mí (cuando me des lo de arriba)
-- [ ] Cargar el inventario de Mercado Libre, la reputación y el botón a tu tienda
+- [ ] Cargar/sincronizar el inventario de Mercado Libre
+- [x] Integración de reputación de Mercado Libre en la web (falta configurar el secreto `ML_ACCESS_TOKEN` en Cloudflare para mostrar datos en vivo)
 - [ ] Pasar las ventas anotadas en el panel (/admin/ventas) a Google Sheets y reporte diario (falta conectar Google Sheets)
 - [ ] Asistente de WhatsApp e Instagram hecho con Claude (API oficial de Meta, sin terceros)
 - [ ] Reporte diario de ventas
