@@ -43,7 +43,7 @@ _Actualizada: 16/11/2026 (tarde)_
 
 ## Me toca a mí (cuando me des lo de arriba)
 - [ ] Cargar/sincronizar el inventario de Mercado Libre
-- [x] Integración de reputación de Mercado Libre en la web (falta configurar el secreto `ML_ACCESS_TOKEN` en Cloudflare para mostrar datos en vivo)
+- [x] Sección de reputación de Mercado Libre en la web con datos del perfil público (actualización manual, sin API ni token)
 - [ ] Pasar las ventas anotadas en el panel (/admin/ventas) a Google Sheets y reporte diario (falta conectar Google Sheets)
 - [ ] Asistente de WhatsApp e Instagram hecho con Claude (API oficial de Meta, sin terceros)
 - [ ] Reporte diario de ventas
