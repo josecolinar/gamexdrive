@@ -266,13 +266,14 @@ async function reputacionMercadoLibre(env, cors) {
   const response = await fetch("https://api.mercadolibre.com/users/" + ML_USER_ID, {
     headers: { Authorization: "Bearer " + env.ML_ACCESS_TOKEN, Accept: "application/json" }
   });
-  if (!response.ok && response.status !== 206) {
+  if (!response.ok) {
     return json({ disponible: false, motivo: "api_no_disponible" }, { ...cors, "Cache-Control": "no-store" }, 502);
   }
   const user = await response.json();
   const rep = user.seller_reputation || {};
   const tx = rep.transactions || {};
   const ratings = tx.ratings || {};
+  const numOrNull = value => value == null || value === "" ? null : (Number.isFinite(Number(value)) ? Number(value) : null);
   const dato = {
     disponible: true,
     nickname: user.nickname || "",
@@ -280,13 +281,13 @@ async function reputacionMercadoLibre(env, cors) {
     level_id: rep.level_id || null,
     power_seller_status: rep.power_seller_status || null,
     transactions: {
-      total: Number.isFinite(Number(tx.total)) ? Number(tx.total) : null,
-      completed: Number.isFinite(Number(tx.completed)) ? Number(tx.completed) : null,
-      canceled: Number.isFinite(Number(tx.canceled)) ? Number(tx.canceled) : null,
+      total: numOrNull(tx.total),
+      completed: numOrNull(tx.completed),
+      canceled: numOrNull(tx.canceled),
       ratings: {
-        positive: Number.isFinite(Number(ratings.positive)) ? Number(ratings.positive) : null,
-        neutral: Number.isFinite(Number(ratings.neutral)) ? Number(ratings.neutral) : null,
-        negative: Number.isFinite(Number(ratings.negative)) ? Number(ratings.negative) : null
+        positive: numOrNull(ratings.positive),
+        neutral: numOrNull(ratings.neutral),
+        negative: numOrNull(ratings.negative)
       }
     },
     actualizado: new Date().toISOString()
