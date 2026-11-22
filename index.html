@@ -647,6 +647,11 @@
       <div><h4>Contacto</h4><ul id="fcontact"></ul></div>
     </div>
     <div class="redes" id="redes"></div>
+    <section id="mlReputation" aria-label="Reputación de Gamexdrive en Mercado Libre" style="margin:1.25rem auto;padding:1rem 1.2rem;max-width:760px;border:1px solid var(--line,rgba(255,255,255,.14));border-radius:14px;background:var(--card,rgba(255,255,255,.035));text-align:center">
+      <div style="font-weight:800;margin-bottom:.35rem">⭐ Nuestra reputación en Mercado Libre</div>
+      <div id="mlRepDetails" style="font-size:.92rem;color:var(--muted);margin-bottom:.7rem">Consulta nuestras calificaciones y trayectoria como vendedor.</div>
+      <a id="mlRepLink" href="https://listado.mercadolibre.com.ve/_CustId_162786331" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.65rem 1rem;border-radius:999px;background:#ffe600;color:#292929;font-weight:800;text-decoration:none">Ver tienda y reputación ↗</a>
+    </section>
     <p class="brandline">GAMEXDRIVE</p>
     <p class="copy" id="copy"></p>
   </div>
@@ -1691,6 +1696,29 @@ function registrarPV(){
   evento("visita");
 }
 
+/* ---------- Reputación del vendedor en Mercado Libre ---------- */
+async function cargarReputacionML(){
+  const cont = $("mlRepDetails"), link = $("mlRepLink");
+  if(!cont || !link) return;
+  link.href = CONFIG.mercadolibre || link.href;
+  if(!PUBLICADA || !apiURL()) return;
+  try {
+    const r = await fetch(apiURL() + "/mercadolibre", {cache:"no-store"});
+    if(!r.ok) return; // El enlace público sigue disponible si falta configurar el token o falla Mercado Libre.
+    const d = await r.json();
+    if(!d.disponible) return;
+    if(d.permalink) link.href = d.permalink;
+    const partes = [];
+    const nivel = { "5_green":"Verde", "4_light_green":"Verde claro", "3_yellow":"Amarillo", "2_orange":"Naranja", "1_red":"Rojo" };
+    if(d.level_id) partes.push("Reputación " + (nivel[d.level_id] || d.level_id.replace(/_/g," ")));
+    if(d.power_seller_status) partes.push("Mercado Líder " + d.power_seller_status);
+    const t = d.transactions || {}, ratings = t.ratings || {};
+    if(Number.isFinite(t.total)) partes.push(t.total.toLocaleString("es-VE") + " operaciones");
+    if(Number.isFinite(ratings.positive)) partes.push(Math.round(ratings.positive * 100) + "% de calificaciones positivas");
+    cont.textContent = partes.length ? partes.join(" · ") : "Consulta nuestro perfil para ver la reputación actualizada.";
+  } catch(e) {}
+}
+
 /* ---------- Clientes: fotos y videos de la carpeta "clientes" de GitHub ---------- */
 const EXT_IMG = /\.(jpe?g|png|webp|gif|avif)$/i, EXT_VID = /\.(mp4|webm|mov)$/i;
 function pintarClientes(lista){
@@ -1721,7 +1749,7 @@ async function cargarClientes(){
 try {
   PRODUCTOS.forEach(p => { if(typeof p.cantidad === "number") p.stock = p.cantidad > 0; if(!p.img && p.fotos && p.fotos.length) p.img = p.fotos[0]; });
   aplicarOfertasMes();
-  pintarFijos(); pintarTodo(); arrancarSlider(); syncURL(false); ruta(); cargarTasa(); cargarInventario(); cargarTop(); cargarClientes(); registrarPV();
+  pintarFijos(); pintarTodo(); arrancarSlider(); syncURL(false); ruta(); cargarTasa(); cargarInventario(); cargarTop(); cargarClientes(); cargarReputacionML(); registrarPV();
 } catch(err) {
   // Nunca dejar la página en blanco: mostrar la tienda y un aviso con el error
   console.error(err);
