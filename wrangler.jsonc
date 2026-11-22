@@ -9,7 +9,7 @@
     "directory": "./",
     "binding": "ASSETS",
     // Estas rutas las responde el worker; todo lo demás es la web
-    "run_worker_first": ["/tasa", "/visto", "/top", "/evento", "/stats", "/mercadolibre"]
+    "run_worker_first": ["/tasa", "/visto", "/top", "/evento", "/stats"]
   },
   "kv_namespaces": [
     { "binding": "VISITAS", "id": "fbbf06120f4e4735a0a07c08941266ec" }
