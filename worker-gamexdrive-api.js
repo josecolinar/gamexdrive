@@ -63,7 +63,6 @@ export default {
       if (url.pathname === "/evento" && request.method === "POST") return await evento(url, env, request, cors);
       if (url.pathname === "/stats") return await stats(url, env, cors);
       if (url.pathname === "/inventario") return await inventario(env, cors);
-      if (url.pathname === "/mercadolibre") return await reputacionMercadoLibre(env, cors);
       if (url.pathname === "/admin/stock" && request.method === "POST") return await adminStock(request, env, cors);
       if (url.pathname === "/admin/ventas") return await adminVentas(url, request, env, cors);
       // Cualquier otra ruta: la web (cuando el worker se publica junto con los archivos)
@@ -249,52 +248,6 @@ async function adminVentas(url, request, env, cors) {
     dias.push({ fecha, ventas });
   }
   return json({ dias }, privado);
-}
-
-/* ---------------- Reputación Mercado Libre ---------------- */
-// ML_ACCESS_TOKEN debe configurarse como Secret en Cloudflare. Nunca se envía al navegador.
-const ML_USER_ID = "162786331";
-async function reputacionMercadoLibre(env, cors) {
-  const headers = { ...cors, "Cache-Control": "public, max-age=1800" };
-  if (!env.ML_ACCESS_TOKEN) {
-    return json({ disponible: false, motivo: "token_no_configurado" }, { ...headers, "Cache-Control": "no-store" }, 503);
-  }
-  const cache = caches.default;
-  const cacheKey = new Request("https://cache.local/mercadolibre-reputacion-" + ML_USER_ID);
-  const guardada = await cache.match(cacheKey);
-  if (guardada) return conCors(guardada, cors);
-  const response = await fetch("https://api.mercadolibre.com/users/" + ML_USER_ID, {
-    headers: { Authorization: "Bearer " + env.ML_ACCESS_TOKEN, Accept: "application/json" }
-  });
-  if (!response.ok) {
-    return json({ disponible: false, motivo: "api_no_disponible" }, { ...cors, "Cache-Control": "no-store" }, 502);
-  }
-  const user = await response.json();
-  const rep = user.seller_reputation || {};
-  const tx = rep.transactions || {};
-  const ratings = tx.ratings || {};
-  const numOrNull = value => value == null || value === "" ? null : (Number.isFinite(Number(value)) ? Number(value) : null);
-  const dato = {
-    disponible: true,
-    nickname: user.nickname || "",
-    permalink: user.permalink || "https://listado.mercadolibre.com.ve/_CustId_" + ML_USER_ID,
-    level_id: rep.level_id || null,
-    power_seller_status: rep.power_seller_status || null,
-    transactions: {
-      total: numOrNull(tx.total),
-      completed: numOrNull(tx.completed),
-      canceled: numOrNull(tx.canceled),
-      ratings: {
-        positive: numOrNull(ratings.positive),
-        neutral: numOrNull(ratings.neutral),
-        negative: numOrNull(ratings.negative)
-      }
-    },
-    actualizado: new Date().toISOString()
-  };
-  const body = new Response(JSON.stringify(dato), { headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "public, max-age=1800" } });
-  await cache.put(cacheKey, body.clone());
-  return conCors(body, cors);
 }
 
 /* ---------------- Utilidades ---------------- */
