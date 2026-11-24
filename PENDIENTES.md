@@ -49,6 +49,7 @@ _Actualizada: 16/11/2026 (tarde)_
 - [ ] Reporte diario de ventas
 
 ## Hecho
+- [x] 24/11: 10 productos de Mercado Libre agregados (peluches Gojo/Geto y Chopper, sudadera Bowser, base Samurai, dioramas Sylveon y Flareon, Funko Popsies Woody, placa Ichiban Kuji, 2 mangas); peluches Demon Slayer a $8.50. Unidades en 1 por defecto: ajustar en admin.html
 - [x] Control de inventario: panel privado gamexdrive.work/admin.html (Vendí 1 / Agotar / Reponer), stock en vivo y registro de ventas
 - [x] Tienda web con carrito, pago y envío, y pedido por WhatsApp
 - [x] Precios en divisas, tasa BCV y bolívares (tasa leída de bcv.org.ve)
