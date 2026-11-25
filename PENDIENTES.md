@@ -2,7 +2,7 @@
 _Actualizada: 16/11/2026 (tarde)_
 
 ## Reglas
-- Precio a tasa BCV = precio en divisas + 20% (antes 30%).
+- Precio a tasa BCV = precio en divisas + 12% (antes 20%, y antes 30%).
 - Figuras de Mercado Libre: precio web = precio ML − 16% (exacto). Videojuegos: mismo precio que en ML.
 - Cada producto real que coincida con uno de relleno (de ejemplo) reemplaza al de relleno: se elimina el de ejemplo.
 
