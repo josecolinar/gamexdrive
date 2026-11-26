@@ -715,6 +715,8 @@ const CONFIG = {
     maxPctCatalogo: 40,        // nunca más de este % del catálogo (para que no todo esté en oferta)
     excluirCategorias: ["Gift Cards"]
   },
+  // Black Friday: descuento automático en toda la web entre estas fechas (hora de Caracas, inclusive)
+  blackFriday: { desde: "2026-11-27", hasta: "2026-11-29", descuento: 20, excluirCategorias: ["Gift Cards"] },
   // Etiqueta "¡Quedan N!" cuando un producto con "cantidad" tiene estas unidades o menos
   pocasUnidades: 2,
   // Cupones: el cliente escribe el código en el carrito. vence = último día válido (AAAA-MM-DD).
@@ -1133,10 +1135,10 @@ function tarjeta(p){
     if(p.nuevo && !p.preventa && !/destapado|usado/i.test(p.etiqueta||"")) t.push('<span class="tg">Nuevo</span>');
     if(pocas(p)) t.push(`<span class="tg low">¡${p.cantidad===1?"Queda 1":"Quedan "+p.cantidad}!</span>`);
   }
-  return `<article class="card${p.ofertaMes?" mes":""}">
+  return `<article class="card${p.ofertaMes||p.bf?" mes":""}">
     <div class="im" data-ver="${p.id}">
       <div class="tagbox">${t.join("")}</div>
-      ${p.ofertaMes?`<span class="ribbon">Oferta del mes</span>`:""}
+      ${p.bf?`<span class="ribbon">Black Friday</span>`:p.ofertaMes?`<span class="ribbon">Oferta del mes</span>`:""}
       ${p.origen?`<span class="origin" title="Origen: ${esc(p.origen[1])}">${p.origen[0]} <span class="otx">${esc(p.origen[1])}</span></span>`:""}
       ${vis(p)}
       ${boton(p)}
@@ -1387,7 +1389,7 @@ function pintarPaginaCarrito(){
   const filas = C.items.map(({p,q,pu,pct,bruto,neto})=>{
     return `<div class="crow">
       <div class="c-prod"><div class="cthumb" data-ver="${p.id}">${vis(p)}</div>
-        <div><div class="t">${esc(p.nombre)}</div><div class="m">${esc(p.cat)}${p.preventa?" · Preventa":""}${p.digital?" · Digital":""}${p.ofertaMes?` · <span style="color:var(--red);font-weight:700">Oferta del mes -${CONFIG.ofertaMensual.descuento}%</span>`:""}${p.autenticidad==="generico"?" · Genérico":p.autenticidad==="original"?" · Original":""}</div><div class="mp">${fmtUsd(pu)} c/u</div></div></div>
+        <div><div class="t">${esc(p.nombre)}</div><div class="m">${esc(p.cat)}${p.preventa?" · Preventa":""}${p.digital?" · Digital":""}${p.bf?` · <span style="color:var(--red);font-weight:700">Black Friday -${CONFIG.blackFriday.descuento}%</span>`:p.ofertaMes?` · <span style="color:var(--red);font-weight:700">Oferta del mes -${CONFIG.ofertaMensual.descuento}%</span>`:""}${p.autenticidad==="generico"?" · Genérico":p.autenticidad==="original"?" · Original":""}</div><div class="mp">${fmtUsd(pu)} c/u</div></div></div>
       <div class="c-price">${fmtUsd(pu)}</div>
       <div class="c-qty"><div class="qbox"><button data-menos="${p.id}" aria-label="Quitar uno">−</button><span>${q}</span><button data-mas="${p.id}" aria-label="Agregar uno">+</button></div></div>
       <div class="c-sub">${pct?`<s>${fmtUsd(bruto)}</s>`:""}${fmtUsd(neto)}${pct?`<span class="pct">-${pct}%</span>`:""}</div>
@@ -1462,7 +1464,7 @@ function actualizarWA(){
   btn.classList.remove("off");
   const C = calcular(), t = C.total, env = estadoEnvio(), bcv = esBCV();
   let m = `¡Hola ${CONFIG.nombre}! 👋 Quiero hacer este pedido:\n\n`;
-  C.items.forEach(({p,q,bruto})=>{ m += `• ${q} x ${p.nombre}${p.autenticidad==="generico"?" [genérico]":""}${p.preventa?" (preventa)":""}${p.ofertaMes?` (oferta del mes -${CONFIG.ofertaMensual.descuento}%)`:""} — ${fmtUsd(bruto)}\n`; });
+  C.items.forEach(({p,q,bruto})=>{ m += `• ${q} x ${p.nombre}${p.autenticidad==="generico"?" [genérico]":""}${p.preventa?" (preventa)":""}${p.bf?` (Black Friday -${CONFIG.blackFriday.descuento}%)`:p.ofertaMes?` (oferta del mes -${CONFIG.ofertaMensual.descuento}%)`:""} — ${fmtUsd(bruto)}\n`; });
   if(C.desc > 0){
     m += `\nSubtotal: ${fmtUsd(C.sub)}`;
     Object.entries(C.grupos).forEach(([k,v]) => { m += `\n🏷️ ${k}: −${fmtUsd(v)}`; });
@@ -1640,6 +1642,23 @@ function aplicarOfertasMes(){
   });
 }
 
+let BF_ACTIVO = false;
+function aplicarBlackFriday(){
+  const bf = CONFIG.blackFriday; if(!bf || !(bf.descuento>0)) return;
+  const hoy = hoyCaracas(); if(hoy < bf.desde || hoy > bf.hasta) return;
+  BF_ACTIVO = true;
+  PRODUCTOS.forEach(p => {
+    if((bf.excluirCategorias||[]).includes(p.cat)) return;
+    const orig = p.precioAntes ?? p.precio;
+    const origBCV = p.precioBCV ? (p.precioAntes ? p.precioBCV / (p.precio/orig) : p.precioBCV) : null;
+    p.ofertaMes = false; p.bf = true; p.precioAntes = orig;
+    p.precio = r2(orig * (1 - bf.descuento/100));
+    if(origBCV) p.precioBCV = r2(origBCV * (1 - bf.descuento/100));
+  });
+  OFERTAS = [];
+  CONFIG.franja = ["BLACK FRIDAY: -" + bf.descuento + "% en toda la web hasta el domingo 29", ...CONFIG.franja];
+}
+
 /* ---------- Destacados: contador de visitas (worker propio) ---------- */
 let TOP = [];
 const apiURL = () => {
@@ -1743,6 +1762,7 @@ async function cargarClientes(){
 try {
   PRODUCTOS.forEach(p => { if(typeof p.cantidad === "number") p.stock = p.cantidad > 0; if(!p.img && p.fotos && p.fotos.length) p.img = p.fotos[0]; });
   aplicarOfertasMes();
+  aplicarBlackFriday();
   pintarFijos(); pintarTodo(); arrancarSlider(); syncURL(false); ruta(); cargarTasa(); cargarInventario(); cargarTop(); cargarClientes(); registrarPV();
 } catch(err) {
   // Nunca dejar la página en blanco: mostrar la tienda y un aviso con el error
