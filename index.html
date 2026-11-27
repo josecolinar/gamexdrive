@@ -716,7 +716,7 @@ const CONFIG = {
     excluirCategorias: ["Gift Cards"]
   },
   // Black Friday: descuento automático en toda la web entre estas fechas (hora de Caracas, inclusive)
-  blackFriday: { desde: "2026-11-27", hasta: "2026-11-29", descuento: 20, excluirCategorias: ["Gift Cards"] },
+  blackFriday: { desde: "2026-11-27", hasta: "2026-11-29", descuento: 20, excluirCategorias: ["Gift Cards"], descuentoPorCategoria: { "Pokémon TCG": 10 } },
   // Etiqueta "¡Quedan N!" cuando un producto con "cantidad" tiene estas unidades o menos
   pocasUnidades: 2,
   // Cupones: el cliente escribe el código en el carrito. vence = último día válido (AAAA-MM-DD).
@@ -1389,7 +1389,7 @@ function pintarPaginaCarrito(){
   const filas = C.items.map(({p,q,pu,pct,bruto,neto})=>{
     return `<div class="crow">
       <div class="c-prod"><div class="cthumb" data-ver="${p.id}">${vis(p)}</div>
-        <div><div class="t">${esc(p.nombre)}</div><div class="m">${esc(p.cat)}${p.preventa?" · Preventa":""}${p.digital?" · Digital":""}${p.bf?` · <span style="color:var(--red);font-weight:700">Black Friday -${CONFIG.blackFriday.descuento}%</span>`:p.ofertaMes?` · <span style="color:var(--red);font-weight:700">Oferta del mes -${CONFIG.ofertaMensual.descuento}%</span>`:""}${p.autenticidad==="generico"?" · Genérico":p.autenticidad==="original"?" · Original":""}</div><div class="mp">${fmtUsd(pu)} c/u</div></div></div>
+        <div><div class="t">${esc(p.nombre)}</div><div class="m">${esc(p.cat)}${p.preventa?" · Preventa":""}${p.digital?" · Digital":""}${p.bf?` · <span style="color:var(--red);font-weight:700">Black Friday -${p.bfPct}%</span>`:p.ofertaMes?` · <span style="color:var(--red);font-weight:700">Oferta del mes -${CONFIG.ofertaMensual.descuento}%</span>`:""}${p.autenticidad==="generico"?" · Genérico":p.autenticidad==="original"?" · Original":""}</div><div class="mp">${fmtUsd(pu)} c/u</div></div></div>
       <div class="c-price">${fmtUsd(pu)}</div>
       <div class="c-qty"><div class="qbox"><button data-menos="${p.id}" aria-label="Quitar uno">−</button><span>${q}</span><button data-mas="${p.id}" aria-label="Agregar uno">+</button></div></div>
       <div class="c-sub">${pct?`<s>${fmtUsd(bruto)}</s>`:""}${fmtUsd(neto)}${pct?`<span class="pct">-${pct}%</span>`:""}</div>
@@ -1464,7 +1464,7 @@ function actualizarWA(){
   btn.classList.remove("off");
   const C = calcular(), t = C.total, env = estadoEnvio(), bcv = esBCV();
   let m = `¡Hola ${CONFIG.nombre}! 👋 Quiero hacer este pedido:\n\n`;
-  C.items.forEach(({p,q,bruto})=>{ m += `• ${q} x ${p.nombre}${p.autenticidad==="generico"?" [genérico]":""}${p.preventa?" (preventa)":""}${p.bf?` (Black Friday -${CONFIG.blackFriday.descuento}%)`:p.ofertaMes?` (oferta del mes -${CONFIG.ofertaMensual.descuento}%)`:""} — ${fmtUsd(bruto)}\n`; });
+  C.items.forEach(({p,q,bruto})=>{ m += `• ${q} x ${p.nombre}${p.autenticidad==="generico"?" [genérico]":""}${p.preventa?" (preventa)":""}${p.bf?` (Black Friday -${p.bfPct}%)`:p.ofertaMes?` (oferta del mes -${CONFIG.ofertaMensual.descuento}%)`:""} — ${fmtUsd(bruto)}\n`; });
   if(C.desc > 0){
     m += `\nSubtotal: ${fmtUsd(C.sub)}`;
     Object.entries(C.grupos).forEach(([k,v]) => { m += `\n🏷️ ${k}: −${fmtUsd(v)}`; });
@@ -1652,11 +1652,12 @@ function aplicarBlackFriday(){
     const orig = p.precioAntes ?? p.precio;
     const origBCV = p.precioBCV ? (p.precioAntes ? p.precioBCV / (p.precio/orig) : p.precioBCV) : null;
     p.ofertaMes = false; p.bf = true; p.precioAntes = orig;
-    p.precio = r2(orig * (1 - bf.descuento/100));
-    if(origBCV) p.precioBCV = r2(origBCV * (1 - bf.descuento/100));
+    const pct = (bf.descuentoPorCategoria||{})[p.cat] ?? bf.descuento; p.bfPct = pct;
+    p.precio = r2(orig * (1 - pct/100));
+    if(origBCV) p.precioBCV = r2(origBCV * (1 - pct/100));
   });
   OFERTAS = [];
-  CONFIG.franja = ["BLACK FRIDAY: -" + bf.descuento + "% en toda la web hasta el domingo 29", ...CONFIG.franja];
+  CONFIG.franja = ["BLACK FRIDAY: -" + bf.descuento + "% en toda la web (Pokémon TCG -" + ((bf.descuentoPorCategoria||{})["Pokémon TCG"]||bf.descuento) + "%) hasta el domingo 29", ...CONFIG.franja];
 }
 
 /* ---------- Destacados: contador de visitas (worker propio) ---------- */
